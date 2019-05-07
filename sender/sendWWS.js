@@ -14,9 +14,11 @@ var ParisAddress = 'amqp://stream_bridge_user1:WWS2016@wws.nokia-innovation.io:5
 
 var MHAddress = 'amqp://stream_bridge_user1:WWS2016@10.4.82.58:5672/%2Ftest'
 
-//Murray hill is accessible only from a few networks in MH, Paris and Tampere from the general web if on an unblocked IP
-var ConnectionAddress = ParisAddress
+var EAT = 'amqp://stream_bridge_user1:WWS2016@34.237.136.223:5672/%2Ftest'
 
+//Murray hill is accessible only from a few networks in MH, Paris and Tampere from the general web if on an unblocked IP
+var ConnectionAddress = EAT
+console.log(ConnectionAddress);
 var banID = 'c4c'
 
 
@@ -68,8 +70,8 @@ class Sleeve {
      console.log('msg', msg)
      console.log('key', key)
      //Now you must publish to 'ingress_exchange' instead of the Sleeve topic
-     
-    this.ch.publish('ingress_exchange', key, new Buffer(JSON.stringify(msg)));
+     this.ch.publish('data', key, new Buffer(JSON.stringify(msg)));
+    //this.ch.publish('ingress_exchange', key, new Buffer(JSON.stringify(msg)));
   }
 
   
@@ -117,7 +119,9 @@ function sendTrigger(sleeveid, num){
       time:d.getTime(), imagename:num
     }
 
-    sleeve.sendMessage(i0, `c4c.button.sleeve`)
+    //sleeve.sendMessage(i0, `c4c.button.sleeve`)
+    sleeve.sendMessage(i0, `c4c`)
+    sleeve.sendMessage(i0, `c4c2`)
           
   }
 //WWS version, Start program
@@ -150,6 +154,21 @@ else if (key && key.name == 'e') {
 else if (key && key.name == 'r') {
   if(connected){
     sendTrigger(banID, "4");
+  }
+}
+else if (key && key.name == 't') {
+  if(connected){
+    sendTrigger(banID, "5");
+  }
+}
+else if (key && key.name == 'y') {
+  if(connected){
+    sendTrigger(banID, "6");
+  }
+}
+else if (key && key.name == 'u') {
+  if(connected){
+    sendTrigger(banID, "7");
   }
 }
 });
