@@ -11,7 +11,8 @@ var startTime;
 var loadtime;
 var biglat;
 var big;
-var BAN_ID = "c4c"; 
+var BAN_ID = "c4c";
+var neo = true;
 
 
 
@@ -94,8 +95,10 @@ function login() {
 	} else{
 		console.log("picking stream")
 		pick_stream(zone_no); // picks initial stream based on zone
-		audio.play();
-		begin();
+		if(!neo){
+			audio.play();
+		}
+		//begin();
 		document.getElementById("information").innerHTML = "Now playing stream " + zone_no + " for performance..."; // used for testing purposes
 	}
 }
@@ -107,8 +110,14 @@ with zone m-1.
 function pick_stream(zone_no) {
 	console.log("network state " + audio.networkState)
 	console.log("ready state " + audio.readyState)
-	audio.src = audio_streams[zone_no - 1];
-	audio = new Audio(audio_streams[zone_no - 1])
+	if(neo){
+		BAN_ID = tag_no;
+		listenToWWSDataWithStomp();
+	}
+	else{
+		audio.src = audio_streams[zone_no - 1];
+		audio = new Audio(audio_streams[zone_no - 1])
+	}
 	
 }
 
@@ -254,11 +263,11 @@ function setup() {
 	//canvas stuff
 	loadSamples();
 	
-	createCanvas(350, 700);
-	background(255, 0, 0);
+	//createCanvas(350, 700);
+	//background(255, 0, 0);
   //text('Loading C4C...', 10, 10);
   
-	listenToWWSDataWithStomp();
+	//listenToWWSDataWithStomp();
 	room = getUrlVars()["room"];
 	console.log(room)
 	//Check whether a variable has been passed via reload function
@@ -356,10 +365,12 @@ function draw(){
 function progress(){
 	loaded++;
 	if(loaded>=sampleNum){
+		/*
 		clear();
 		fill(0, 0, 0)
 		textSize(32);
 		text('Welcome to C4C! Turn up your volume and touch anywhere to begin', 10, 30, 350, 600);
+		*/
 	}
 }
 
@@ -386,7 +397,7 @@ function playSamp(){
 function mousePressed() {
 	if(loaded>=sampleNum&&!started){
 		clear();
-		text('Keep your phone open and Listen to the music', 10, 30, 350, 600);
+		//text('Keep your phone open and Listen to the music', 10, 30, 350, 600);
 		playSamp();
 		console.log("mousepress");
 		//dummyaudio.play();
@@ -444,9 +455,9 @@ function listenToWWSDataWithStomp() {
 			if(lat>biglat){
 				biglat = lat;
 			}
-			text('Latency:  ' + lat, 100, 170);
-			text('Loaded Time:  ' + loadtime, 100, 270);
-			text('Top Lat:  ' + biglat, 100, 370);
+			//text('Latency:  ' + lat, 100, 170);
+			//text('Loaded Time:  ' + loadtime, 100, 270);
+			//text('Top Lat:  ' + biglat, 100, 370);
 
 			playSamp();
 

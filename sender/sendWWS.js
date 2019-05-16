@@ -2,6 +2,13 @@ const amqp = require('amqplib/callback_api');
 var osc = require("osc")
 var keypress = require('keypress');
 
+var midi = require('midi');
+
+// Set up a new input.
+var input = new midi.input();
+
+
+
 var connected
 //Used to connect to WWS, should not depend on network which machine is connected to 
 //as long as it can reach the server
@@ -19,7 +26,7 @@ var EAT = 'amqp://stream_bridge_user1:WWS2016@34.237.136.223:5672/%2Ftest'
 //Murray hill is accessible only from a few networks in MH, Paris and Tampere from the general web if on an unblocked IP
 var ConnectionAddress = EAT
 console.log(ConnectionAddress);
-var banID = 'c4c'
+var banID = '1001'
 
 
 //Josh's Sleeve class
@@ -120,7 +127,7 @@ function sendTrigger(sleeveid, num){
     }
 
     //sleeve.sendMessage(i0, `c4c.button.sleeve`)
-    sleeve.sendMessage(i0, `c4c`)
+    sleeve.sendMessage(i0, banID)
     sleeve.sendMessage(i0, `c4c2`)
           
   }
@@ -175,6 +182,70 @@ else if (key && key.name == 'u') {
 
 process.stdin.setRawMode(true);
 process.stdin.resume();
+
+
+// Count the available input ports.
+console.log(input.getPortCount());
+
+
+// Get the name of a specified input port.
+
+console.log(input.getPortName(0));
+
+// Configure a callback.
+input.on('message', function(deltaTime, message) {
+  console.log("received");
+  // The message is an array of numbers corresponding to the MIDI bytes:
+  //   [status, data1, data2]
+  // https://www.cs.cf.ac.uk/Dave/Multimedia/node158.html has some helpful
+  // information interpreting the messages.
+  console.log('m:' + message + ' d:' + deltaTime);
+
+  var note = message.toString().split(',')[1];
+  console.log(note);
+  if(note=='70'){
+    console.log('70!');
+    sendTrigger(banID, "1");
+  }
+
+});
+
+// Open the first available input port.
+input.openPort(0);
+
+// Sysex, timing, and active sensing messages are ignored
+// by default. To enable these message types, pass false for
+// the appropriate type in the function below.
+// Order: (Sysex, Timing, Active Sensing)
+// For example if you want to receive only MIDI Clock beats
+// you should use
+// input.ignoreTypes(true, false, true)
+input.ignoreTypes(false, false, false);
+
+// ... receive MIDI messages ...
+
+// Close the port when done.
+//input.closePort();
+
+// Set up a new input.
+
+/*
+var input = new midi.input();
+
+// Configure a callback.
+input.on('message', function(deltaTime, message) {
+    console.log('m:' + message + ' d:' + deltaTime);
+});
+
+// Create a virtual input port.
+input.openVirtualPort("Test Input");
+*/
+// A midi device "Test Input" is now available for other
+// software to send messages to.
+
+// ... receive MIDI messages ...
+
+// Close the port when done.
 
 /*
 //Open a UDP port for OSC purposes
