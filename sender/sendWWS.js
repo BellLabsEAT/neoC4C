@@ -123,13 +123,13 @@ function sendTrigger(sleeveid, num){
     
     var d = new Date();
     const i0 = {
-      //time:d.getTime(), code:num
+      //time:d.getTime(), imagename:num
       code:num
     }
 
     //sleeve.sendMessage(i0, `c4c.button.sleeve`)
     sleeve.sendMessage(i0, banID)
-    sleeve.sendMessage(i0, `c4c2`)
+    sleeve.sendMessage(i0, `c4c`)
           
   }
 //WWS version, Start program
@@ -214,7 +214,9 @@ input.on('message', function(deltaTime, message) {
 
   var note = message.toString().split(',')[1];
   console.log(note);
-  if(note=='70'){
+
+  //MIDI Handling
+  if(note==24){
     console.log('70!');
     sendTrigger(banID, "1");
   }
@@ -222,7 +224,7 @@ input.on('message', function(deltaTime, message) {
 });
 
 // Open the first available input port.
-input.openPort(0);
+input.openPort(1);
 
 // Sysex, timing, and active sensing messages are ignored
 // by default. To enable these message types, pass false for
@@ -231,7 +233,7 @@ input.openPort(0);
 // For example if you want to receive only MIDI Clock beats
 // you should use
 // input.ignoreTypes(true, false, true)
-input.ignoreTypes(false, false, false);
+//input.ignoreTypes(false, false, false);
 
 // ... receive MIDI messages ...
 

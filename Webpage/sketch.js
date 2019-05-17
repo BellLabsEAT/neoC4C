@@ -1,7 +1,7 @@
 //import { rejects } from "assert";
 
 var samples = [];
-var sampleNum = 7;
+var sampleNum = 5;
 var started = false;
 let curSamp;
 var loaded;
@@ -165,6 +165,8 @@ function changeToNeo(){
 	audio.pause();
 	dummyaudio.play();
 	neo = true;
+	samples[7].loop();
+	samples[7].play();
 	listenToWWSDataWithStomp();
 }
 
@@ -297,7 +299,7 @@ function http_GET(url) {
 
 
 function preload(){
-  dummyaudio.src = "samples/Counting.wav";
+  dummyaudio.src = "samples/silence.wav";
 		console.log("samp loaded")
 		dummyaudio.loop = true;
 }
@@ -345,9 +347,11 @@ function loadSamples(){
 	samples[4] = loadSound('samples/Counting.wav', progress)
 	samples[5] = loadSound('samples/fields1.wav', progress)
 	samples[6] = loadSound('samples/fields2.wav', progress)
+	samples[7] = loadSound('samples/silence.wav', progress)
 	for(var i = 0; i < sampleNum; i++){
 		samples[i].playMode('sustain');
 	}
+	
 }
 
 function getQueryVariable(variable)
@@ -408,13 +412,13 @@ function playSamp(){
 	else{
 		var code = parseInt(curSamp)
 		var index = code - 1;
-		console.log("playing sample");
+		console.log("playing sample " + index);
 		samples[index].play();
 	}
 }
 
 function mousePressed() {
-	/*
+	
 	if(loaded>=sampleNum&&!started){
 		clear();
 		//text('Keep your phone open and Listen to the music', 10, 30, 350, 600);
@@ -422,9 +426,9 @@ function mousePressed() {
 		console.log("mousepress");
 		//dummyaudio.play();
 		//noSleep.enable();
-		//started = true;
+		started = true;
 	}
-	*/
+	
 }
 
 
