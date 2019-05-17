@@ -59,6 +59,45 @@ var startTime;
 var enteringFirstTime = false;
 var audio = new Audio();
 
+new p5();
+
+function setup() {
+	connectAttempts = 0;
+	biglat = 0;
+	big = false;
+	big = getQueryVariable("big")
+	var newID = getQueryVariable("ban")
+	if(newID!=false){
+		console.log("new ban is " + newID)
+		BAN_ID = newID;
+	}
+	var d = new Date();
+	startTime = d.getSeconds();
+	loaded = 0;
+  curSamp = "1"
+	//sample1.playMode('sustain');
+
+	//canvas stuff
+	loadSamples();
+	//load samples
+	
+	//createCanvas(350, 700);
+	//background(255, 0, 0);
+  //text('Loading C4C...', 10, 10);
+  
+	//listenToWWSDataWithStomp();
+	room = getUrlVars()["room"];
+	//console.log(room)
+	//Check whether a variable has been passed via reload function
+	if(room>1000){
+		tag_no = room;
+		login();
+	}
+	document.getElementById("attempted_login").value = "";
+
+}
+
+
 
 
 /*
@@ -258,45 +297,12 @@ function http_GET(url) {
 
 
 function preload(){
-  dummyaudio.src = "samples/silence.wav";
+  dummyaudio.src = "samples/Counting.wav";
 		console.log("samp loaded")
 		dummyaudio.loop = true;
 }
 
-function setup() {
-	connectAttempts = 0;
-	biglat = 0;
-	big = false;
-	big = getQueryVariable("big")
-	var newID = getQueryVariable("ban")
-	if(newID!=false){
-		console.log("new ban is " + newID)
-		BAN_ID = newID;
-	}
-	var d = new Date();
-	startTime = d.getSeconds();
-	loaded = 0;
-  curSamp = "1"
-	//sample1.playMode('sustain');
 
-	//canvas stuff
-	loadSamples();
-	
-	//createCanvas(350, 700);
-	//background(255, 0, 0);
-  //text('Loading C4C...', 10, 10);
-  
-	//listenToWWSDataWithStomp();
-	room = getUrlVars()["room"];
-	console.log(room)
-	//Check whether a variable has been passed via reload function
-	if(room>1000){
-		tag_no = room;
-		login();
-	}
-	document.getElementById("attempted_login").value = "";
-
-}
 
 
 /*
@@ -316,7 +322,7 @@ function setup() {
 */
 
 
-/*
+
 document.body.addEventListener("touchend", function(){
 	console.log("clicked")
   if(!started){
@@ -329,7 +335,6 @@ document.body.addEventListener("touchend", function(){
 
 	}
 });
-*/
 
 function loadSamples(){
 	
@@ -393,15 +398,19 @@ function progress(){
 
 
 function playSamp(){
+	console.log("playsamp");
 	if(curSamp=="neo"){
 		changeToNeo();
 	}
 	else if(curSamp=="og"){
 		changeToOG();
 	}
-	var code = parseInt(curSamp)
-	var index = code - 1;
-	samples[index].play();
+	else{
+		var code = parseInt(curSamp)
+		var index = code - 1;
+		console.log("playing sample");
+		samples[index].play();
+	}
 }
 
 function mousePressed() {
