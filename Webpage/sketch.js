@@ -13,6 +13,7 @@ var biglat;
 var big;
 var BAN_ID = "c4c";
 var neo = true;
+var connectAttempts;
 
 
 
@@ -110,15 +111,30 @@ with zone m-1.
 function pick_stream(zone_no) {
 	console.log("network state " + audio.networkState)
 	console.log("ready state " + audio.readyState)
+	BAN_ID = tag_no;
 	if(neo){
-		BAN_ID = tag_no;
-		listenToWWSDataWithStomp();
+		
+		changeToNeo();
 	}
 	else{
-		audio.src = audio_streams[zone_no - 1];
-		audio = new Audio(audio_streams[zone_no - 1])
+		changeToOG();
 	}
 	
+}
+
+function changeToNeo(){
+	audio.pause();
+	dummyaudio.play();
+	neo = true;
+	listenToWWSDataWithStomp();
+}
+
+function changeToOG(){
+	neo = false;
+	audio.src = audio_streams[zone_no - 1];
+	audio = new Audio(audio_streams[zone_no - 1])
+	dummyaudio.pause();
+	audio.play();
 }
 
 
@@ -144,11 +160,13 @@ function begin(){
 	
 }
 
+/*
 function updateCurrentTime(){
 	var d = new Date();
 	ct = d.getTime() - startTime;
 	audio.currentTime = ct/1000;
 }
+*/
 
 function reloadRoom(){
 	window.location.assign('https://www.c4cstream.com/?room='+tag_no); 
@@ -170,6 +188,7 @@ has not changed. Since non-localization zone definitions are static, this means 
 inactive when HAIP is not in use.
 */
 function refresh() {
+	console.log("refresh?")
 	setInterval(function() {
 		// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
 		var old_zone_no = zone_no; // used for non-localization zone definitions
@@ -239,13 +258,13 @@ function http_GET(url) {
 
 
 function preload(){
-  dummyaudio.src = "silence.wav";
+  dummyaudio.src = "samples/silence.wav";
 		console.log("samp loaded")
 		dummyaudio.loop = true;
 }
 
 function setup() {
-	
+	connectAttempts = 0;
 	biglat = 0;
 	big = false;
 	big = getQueryVariable("big")
@@ -296,6 +315,8 @@ function setup() {
 }
 */
 
+
+/*
 document.body.addEventListener("touchend", function(){
 	console.log("clicked")
   if(!started){
@@ -308,21 +329,17 @@ document.body.addEventListener("touchend", function(){
 
 	}
 });
+*/
 
 function loadSamples(){
 	
-	samples[0] = loadSound('c1.wav', progress)
-	samples[1] = loadSound('c2.wav', progress)
-	samples[2] = loadSound('eb1.wav', progress)
-	samples[3] = loadSound('g1.wav', progress)
-	samples[4] = loadSound('Counting.wav', progress)
-	samples[5] = loadSound('fields1.wav', progress)
-	samples[6] = loadSound('fields2.wav', progress)
-	if(big){
-		console.log("big true");
-	samples[7] = loadSound('Bei.wav', progress)
-	samples[8] = loadSound('NYC.wav', progress)
-	}
+	samples[0] = loadSound('samples/c1.wav', progress)
+	samples[1] = loadSound('samples/c2.wav', progress)
+	samples[2] = loadSound('samples/eb1.wav', progress)
+	samples[3] = loadSound('samples/g1.wav', progress)
+	samples[4] = loadSound('samples/Counting.wav', progress)
+	samples[5] = loadSound('samples/fields1.wav', progress)
+	samples[6] = loadSound('samples/fields2.wav', progress)
 	for(var i = 0; i < sampleNum; i++){
 		samples[i].playMode('sustain');
 	}
@@ -376,25 +393,19 @@ function progress(){
 
 
 function playSamp(){
-	/*
-  if(curSamp=="1"){
-    sample1.play();
-  }
-  if(curSamp=="2"){
-    sample2.play();
-  }
-  if(curSamp=="3"){
-    sample3.play();
-  }
-  if(curSamp=="4"){
-    sample4.play();
+	if(curSamp=="neo"){
+		changeToNeo();
 	}
-	*/
-	var index = parseInt(curSamp) - 1;
+	else if(curSamp=="og"){
+		changeToOG();
+	}
+	var code = parseInt(curSamp)
+	var index = code - 1;
 	samples[index].play();
 }
 
 function mousePressed() {
+	/*
 	if(loaded>=sampleNum&&!started){
 		clear();
 		//text('Keep your phone open and Listen to the music', 10, 30, 350, 600);
@@ -404,6 +415,7 @@ function mousePressed() {
 		//noSleep.enable();
 		//started = true;
 	}
+	*/
 }
 
 
@@ -433,7 +445,13 @@ function listenToWWSDataWithStomp() {
 
 	function onError() {
 		console.log('Stomp error');
-		listenToWWSDataWithStomp();
+		connectAttempts++;
+		if(connectAttempts>4){
+			changeToOG();
+			connectAttempts = 0;
+		} else{
+			listenToWWSDataWithStomp();
+		}
 	}
 
 	function onConnectListener(x) {
@@ -442,12 +460,13 @@ function listenToWWSDataWithStomp() {
 		//client.subscribe(exchange+BAN_ID+".motion.sleeve", function(msg) {
     client.subscribe(exchange+BAN_ID, function(msg) {
 			// Update motion information
-			console.log(msg.body);
+			//console.log(msg.body);
 			let data = JSON.parse(msg.body);
-			curSamp = data.imagename;
-			console.log(data.imagename);
+			curSamp = data.code;
+			console.log(data.code);
 
 			//Latency display
+			/*
 			clear();
 			var d = new Date();
 			console.log(d.getTime() - data.time);
@@ -455,6 +474,7 @@ function listenToWWSDataWithStomp() {
 			if(lat>biglat){
 				biglat = lat;
 			}
+			*/
 			//text('Latency:  ' + lat, 100, 170);
 			//text('Loaded Time:  ' + loadtime, 100, 270);
 			//text('Top Lat:  ' + biglat, 100, 370);

@@ -123,7 +123,8 @@ function sendTrigger(sleeveid, num){
     
     var d = new Date();
     const i0 = {
-      time:d.getTime(), imagename:num
+      //time:d.getTime(), code:num
+      code:num
     }
 
     //sleeve.sendMessage(i0, `c4c.button.sleeve`)
@@ -176,6 +177,16 @@ else if (key && key.name == 'y') {
 else if (key && key.name == 'u') {
   if(connected){
     sendTrigger(banID, "7");
+  }
+}
+else if (key && key.name == 'b') {
+  if(connected){
+    sendTrigger(banID, "neo");
+  }
+}
+else if (key && key.name == 'n') {
+  if(connected){
+    sendTrigger(banID, "og");
   }
 }
 });
