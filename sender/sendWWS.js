@@ -53,6 +53,7 @@ class Sleeve {
             console.log(err);
           }
           console.log('channel created')
+          console.log("channel is " + toString(ch));
 
 
 
