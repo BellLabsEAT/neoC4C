@@ -74,11 +74,11 @@ function setup() {
 	var d = new Date();
 	startTime = d.getSeconds();
 	loaded = 0;
-  curSamp = "1"
+  curSamp = "34"
 	//sample1.playMode('sustain');
 
 	//canvas stuff
-	loadSamples();
+	
 	//load samples
 	
 	//createCanvas(350, 700);
@@ -152,7 +152,7 @@ function pick_stream(zone_no) {
 	console.log("ready state " + audio.readyState)
 	BAN_ID = tag_no;
 	if(neo){
-		
+		loadSamples();
 		changeToNeo();
 	}
 	else{
@@ -165,8 +165,6 @@ function changeToNeo(){
 	audio.pause();
 	dummyaudio.play();
 	neo = true;
-	samples[7].loop();
-	samples[7].play();
 	listenToWWSDataWithStomp();
 }
 
@@ -340,18 +338,60 @@ document.body.addEventListener("touchend", function(){
 
 function loadSamples(){
 	
-	samples[0] = loadSound('samples/c1.wav', progress)
-	samples[1] = loadSound('samples/c2.wav', progress)
-	samples[2] = loadSound('samples/eb1.wav', progress)
-	samples[3] = loadSound('samples/g1.wav', progress)
-	samples[4] = loadSound('samples/Counting.wav', progress)
-	samples[5] = loadSound('samples/fields1.wav', progress)
-	samples[6] = loadSound('samples/fields2.wav', progress)
-	samples[7] = loadSound('samples/silence.wav', progress)
+	samples[34] = loadSound('samples/silence.wav')
+	if(tag_no=='1001'){
+		samples[0] = loadSound('samples/Fields_C4C_Sample1_Stream1.wav', progress)
+		samples[4] = loadSound('samples/Fields_C4C_Sample2_Stream1.wav', progress)
+		samples[8] = loadSound('samples/Fields_C4C_Sample3_Stream1.wav', progress)
+		samples[12] = loadSound('samples/Fields_C4C_Sample4_Stream1.wav', progress)
+		samples[16] = loadSound('samples/Fields_C4C_Sample5_Stream1.wav', progress)
+		samples[20] = loadSound('samples/Fields_C4C_Sample6_Stream1.wav', progress)
+		samples[24] = loadSound('samples/Fields_C4C_Sample7_Stream1.wav', progress)
+		samples[28] = loadSound('samples/Fields_C4C_Sample8_Stream1.wav', progress)
+		samples[32] = loadSound('samples/Fefferman19MayPiece_Streams1and3.wav', progress)
+	}
+	else if(tag_no=='1002'){
+		samples[1] = loadSound('samples/Fields_C4C_Sample1_Stream2.wav', progress)
+		samples[5] = loadSound('samples/Fields_C4C_Sample2_Stream2.wav', progress)
+		samples[9] = loadSound('samples/Fields_C4C_Sample3_Stream2.wav', progress)
+		samples[13] = loadSound('samples/Fields_C4C_Sample4_Stream2.wav', progress)
+		samples[17] = loadSound('samples/Fields_C4C_Sample5_Stream2.wav', progress)
+		samples[21] = loadSound('samples/Fields_C4C_Sample6_Stream2.wav', progress)
+		samples[25] = loadSound('samples/Fields_C4C_Sample7_Stream2.wav', progress)
+		samples[29] = loadSound('samples/Fields_C4C_Sample8_Stream2.wav', progress)
+		samples[33] = loadSound('samples/Fefferman19MayPiece_Streams2and4.wav', progress)
+	}
+	else if(tag_no=='1003'){
+		samples[2] = loadSound('samples/Fields_C4C_Sample1_Stream3.wav', progress)
+		samples[6] = loadSound('samples/Fields_C4C_Sample2_Stream3.wav', progress)
+		samples[10] = loadSound('samples/Fields_C4C_Sample3_Stream3.wav', progress)
+		samples[14] = loadSound('samples/Fields_C4C_Sample4_Stream3.wav', progress)
+		samples[18] = loadSound('samples/Fields_C4C_Sample5_Stream3.wav', progress)
+		samples[22] = loadSound('samples/Fields_C4C_Sample6_Stream3.wav', progress)
+		samples[26] = loadSound('samples/Fields_C4C_Sample7_Stream3.wav', progress)
+		samples[30] = loadSound('samples/Fields_C4C_Sample8_Stream3.wav', progress)
+		samples[32] = loadSound('samples/Fefferman19MayPiece_Streams1and3.wav', progress)
+	}
+	else if(tag_no=='1004'){
+		samples[3] = loadSound('samples/Fields_C4C_Sample1_Stream4.wav', progress)
+	samples[7] = loadSound('samples/Fields_C4C_Sample2_Stream4.wav', progress)	
+	samples[11] = loadSound('samples/Fields_C4C_Sample3_Stream4.wav', progress)
+	samples[15] = loadSound('samples/Fields_C4C_Sample4_Stream4.wav', progress)
+	samples[19] = loadSound('samples/Fields_C4C_Sample5_Stream4.wav', progress)
+	samples[23] = loadSound('samples/Fields_C4C_Sample6_Stream4.wav', progress)	
+	samples[27] = loadSound('samples/Fields_C4C_Sample7_Stream4.wav', progress)
+	samples[31] = loadSound('samples/Fields_C4C_Sample8_Stream4.wav', progress)
+	samples[33] = loadSound('samples/Fefferman19MayPiece_Streams2and4.wav', progress)
+	}
+	
+	
+	
+	
+
+	
 	for(var i = 0; i < sampleNum; i++){
 		samples[i].playMode('sustain');
 	}
-	
 }
 
 function getQueryVariable(variable)
@@ -390,6 +430,7 @@ function draw(){
 
 function progress(){
 	loaded++;
+	console.log("sampled loaded")
 	if(loaded>=sampleNum){
 		/*
 		clear();
@@ -506,4 +547,46 @@ function listenToWWSDataWithStomp() {
       <source src="horse.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 		</audio>
+
+
+		function loadSamples(){
+	
+	samples[0] = loadSound('samples/Fields_C4C_Sample1_Stream1.wav', progress)
+	samples[1] = loadSound('samples/Fields_C4C_Sample1_Stream2.wav', progress)
+	samples[2] = loadSound('samples/Fields_C4C_Sample1_Stream3.wav', progress)
+	samples[3] = loadSound('samples/Fields_C4C_Sample1_Stream4.wav', progress)
+	samples[4] = loadSound('samples/Fields_C4C_Sample2_Stream1.wav', progress)
+	samples[5] = loadSound('samples/Fields_C4C_Sample2_Stream2.wav', progress)
+	samples[6] = loadSound('samples/Fields_C4C_Sample2_Stream3.wav', progress)
+	samples[7] = loadSound('samples/Fields_C4C_Sample2_Stream4.wav', progress)
+	samples[8] = loadSound('samples/Fields_C4C_Sample3_Stream1.wav', progress)
+	samples[9] = loadSound('samples/Fields_C4C_Sample3_Stream2.wav', progress)
+	samples[10] = loadSound('samples/Fields_C4C_Sample3_Stream3.wav', progress)
+	samples[11] = loadSound('samples/Fields_C4C_Sample3_Stream4.wav', progress)
+	samples[12] = loadSound('samples/Fields_C4C_Sample4_Stream1.wav', progress)
+	samples[13] = loadSound('samples/Fields_C4C_Sample4_Stream2.wav', progress)
+	samples[14] = loadSound('samples/Fields_C4C_Sample4_Stream3.wav', progress)
+	samples[15] = loadSound('samples/Fields_C4C_Sample4_Stream4.wav', progress)
+	samples[16] = loadSound('samples/Fields_C4C_Sample5_Stream1.wav', progress)
+	samples[17] = loadSound('samples/Fields_C4C_Sample5_Stream2.wav', progress)
+	samples[18] = loadSound('samples/Fields_C4C_Sample5_Stream3.wav', progress)
+	samples[19] = loadSound('samples/Fields_C4C_Sample5_Stream4.wav', progress)
+	samples[20] = loadSound('samples/Fields_C4C_Sample6_Stream1.wav', progress)
+	samples[21] = loadSound('samples/Fields_C4C_Sample6_Stream2.wav', progress)
+	samples[22] = loadSound('samples/Fields_C4C_Sample6_Stream3.wav', progress)
+	samples[23] = loadSound('samples/Fields_C4C_Sample6_Stream4.wav', progress)
+	samples[24] = loadSound('samples/Fields_C4C_Sample7_Stream1.wav', progress)
+	samples[25] = loadSound('samples/Fields_C4C_Sample7_Stream2.wav', progress)
+	samples[26] = loadSound('samples/Fields_C4C_Sample7_Stream3.wav', progress)
+	samples[27] = loadSound('samples/Fields_C4C_Sample7_Stream4.wav', progress)
+	samples[28] = loadSound('samples/Fields_C4C_Sample8_Stream1.wav', progress)
+	samples[29] = loadSound('samples/Fields_C4C_Sample8_Stream2.wav', progress)
+	samples[30] = loadSound('samples/Fields_C4C_Sample8_Stream3.wav', progress)
+	samples[31] = loadSound('samples/Fields_C4C_Sample8_Stream4.wav', progress)
+	samples[32] = loadSound('samples/Fefferman19MayPiece_Streams1and3.wav', progress)
+	samples[33] = loadSound('samples/Fefferman19MayPiece_Streams2and4.wav', progress)
+	for(var i = 0; i < sampleNum; i++){
+		samples[i].playMode('sustain');
+	}
+}
 		*/
