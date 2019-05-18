@@ -13,6 +13,10 @@ var BAN_ID = "c4c";
 var neo = true;
 var connectAttempts;
 var client;
+var banID = '1001'
+var banID2 = '1002'
+var banID3 = '1003'
+var banID4 = '1004'
 
 listenToWWSDataWithStomp();
 function setup() {
@@ -26,30 +30,106 @@ function activateSending(){
         if (err) {
           console.log("WebMidi could not be enabled.", err);
         } else {
-          console.log("WebMidi enabled!");
+            console.log("WebMidi enabled!");
 
-          console.log(WebMidi.inputs);
-        console.log(WebMidi.outputs);
-        input = WebMidi.inputs[0];
-        input.addListener('noteon', "all",
-            function (e) {
-                var note = "" + e.note.name + e.note.octave;
-                console.log("Received 'noteon' message (" + e.note.name + e.note.octave + ").");
-                if(note=="D5"){
-                    sendWWS();
+            console.log(WebMidi.inputs);
+            console.log(WebMidi.outputs);
+            input = WebMidi.inputs[0];
+            input.addListener('noteon', "all",
+                function (e) {
+                    var note = "" + e.note.name + e.note.octave;
+                    console.log(e.note.number)
+                    console.log("Received 'noteon' message (" + e.note.name + e.note.octave + ").");
+                    sendMIDI(e.note.number)
+                    if(note=="D5"){
+                        sendWWS();
+                    }
                 }
-            }
-  );
+            );
         }
         
       });
 }
 
-
-document.body.addEventListener("click", function(){
-    console.log("sending");
-    sendWWS();
-});
+function sendMIDI(note){
+    switch (note){
+        case 48:
+          console.log('C2');
+          sendTrigger(banID, "1");
+          sendTrigger(banID2, "2");
+          sendTrigger(banID3, "3");
+          sendTrigger(banID4, "4");
+          break;
+    
+        case 50:
+          console.log('D2');
+          sendTrigger(banID, "5");
+          sendTrigger(banID2, "6");
+          sendTrigger(banID3, "7");
+          sendTrigger(banID4, "8");
+          break;
+    
+        case 52:
+          console.log('E2');
+          sendTrigger(banID, "9");
+          sendTrigger(banID2, "10");
+          sendTrigger(banID3, "11");
+          sendTrigger(banID4, "12");
+          break;
+    
+        case 53:
+          console.log('F2');
+          sendTrigger(banID, "13");
+          sendTrigger(banID2, "14");
+          sendTrigger(banID3, "15");
+          sendTrigger(banID4, "16");
+          break;
+    
+        case 55: 
+          console.log('G2');
+          sendTrigger(banID, "17");
+          sendTrigger(banID2, "18");
+          sendTrigger(banID3, "18");
+          sendTrigger(banID4, "20");
+          break;
+    
+        case 57: 
+          console.log('A2');
+          sendTrigger(banID, "21");
+          sendTrigger(banID2, "22");
+          sendTrigger(banID3, "23");
+          sendTrigger(banID4, "24");
+          break;
+    
+        case 59:
+          console.log('B2');
+          sendTrigger(banID, "25");
+          sendTrigger(banID2, "26");
+          sendTrigger(banID3, "27");
+          sendTrigger(banID4, "28");
+          break;
+    
+        case 60:
+          console.log('C3');
+          sendTrigger(banID, "29");
+          sendTrigger(banID2, "30");
+          sendTrigger(banID3, "31");
+          sendTrigger(banID4, "32");
+          break;
+    
+        case 62:
+          console.log('D3');
+          sendTrigger(banID, "33");
+          sendTrigger(banID2, "34");
+          sendTrigger(banID3, "33");
+          sendTrigger(banID4, "34");
+          break;
+    
+        default:
+          console.log('Pressed key outside of mapped range');
+          console.log(note);
+      }
+}
 
 
 // STOMP-based stream listener (no polling)
@@ -80,8 +160,7 @@ function listenToWWSDataWithStomp() {
 		console.log('Stomp error');
 		connectAttempts++;
 		if(connectAttempts>4){
-			changeToOG();
-			connectAttempts = 0;
+
 		} else{
 			listenToWWSDataWithStomp();
 		}
@@ -120,15 +199,15 @@ function listenToWWSDataWithStomp() {
 }
 
 
-function sendWWS() {
+function sendTrigger(ban, samp) {
 	
 
 	if (client) {		
 		let payload = {
-			code: "1"
+			code: samp
 		}
 
-        client.send("/exchange/data/1001", {}, JSON.stringify(payload));
+        client.send("/exchange/data/" + ban, {}, JSON.stringify(payload));
         console.log("sent " + JSON.stringify(payload));
 	}
 }
