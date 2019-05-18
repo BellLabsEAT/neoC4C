@@ -20,12 +20,31 @@ function setup() {
     listenToWWSDataWithStomp();
 }
 
+function activateSending(){
+    WebMidi.enable(function (err) {
 
+        if (err) {
+          console.log("WebMidi could not be enabled.", err);
+        } else {
+          console.log("WebMidi enabled!");
 
-function mousePressed() {
-	sendWWS();
-	
+          console.log(WebMidi.inputs);
+        console.log(WebMidi.outputs);
+        input = WebMidi.inputs[0];
+        input.addListener('noteon', "all",
+            function (e) {
+                var note = "" + e.note.name + e.note.octave;
+                console.log("Received 'noteon' message (" + e.note.name + e.note.octave + ").");
+                if(note=="D5"){
+                    sendWWS();
+                }
+            }
+  );
+        }
+        
+      });
 }
+
 
 document.body.addEventListener("click", function(){
     console.log("sending");
@@ -70,7 +89,7 @@ function listenToWWSDataWithStomp() {
 
 	function onConnectListener(x) {
         console.log("Listening to " + BAN_ID)
-        sendWWS();
+        activateSending();
 
 		//client.subscribe(exchange+BAN_ID+".motion.sleeve", function(msg) {
     client.subscribe(exchange+BAN_ID, function(msg) {
@@ -93,8 +112,6 @@ function listenToWWSDataWithStomp() {
 			//text('Latency:  ' + lat, 100, 170);
 			//text('Loaded Time:  ' + loadtime, 100, 270);
 			//text('Top Lat:  ' + biglat, 100, 370);
-
-			playSamp();
 
 		});
 	}
