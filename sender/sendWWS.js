@@ -128,8 +128,15 @@ function sendTrigger(sleeveid, num){
     }
 
     //sleeve.sendMessage(i0, `c4c.button.sleeve`)
-    sleeve.sendMessage(i0, banID)
-    sleeve.sendMessage(i0, `c4c`)
+    if(sleeveid=='all'){
+      sleeve.sendMessage(i0, '1001')
+      sleeve.sendMessage(i0, '1002')
+      sleeve.sendMessage(i0, '1003')
+      sleeve.sendMessage(i0, '1004')
+    }
+    else{
+      sleeve.sendMessage(i0, sleeveid)
+    }
           
   }
 //WWS version, Start program
@@ -152,7 +159,7 @@ process.stdin.on('keypress', function (ch, key) {
   else if (key && key.name == 'w') {
     if(connected){
       sendTrigger(banID, "2");
-    }
+    } 
 }
 else if (key && key.name == 'e') {
   if(connected){
