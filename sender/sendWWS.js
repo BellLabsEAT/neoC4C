@@ -1,5 +1,5 @@
 const amqp = require('amqplib/callback_api');
-var osc = require("osc")
+//var osc = require("osc")
 var keypress = require('keypress');
 
 var midi = require('midi');
@@ -27,6 +27,9 @@ var EAT = 'amqp://stream_bridge_user1:WWS2016@34.237.136.223:5672/%2Ftest'
 var ConnectionAddress = EAT
 console.log(ConnectionAddress);
 var banID = '1001'
+var banID2 = '1002'
+var banID3 = '1003'
+var banID4 = '1004'
 
 
 //Josh's Sleeve class
@@ -154,36 +157,73 @@ process.stdin.on('keypress', function (ch, key) {
   else if (key && key.name == 'q') {
       if(connected){
         sendTrigger(banID, "1");
+        sendTrigger(banID2, "2");
+        sendTrigger(banID3, "3");
+        sendTrigger(banID4, "4");
       }
   }
   else if (key && key.name == 'w') {
     if(connected){
-      sendTrigger(banID, "2");
+      sendTrigger(banID, "5");
+      sendTrigger(banID2, "6");
+      sendTrigger(banID3, "7");
+      sendTrigger(banID4, "8");
     } 
 }
 else if (key && key.name == 'e') {
   if(connected){
-    sendTrigger(banID, "3");
+    sendTrigger(banID, "9");
+    sendTrigger(banID2, "10");
+    sendTrigger(banID3, "11");
+    sendTrigger(banID4, "12");
   }
 }
 else if (key && key.name == 'r') {
   if(connected){
-    sendTrigger(banID, "4");
+    sendTrigger(banID, "13");
+    sendTrigger(banID2, "14");
+    sendTrigger(banID3, "15");
+    sendTrigger(banID4, "16");
   }
 }
 else if (key && key.name == 't') {
   if(connected){
-    sendTrigger(banID, "5");
+    sendTrigger(banID, "17");
+    sendTrigger(banID2, "18");
+    sendTrigger(banID3, "18");
+    sendTrigger(banID4, "20");
   }
 }
 else if (key && key.name == 'y') {
   if(connected){
-    sendTrigger(banID, "6");
+    sendTrigger(banID, "21");
+    sendTrigger(banID2, "22");
+    sendTrigger(banID3, "23");
+    sendTrigger(banID4, "24");
   }
 }
 else if (key && key.name == 'u') {
   if(connected){
-    sendTrigger(banID, "7");
+    sendTrigger(banID, "25");
+    sendTrigger(banID2, "26");
+    sendTrigger(banID3, "27");
+    sendTrigger(banID4, "28");
+  }
+}
+else if (key && key.name == 'i') {
+  if(connected){
+    sendTrigger(banID, "29");
+    sendTrigger(banID2, "30");
+    sendTrigger(banID3, "31");
+    sendTrigger(banID4, "32");
+  }
+}
+else if (key && key.name == 'o') {
+  if(connected){
+    sendTrigger(banID, "33");
+    sendTrigger(banID2, "34");
+    sendTrigger(banID3, "33");
+    sendTrigger(banID4, "34");
   }
 }
 else if (key && key.name == 'b') {
@@ -223,9 +263,86 @@ input.on('message', function(deltaTime, message) {
   console.log(note);
 
   //MIDI Handling
-  if(note==24){
-    console.log('70!');
-    sendTrigger(banID, "1");
+  // if(note==24){
+  //   console.log('70!');
+  //   sendTrigger(banID, "1");
+  // }
+  switch (note){
+    case 48:
+      console.log('C2');
+      sendTrigger(banID, "1");
+      sendTrigger(banID2, "2");
+      sendTrigger(banID3, "3");
+      sendTrigger(banID4, "4");
+      break;
+
+    case 50:
+      console.log('D2');
+      sendTrigger(banID, "5");
+      sendTrigger(banID2, "6");
+      sendTrigger(banID3, "7");
+      sendTrigger(banID4, "8");
+      break;
+
+    case 52:
+      console.log('E2');
+      sendTrigger(banID, "9");
+      sendTrigger(banID2, "10");
+      sendTrigger(banID3, "11");
+      sendTrigger(banID4, "12");
+      break;
+
+    case 53:
+      console.log('F2');
+      sendTrigger(banID, "13");
+      sendTrigger(banID2, "14");
+      sendTrigger(banID3, "15");
+      sendTrigger(banID4, "16");
+      break;
+
+    case 55: 
+      console.log('G2');
+      sendTrigger(banID, "17");
+      sendTrigger(banID2, "18");
+      sendTrigger(banID3, "18");
+      sendTrigger(banID4, "20");
+      break;
+
+    case 57: 
+      console.log('A2');
+      sendTrigger(banID, "21");
+      sendTrigger(banID2, "22");
+      sendTrigger(banID3, "23");
+      sendTrigger(banID4, "24");
+      break;
+
+    case 59:
+      console.log('B2');
+      sendTrigger(banID, "25");
+      sendTrigger(banID2, "26");
+      sendTrigger(banID3, "27");
+      sendTrigger(banID4, "28");
+      break;
+
+    case 60:
+      console.log('C3');
+      sendTrigger(banID, "29");
+      sendTrigger(banID2, "30");
+      sendTrigger(banID3, "31");
+      sendTrigger(banID4, "32");
+      break;
+
+    case 62:
+      console.log('D3');
+      sendTrigger(banID, "33");
+      sendTrigger(banID2, "34");
+      sendTrigger(banID3, "33");
+      sendTrigger(banID4, "34");
+      break;
+
+    default:
+      console.log('Pressed key outside of mapped range');
+      console.log(note);
   }
 
 });
