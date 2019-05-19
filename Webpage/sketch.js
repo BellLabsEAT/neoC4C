@@ -389,9 +389,9 @@ function loadSamples(){
 	
 
 	
-	for(var i = 0; i < sampleNum; i++){
-		samples[i].playMode('sustain');
-	}
+	//for(var i = 0; i < sampleNum; i++){
+	//	samples[i].playMode('sustain');
+	//}
 }
 
 function getQueryVariable(variable)
