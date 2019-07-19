@@ -2,7 +2,7 @@
 
 var samples = [];
 var sampleNum = 5;
-var started = false;
+var started = true;
 let curSamp;
 var loaded;
 //var noSleep = new NoSleep();
@@ -62,6 +62,7 @@ var audio = new Audio();
 new p5();
 
 function setup() {
+	started = false;
 	connectAttempts = 0;
 	biglat = 0;
 	big = false;
@@ -74,7 +75,7 @@ function setup() {
 	var d = new Date();
 	startTime = d.getSeconds();
 	loaded = 0;
-  curSamp = "34"
+  curSamp = "35"
 	//sample1.playMode('sustain');
 
 	//canvas stuff
@@ -300,6 +301,7 @@ function preload(){
   dummyaudio.src = "samples/silence.wav";
 		console.log("samp loaded")
 		dummyaudio.loop = true;
+		samples[34] = loadSound('samples/silence.wav', loopSilence)
 }
 
 
@@ -338,7 +340,7 @@ document.body.addEventListener("touchend", function(){
 
 function loadSamples(){
 	
-	samples[34] = loadSound('samples/silence.wav')
+	samples[34] = loadSound('samples/silence.wav', loopSilence)
 	if(tag_no=='1001'){
 		samples[0] = loadSound('samples/2_Fields_C4C_Sample1_Stream1.mp3', progress)
 		samples[4] = loadSound('samples/2_Fields_C4C_Sample2_Stream1.mp3', progress)
@@ -427,6 +429,10 @@ function draw(){
 	}
 	*/
 }
+function loopSilence(){
+	samples[34].loop();
+	samples[34].play();
+}
 
 function progress(){
 	loaded++;
@@ -454,13 +460,18 @@ function playSamp(){
 		var code = parseInt(curSamp)
 		var index = code - 1;
 		console.log("playing sample " + index);
-		samples[index].play();
+		try{
+			samples[index].play();
+		}
+		catch(err){
+			console.log("Error! " + err);
+		}
 	}
 }
 
 function mousePressed() {
-	
-	if(loaded>=sampleNum&&!started){
+	console.log("mousepress");
+	if(!started){
 		clear();
 		//text('Keep your phone open and Listen to the music', 10, 30, 350, 600);
 		playSamp();
