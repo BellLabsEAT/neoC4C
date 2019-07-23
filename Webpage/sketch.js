@@ -1,6 +1,10 @@
 //import { rejects } from "assert";
 
 var samples = [];
+
+var hornsamp1 = [];
+var horntimes1 = [];
+
 var sampleNum = 5;
 var started = true;
 let curSamp;
@@ -386,14 +390,16 @@ function loadSamples(){
 		samples[33] = loadSound('samples/Fefferman19MayPiece_Streams2and4-VBR.mp3', progress)
 	}
 	
-	
-	
-	
+}
 
-	
-	//for(var i = 0; i < sampleNum; i++){
-	//	samples[i].playMode('sustain');
-	//}
+function loadHorns(){
+	horntimes1 = [0, 150, 300, 450]
+}
+
+function playHorn(samp, time){
+	for(i = 0; i < samp.length; i++){
+		setTimeout(samp[i].play(), time[i]*1000);
+	}
 }
 
 function getQueryVariable(variable)
@@ -456,6 +462,9 @@ function playSamp(){
 	else if(curSamp=="og"){
 		changeToOG();
 	}
+	else if(curSamp=="stopall"){
+		stopAll();
+	}
 	else{
 		var code = parseInt(curSamp)
 		var index = code - 1;
@@ -466,6 +475,18 @@ function playSamp(){
 		catch(err){
 			console.log("Error! " + err);
 		}
+	}
+}
+
+function stopAll(){
+	for(var i = 0; i < sampleNum; i++){
+		samples[i].stop();
+	}
+}
+
+function sustainMode(){
+	for(var i = 0; i < sampleNum; i++){
+		samples[i].playMode('sustain');
 	}
 }
 
@@ -495,9 +516,9 @@ function listenToWWSDataWithStomp() {
 	//MH
 	//const url = "ws://stream_bridge_user1:WWS2016@10.4.82.58/ws"
 	//Paris
-	//const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
+	const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
 	//EAT
-	const url = "ws://stream_bridge_user1:WWS2016@34.237.136.223:15674/ws"
+	//const url = "ws://stream_bridge_user1:WWS2016@34.237.136.223:15674/ws"
 
 	const exchange = "/exchange/data/";
 
@@ -560,44 +581,4 @@ function listenToWWSDataWithStomp() {
 		</audio>
 
 
-		function loadSamples(){
-	
-	samples[0] = loadSound('samples/Fields_C4C_Sample1_Stream1.wav', progress)
-	samples[1] = loadSound('samples/Fields_C4C_Sample1_Stream2.wav', progress)
-	samples[2] = loadSound('samples/Fields_C4C_Sample1_Stream3.wav', progress)
-	samples[3] = loadSound('samples/Fields_C4C_Sample1_Stream4.wav', progress)
-	samples[4] = loadSound('samples/Fields_C4C_Sample2_Stream1.wav', progress)
-	samples[5] = loadSound('samples/Fields_C4C_Sample2_Stream2.wav', progress)
-	samples[6] = loadSound('samples/Fields_C4C_Sample2_Stream3.wav', progress)
-	samples[7] = loadSound('samples/Fields_C4C_Sample2_Stream4.wav', progress)
-	samples[8] = loadSound('samples/Fields_C4C_Sample3_Stream1.wav', progress)
-	samples[9] = loadSound('samples/Fields_C4C_Sample3_Stream2.wav', progress)
-	samples[10] = loadSound('samples/Fields_C4C_Sample3_Stream3.wav', progress)
-	samples[11] = loadSound('samples/Fields_C4C_Sample3_Stream4.wav', progress)
-	samples[12] = loadSound('samples/Fields_C4C_Sample4_Stream1.wav', progress)
-	samples[13] = loadSound('samples/Fields_C4C_Sample4_Stream2.wav', progress)
-	samples[14] = loadSound('samples/Fields_C4C_Sample4_Stream3.wav', progress)
-	samples[15] = loadSound('samples/Fields_C4C_Sample4_Stream4.wav', progress)
-	samples[16] = loadSound('samples/Fields_C4C_Sample5_Stream1.wav', progress)
-	samples[17] = loadSound('samples/Fields_C4C_Sample5_Stream2.wav', progress)
-	samples[18] = loadSound('samples/Fields_C4C_Sample5_Stream3.wav', progress)
-	samples[19] = loadSound('samples/Fields_C4C_Sample5_Stream4.wav', progress)
-	samples[20] = loadSound('samples/Fields_C4C_Sample6_Stream1.wav', progress)
-	samples[21] = loadSound('samples/Fields_C4C_Sample6_Stream2.wav', progress)
-	samples[22] = loadSound('samples/Fields_C4C_Sample6_Stream3.wav', progress)
-	samples[23] = loadSound('samples/Fields_C4C_Sample6_Stream4.wav', progress)
-	samples[24] = loadSound('samples/Fields_C4C_Sample7_Stream1.wav', progress)
-	samples[25] = loadSound('samples/Fields_C4C_Sample7_Stream2.wav', progress)
-	samples[26] = loadSound('samples/Fields_C4C_Sample7_Stream3.wav', progress)
-	samples[27] = loadSound('samples/Fields_C4C_Sample7_Stream4.wav', progress)
-	samples[28] = loadSound('samples/Fields_C4C_Sample8_Stream1.wav', progress)
-	samples[29] = loadSound('samples/Fields_C4C_Sample8_Stream2.wav', progress)
-	samples[30] = loadSound('samples/Fields_C4C_Sample8_Stream3.wav', progress)
-	samples[31] = loadSound('samples/Fields_C4C_Sample8_Stream4.wav', progress)
-	samples[32] = loadSound('samples/Fefferman19MayPiece_Streams1and3.wav', progress)
-	samples[33] = loadSound('samples/Fefferman19MayPiece_Streams2and4.wav', progress)
-	for(var i = 0; i < sampleNum; i++){
-		samples[i].playMode('sustain');
-	}
-}
 		*/
