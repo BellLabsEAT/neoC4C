@@ -17,6 +17,7 @@ var banID = '1001'
 var banID2 = '1002'
 var banID3 = '1003'
 var banID4 = '1004'
+var banID5 = '1005'
 
 listenToWWSDataWithStomp();
 function setup() {
@@ -135,8 +136,20 @@ document.body.addEventListener("keypress", function(event){
   key = event.which;
   console.log(key);
   if(String.fromCharCode(key)=='a'){
-    sendTrigger(banID, "1");
+    sendTriggers("0");
+    setTimeout(sendTriggers, 250*1000, "1");
+    setTimeout(sendTriggers, 401*1000, "2");
   }
+  else if(String.fromCharCode(key)=='1'){
+    sendTriggers("0");
+  }
+  else if(String.fromCharCode(key)=='2'){
+    sendTriggers("1");
+  }
+  else if(String.fromCharCode(key)=='3'){
+    sendTriggers("2");
+  }
+  
 });
 
 
@@ -206,6 +219,13 @@ function listenToWWSDataWithStomp() {
 	client.connect("stream_bridge_user1", "WWS2016", onConnectListener, onError, "/test");
 }
 
+function sendTriggers(samp){
+  sendTrigger(banID, samp)
+  sendTrigger(banID2, samp)
+  sendTrigger(banID3, samp)
+  sendTrigger(banID4, samp)
+  sendTrigger(banID5, samp)
+}
 
 function sendTrigger(ban, samp) {
 	

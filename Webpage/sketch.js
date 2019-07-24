@@ -2,8 +2,8 @@
 
 var samples = [];
 
-var hornsamp1 = [];
-var horntimes1 = [];
+var hornsamp = [];
+var horntimes = [];
 
 var sampleNum = 9;
 var started = true;
@@ -344,107 +344,59 @@ document.body.addEventListener("touchend", function(){
 });
 
 function loadSamples(){
-	loadHorns();
+
 	samples[34] = loadSound('samples/silence.wav', loopSilence)
+	horntimes[0] = 0;
+	horntimes[1] = 250*1000;
+	horntimes[2] = 401*1000;
 	if(tag_no=='1001'){
-		samples[0] = loadSound('samples/2_Fields_C4C_Sample1_Stream1.mp3', progress)
-		samples[4] = loadSound('samples/2_Fields_C4C_Sample2_Stream1.mp3', progress)
-		samples[8] = loadSound('samples/2_Fields_C4C_Sample3_Stream1.mp3', progress)
-		samples[12] = loadSound('samples/2_Fields_C4C_Sample4_Stream1.mp3', progress)
-		samples[16] = loadSound('samples/2_Fields_C4C_Sample5_Stream1.mp3', progress)
-		samples[20] = loadSound('samples/2_Fields_C4C_Sample6_Stream1.mp3', progress)
-		samples[24] = loadSound('samples/2_Fields_C4C_Sample7_Stream1.mp3', progress)
-		samples[28] = loadSound('samples/2_Fields_C4C_Sample8_Stream1.mp3', progress)
-		samples[32] = loadSound('samples/Fefferman19MayPiece_Streams1and3-VBR.mp3', progress)
+		hornsamp[0] = loadSound('mp3s/4001/20190725_EM_2B_1.mp3');
+		hornsamp[1] = loadSound('mp3s/4001/20190725_EM_2B_2.mp3');
+		hornsamp[2] = loadSound('mp3s/4001/20190725_EM_2B_3.mp3');
 	}
 	else if(tag_no=='1002'){
-		samples[1] = loadSound('samples/2_Fields_C4C_Sample1_Stream2.mp3', progress)
-		samples[5] = loadSound('samples/2_Fields_C4C_Sample2_Stream2.mp3', progress)
-		samples[9] = loadSound('samples/2_Fields_C4C_Sample3_Stream2.mp3', progress)
-		samples[13] = loadSound('samples/2_Fields_C4C_Sample4_Stream2.mp3', progress)
-		samples[17] = loadSound('samples/2_Fields_C4C_Sample5_Stream2.mp3', progress)
-		samples[21] = loadSound('samples/2_Fields_C4C_Sample6_Stream2.mp3', progress)
-		samples[25] = loadSound('samples/2_Fields_C4C_Sample7_Stream2.mp3', progress)
-		samples[29] = loadSound('samples/2_Fields_C4C_Sample8_Stream2.mp3', progress)
-		samples[33] = loadSound('samples/Fefferman19MayPiece_Streams2and4-VBR.mp3', progress)
+		hornsamp[0] = loadSound('mp3s/4002/20190725_EM_2D_1.mp3');
+		hornsamp[1] = loadSound('mp3s/4002/20190725_EM_2D_2.mp3');
+		hornsamp[2] = loadSound('mp3s/4002/20190725_EM_2D_3.mp3');
 	}
 	else if(tag_no=='1003'){
-		samples[2] = loadSound('samples/2_Fields_C4C_Sample1_Stream3.mp3', progress)
-		samples[6] = loadSound('samples/2_Fields_C4C_Sample2_Stream3.mp3', progress)
-		samples[10] = loadSound('samples/2_Fields_C4C_Sample3_Stream3.mp3', progress)
-		samples[14] = loadSound('samples/2_Fields_C4C_Sample4_Stream3.mp3', progress)
-		samples[18] = loadSound('samples/2_Fields_C4C_Sample5_Stream3.mp3', progress)
-		samples[22] = loadSound('samples/2_Fields_C4C_Sample6_Stream3.mp3', progress)
-		samples[26] = loadSound('samples/2_Fields_C4C_Sample7_Stream3.mp3', progress)
-		samples[30] = loadSound('samples/2_Fields_C4C_Sample8_Stream3.mp3', progress)
-		samples[32] = loadSound('samples/Fefferman19MayPiece_Streams1and3-VBR.mp3', progress)
+		hornsamp[0] = loadSound('mp3s/4003/20190725_EM_3B_1.mp3');
+		hornsamp[1] = loadSound('mp3s/4003/20190725_EM_3B_2.mp3');
+		hornsamp[2] = loadSound('mp3s/4003/20190725_EM_3B_3.mp3');
 	}
 	else if(tag_no=='1004'){
-		samples[3] = loadSound('samples/2_Fields_C4C_Sample1_Stream4.mp3', progress)
-		samples[7] = loadSound('samples/2_Fields_C4C_Sample2_Stream4.mp3', progress)	
-		samples[11] = loadSound('samples/2_Fields_C4C_Sample3_Stream4.mp3', progress)
-		samples[15] = loadSound('samples/2_Fields_C4C_Sample4_Stream4.mp3', progress)
-		samples[19] = loadSound('samples/2_Fields_C4C_Sample5_Stream4.mp3', progress)
-		samples[23] = loadSound('samples/2_Fields_C4C_Sample6_Stream4.mp3', progress)	
-		samples[27] = loadSound('samples/2_Fields_C4C_Sample7_Stream4.mp3', progress)
-		samples[31] = loadSound('samples/2_Fields_C4C_Sample8_Stream4.mp3', progress)
-		samples[33] = loadSound('samples/Fefferman19MayPiece_Streams2and4-VBR.mp3', progress)
+		hornsamp[0] = loadSound('mp3s/4004/20190725_EM_3D_1.mp3');
+		hornsamp[1] = loadSound('mp3s/4004/20190725_EM_3D_2.mp3');
+		hornsamp[2] = loadSound('mp3s/4004/20190725_EM_3D_3.mp3');
+	}
+	else if(tag_no=='1005'){
+		hornsamp[0] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3');
+		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_2.mp3');
+		hornsamp[2] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3');
 	}
 	
 }
 
 function loadHorns(){
-	samples[0] = loadSound('hornsamples/beat30371.wav', progress);
-	horntimes1[0] = 30371;
-	samples[1] = loadSound('hornsamples/beat30952.wav', progress);
-	horntimes1[1] = 30952;
-	samples[2] = loadSound('hornsamples/beat32229.wav', progress);
-	horntimes1[2] = 32229;
-	samples[3] = loadSound('hornsamples/beat31904.wav', progress);
-	horntimes1[3] = 31904;
-	samples[4] = loadSound('hornsamples/beat22058.wav', progress);
-	horntimes1[4] = 22058;
-	samples[5] = loadSound('hornsamples/beat31393.wav', progress);
-	horntimes1[5] = 31393;
-	samples[6] = loadSound('hornsamples/beat30511.wav', progress);
-	horntimes1[6] = 30511;
-	samples[7] = loadSound('hornsamples/beat34992.wav', progress);
-	horntimes1[7] = 34992;
-	samples[8] = loadSound('hornsamples/beat30302.wav', progress);
-	horntimes1[8] = 30302;
-	samples[9] = loadSound('hornsamples/beat32043.wav', progress);
-	horntimes1[9] = 32043;
-	samples[10] = loadSound('hornsamples/beat30720.wav', progress);
-	horntimes1[10] = 30720;
-	samples[11] = loadSound('hornsamples/beat29884.wav', progress);
-	horntimes1[11] = 29884;
-	samples[12] = loadSound('hornsamples/beat27306.wav', progress);
-	horntimes1[12] = 27306;
-	samples[13] = loadSound('hornsamples/beat29303.wav', progress);
-	horntimes1[13] = 29303;
-	samples[14] = loadSound('hornsamples/beat31161.wav', progress);
-	horntimes1[14] = 31161;
-	samples[15] = loadSound('hornsamples/beat31648.wav', progress);
-	horntimes1[15] = 31648;
-	samples[16] = loadSound('hornsamples/beat22384.wav', progress);
-	horntimes1[16] = 22384;
-	samples[17] = loadSound('hornsamples/beat24938.wav', progress);
-	horntimes1[17] = 24938;
-	samples[18] = loadSound('hornsamples/beat29559.wav', progress);
-	horntimes1[18] = 29559;
-	samples[19] = loadSound('hornsamples/beat30627.wav', progress);
-	horntimes1[19] = 30627;
-	samples[20] = loadSound('hornsamples/beat30023.wav', progress);
-	horntimes1[20] = 30023;
-	samples[21] = loadSound('hornsamples/beat32345.wav', progress);
-	horntimes1[21] = 32345;
-
+	hornsamp1[0] = loadSound('mp3s/4001/20190725_EM_2B_1.mp3');
+	hornsamp1[1] = loadSound('mp3s/4001/20190725_EM_2B_2.mp3');
+	hornsamp1[2] = loadSound('mp3s/4001/20190725_EM_2B_3.mp3');
+	horntimes1[0] = 0;
+	horntimes1[1] = 250*1000;
+	horntimes1[2] = 401*1000;
 }
 
 function playHorn(samp, time){
 	for(i = 0; i < samp.length; i++){
-		setTimeout(samp[i].play(), time[i]);
+		setTimeout(playSample, time[i], samp[i]);
+		//print(time[i]);
 	}
+}
+
+//literally timeout will not work with just the sample.play() method so you need this dumb
+//thing
+function playSample(sample){
+	sample.play();
 }
 
 function getQueryVariable(variable)
@@ -491,9 +443,9 @@ function progress(){
 	sendMessage("c4c", "sample loaded");
 
 	if(loaded>=sampleNum){
-		console.log("All samples loaded");
+		console.log("All samples loaded " + tag_no);
 		sendMessage("c4c", "client fully loaded");
-		playHorn(hornsamp1, horntimes1);
+		//playHorn(hornsamp1, horntimes1);
 		/*
 		clear();
 		fill(0, 0, 0)
@@ -520,7 +472,7 @@ function playSamp(){
 		var index = code - 1;
 		console.log("playing sample " + index);
 		try{
-			samples[index].play();
+			hornsamp[index].play();
 		}
 		catch(err){
 			console.log("Error! " + err);
