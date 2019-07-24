@@ -350,30 +350,36 @@ function loadSamples(){
 	horntimes[1] = 250*1000;
 	horntimes[2] = 401*1000;
 	if(tag_no=='1001'){
-		hornsamp[0] = loadSound('mp3s/4001/20190725_EM_2B_1.mp3');
-		hornsamp[1] = loadSound('mp3s/4001/20190725_EM_2B_2.mp3');
-		hornsamp[2] = loadSound('mp3s/4001/20190725_EM_2B_3.mp3');
+		hornsamp[0] = loadSound("mp3s _single files/20190725_EM_2B_4001.mp3", progress)
+		hornsamp[1] = loadSound('mp3s/4001/20190725_EM_2B_1.mp3', progress);
+		hornsamp[2] = loadSound('mp3s/4001/20190725_EM_2B_2.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4001/20190725_EM_2B_3.mp3', progress);
 	}
 	else if(tag_no=='1002'){
-		hornsamp[0] = loadSound('mp3s/4002/20190725_EM_2D_1.mp3');
-		hornsamp[1] = loadSound('mp3s/4002/20190725_EM_2D_2.mp3');
-		hornsamp[2] = loadSound('mp3s/4002/20190725_EM_2D_3.mp3');
+		hornsamp[0] = loadSound("mp3s _single files/20190725_EM_2D_4002.mp3", progress)
+		hornsamp[1] = loadSound('mp3s/4002/20190725_EM_2D_1.mp3', progress);
+		hornsamp[2] = loadSound('mp3s/4002/20190725_EM_2D_2.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4002/20190725_EM_2D_3.mp3', progress);
 	}
 	else if(tag_no=='1003'){
-		hornsamp[0] = loadSound('mp3s/4003/20190725_EM_3B_1.mp3');
-		hornsamp[1] = loadSound('mp3s/4003/20190725_EM_3B_2.mp3');
-		hornsamp[2] = loadSound('mp3s/4003/20190725_EM_3B_3.mp3');
+		hornsamp[0] = loadSound("mp3s _single files/20190725_EM_3B_4003.mp3", progress)
+		hornsamp[1] = loadSound('mp3s/4003/20190725_EM_3B_1.mp3', progress);
+		hornsamp[2] = loadSound('mp3s/4003/20190725_EM_3B_2.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4003/20190725_EM_3B_3.mp3', progress);
 	}
 	else if(tag_no=='1004'){
-		hornsamp[0] = loadSound('mp3s/4004/20190725_EM_3D_1.mp3');
-		hornsamp[1] = loadSound('mp3s/4004/20190725_EM_3D_2.mp3');
-		hornsamp[2] = loadSound('mp3s/4004/20190725_EM_3D_3.mp3');
+		hornsamp[0] = loadSound("mp3s _single files/20190725_EM_3D_4004.mp3", progress)
+		hornsamp[1] = loadSound('mp3s/4004/20190725_EM_3D_1.mp3', progress);
+		hornsamp[2] = loadSound('mp3s/4004/20190725_EM_3D_2.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4004/20190725_EM_3D_3.mp3', progress);
 	}
 	else if(tag_no=='1005'){
-		hornsamp[0] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3');
-		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_2.mp3');
-		hornsamp[2] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3');
+		hornsamp[0] = loadSound("mp3s _single files/20190725_EM_3C_4005.mp3", progress)
+		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3', progress);
+		hornsamp[2] = loadSound('mp3s/4005/20190725_EM_3C_2.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3', progress);
 	}
+	hornsamp[4] = loadSound('test.wav', progress)
 	
 }
 
@@ -442,9 +448,9 @@ function progress(){
 	console.log("sampled " + loaded + "loaded");
 	sendMessage("c4c", "sample loaded");
 
-	if(loaded>=sampleNum){
+	if(loaded>=4){
 		console.log("All samples loaded " + tag_no);
-		sendMessage("c4c", "client fully loaded");
+		sendMessage("c4c", tag_no + " fully loaded");
 		//playHorn(hornsamp1, horntimes1);
 		/*
 		clear();
@@ -481,7 +487,10 @@ function playSamp(){
 }
 
 function stopAll(){
-	for(var i = 0; i < sampleNum; i++){
+	for(var i = 0; i < hornsamp.length; i++){
+		hornsamp[i].stop();
+	}
+	for(var i = 0; i < samples.length; i++){
 		samples[i].stop();
 	}
 }
@@ -531,9 +540,9 @@ function listenToWWSDataWithStomp() {
 	//MH
 	//const url = "ws://stream_bridge_user1:WWS2016@10.4.82.58/ws"
 	//Paris
-	const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
+	//const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
 	//EAT
-	//const url = "ws://stream_bridge_user1:WWS2016@34.237.136.223:15674/ws"
+	const url = "ws://stream_bridge_user1:WWS2016@3.83.188.186:15674/ws"
 
 	const exchange = "/exchange/data/";
 

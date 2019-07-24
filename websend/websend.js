@@ -18,10 +18,16 @@ var banID2 = '1002'
 var banID3 = '1003'
 var banID4 = '1004'
 var banID5 = '1005'
+var timer1
+var timer2
 
-listenToWWSDataWithStomp();
+setup();
+//listenToWWSDataWithStomp();
 function setup() {
-
+  console.log("hello!!!!!")
+  //document.getElementById("demo").innerHTML = 5+6;
+  //document.write("hello");
+  
     listenToWWSDataWithStomp();
 }
 
@@ -136,18 +142,33 @@ document.body.addEventListener("keypress", function(event){
   key = event.which;
   console.log(key);
   if(String.fromCharCode(key)=='a'){
-    sendTriggers("0");
-    setTimeout(sendTriggers, 250*1000, "1");
-    setTimeout(sendTriggers, 401*1000, "2");
+    sendTriggers('0');
+  }
+  if(String.fromCharCode(key)=='d'){
+    clearTimeout(timer1);
+    clearTimeout(timer2);
+    sendTriggers("1");
+    timer1 =  setTimeout(sendTriggers, 250*1000, "2");
+    timer2 =  setTimeout(sendTriggers, 401*1000, "3");
   }
   else if(String.fromCharCode(key)=='1'){
-    sendTriggers("0");
-  }
-  else if(String.fromCharCode(key)=='2'){
     sendTriggers("1");
   }
-  else if(String.fromCharCode(key)=='3'){
+  else if(String.fromCharCode(key)=='2'){
     sendTriggers("2");
+  }
+  else if(String.fromCharCode(key)=='3'){
+    sendTriggers("3");
+  }
+  else if(String.fromCharCode(key)=='x'){
+    sendTriggers("stopall");
+  }
+  else if(String.fromCharCode(key)=='f'){
+    clearTimeout(timer1);
+    clearTimeout(timer2);
+  }
+  else if(String.fromCharCode(key)=='t'){
+    sendTriggers("4");
   }
   
 });
@@ -164,9 +185,9 @@ function listenToWWSDataWithStomp() {
 	//MH
 	//const url = "ws://stream_bridge_user1:WWS2016@10.4.82.58/ws"
 	//Paris
-	const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
+	//const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
 	//EAT
-	//const url = "ws://stream_bridge_user1:WWS2016@34.237.136.223:15674/ws"
+	const url = "ws://stream_bridge_user1:WWS2016@3.83.188.186:15674/ws"
 
 	const exchange = "/exchange/data/";
 
@@ -195,7 +216,8 @@ function listenToWWSDataWithStomp() {
     client.subscribe(exchange+BAN_ID, function(msg) {
 			// Update motion information
 			//console.log(msg.body);
-			let data = JSON.parse(msg.body);
+      let data = JSON.parse(msg.body);
+      parseReceived(data);
 			curSamp = data.code;
 			//console.log(data.code);
 
@@ -219,6 +241,35 @@ function listenToWWSDataWithStomp() {
 	client.connect("stream_bridge_user1", "WWS2016", onConnectListener, onError, "/test");
 }
 
+function parseReceived(data){
+  console.log(data);
+  console.log(data.code)
+  if(String(data.code).includes("fully loaded")){
+    var k = parseInt(String(data.code));
+    console.log("parsed is " + k);
+    if(k!=NaN){
+      switch(k){
+        case 1001:
+          document.getElementById("1001").innerHTML = "phone 1 loaded";
+          break;
+        case 1002:
+          document.getElementById("1002").innerHTML = "phone 2 loaded";
+          break;
+        case 1003:
+          document.getElementById("1003").innerHTML = "phone 3 loaded";
+          break;
+        case 1004:
+          document.getElementById("1004").innerHTML = "phone 4 loaded";
+          break;
+        case 1005:
+          document.getElementById("1005").innerHTML = "phone 5 loaded";
+          break;
+
+      }
+  }
+  }
+}
+
 function sendTriggers(samp){
   sendTrigger(banID, samp)
   sendTrigger(banID2, samp)
@@ -237,6 +288,7 @@ function sendTrigger(ban, samp) {
 
         client.send("/exchange/data/" + ban, {}, JSON.stringify(payload));
         console.log("sent " + JSON.stringify(payload));
+        //document.write("sent " + JSON.stringify(payload));
 	}
 }
 
