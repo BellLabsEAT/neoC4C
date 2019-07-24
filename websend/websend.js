@@ -131,6 +131,14 @@ function sendMIDI(note){
       }
 }
 
+document.body.addEventListener("keypress", function(event){
+  key = event.which;
+  console.log(key);
+  if(String.fromCharCode(key)=='a'){
+    sendTrigger(banID, "1");
+  }
+});
+
 
 // STOMP-based stream listener (no polling)
 function listenToWWSDataWithStomp() {
@@ -143,9 +151,9 @@ function listenToWWSDataWithStomp() {
 	//MH
 	//const url = "ws://stream_bridge_user1:WWS2016@10.4.82.58/ws"
 	//Paris
-	//const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
+	const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
 	//EAT
-	const url = "ws://stream_bridge_user1:WWS2016@34.237.136.223:15674/ws"
+	//const url = "ws://stream_bridge_user1:WWS2016@34.237.136.223:15674/ws"
 
 	const exchange = "/exchange/data/";
 

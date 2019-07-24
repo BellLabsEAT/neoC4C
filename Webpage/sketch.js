@@ -5,7 +5,7 @@ var samples = [];
 var hornsamp1 = [];
 var horntimes1 = [];
 
-var sampleNum = 5;
+var sampleNum = 9;
 var started = true;
 let curSamp;
 var loaded;
@@ -18,6 +18,7 @@ var big;
 var BAN_ID = "c4c";
 var neo = true;
 var connectAttempts;
+var sendClient;
 
 
 
@@ -343,7 +344,7 @@ document.body.addEventListener("touchend", function(){
 });
 
 function loadSamples(){
-	
+	loadHorns();
 	samples[34] = loadSound('samples/silence.wav', loopSilence)
 	if(tag_no=='1001'){
 		samples[0] = loadSound('samples/2_Fields_C4C_Sample1_Stream1.mp3', progress)
@@ -393,12 +394,56 @@ function loadSamples(){
 }
 
 function loadHorns(){
-	horntimes1 = [0, 150, 300, 450]
+	samples[0] = loadSound('hornsamples/beat30371.wav', progress);
+	horntimes1[0] = 30371;
+	samples[1] = loadSound('hornsamples/beat30952.wav', progress);
+	horntimes1[1] = 30952;
+	samples[2] = loadSound('hornsamples/beat32229.wav', progress);
+	horntimes1[2] = 32229;
+	samples[3] = loadSound('hornsamples/beat31904.wav', progress);
+	horntimes1[3] = 31904;
+	samples[4] = loadSound('hornsamples/beat22058.wav', progress);
+	horntimes1[4] = 22058;
+	samples[5] = loadSound('hornsamples/beat31393.wav', progress);
+	horntimes1[5] = 31393;
+	samples[6] = loadSound('hornsamples/beat30511.wav', progress);
+	horntimes1[6] = 30511;
+	samples[7] = loadSound('hornsamples/beat34992.wav', progress);
+	horntimes1[7] = 34992;
+	samples[8] = loadSound('hornsamples/beat30302.wav', progress);
+	horntimes1[8] = 30302;
+	samples[9] = loadSound('hornsamples/beat32043.wav', progress);
+	horntimes1[9] = 32043;
+	samples[10] = loadSound('hornsamples/beat30720.wav', progress);
+	horntimes1[10] = 30720;
+	samples[11] = loadSound('hornsamples/beat29884.wav', progress);
+	horntimes1[11] = 29884;
+	samples[12] = loadSound('hornsamples/beat27306.wav', progress);
+	horntimes1[12] = 27306;
+	samples[13] = loadSound('hornsamples/beat29303.wav', progress);
+	horntimes1[13] = 29303;
+	samples[14] = loadSound('hornsamples/beat31161.wav', progress);
+	horntimes1[14] = 31161;
+	samples[15] = loadSound('hornsamples/beat31648.wav', progress);
+	horntimes1[15] = 31648;
+	samples[16] = loadSound('hornsamples/beat22384.wav', progress);
+	horntimes1[16] = 22384;
+	samples[17] = loadSound('hornsamples/beat24938.wav', progress);
+	horntimes1[17] = 24938;
+	samples[18] = loadSound('hornsamples/beat29559.wav', progress);
+	horntimes1[18] = 29559;
+	samples[19] = loadSound('hornsamples/beat30627.wav', progress);
+	horntimes1[19] = 30627;
+	samples[20] = loadSound('hornsamples/beat30023.wav', progress);
+	horntimes1[20] = 30023;
+	samples[21] = loadSound('hornsamples/beat32345.wav', progress);
+	horntimes1[21] = 32345;
+
 }
 
 function playHorn(samp, time){
 	for(i = 0; i < samp.length; i++){
-		setTimeout(samp[i].play(), time[i]*1000);
+		setTimeout(samp[i].play(), time[i]);
 	}
 }
 
@@ -442,8 +487,13 @@ function loopSilence(){
 
 function progress(){
 	loaded++;
-	console.log("sampled loaded")
+	console.log("sampled " + loaded + "loaded");
+	sendMessage("c4c", "sample loaded");
+
 	if(loaded>=sampleNum){
+		console.log("All samples loaded");
+		sendMessage("c4c", "client fully loaded");
+		playHorn(hornsamp1, horntimes1);
 		/*
 		clear();
 		fill(0, 0, 0)
@@ -504,6 +554,19 @@ function mousePressed() {
 	
 }
 
+function sendMessage(ban, message) {
+	
+
+	if (sendClient) {		
+		let payload = {
+			code: message
+		}
+
+        sendClient.send("/exchange/data/" + ban, {}, JSON.stringify(payload));
+        console.log("sent " + JSON.stringify(payload));
+	}
+}
+
 
 // STOMP-based stream listener (no polling)
 function listenToWWSDataWithStomp() {
@@ -542,6 +605,7 @@ function listenToWWSDataWithStomp() {
 
 	function onConnectListener(x) {
 		console.log("Listening to " + BAN_ID);
+		sendMessage('c4c', 'online')
 
 		//client.subscribe(exchange+BAN_ID+".motion.sleeve", function(msg) {
     client.subscribe(exchange+BAN_ID, function(msg) {
@@ -571,6 +635,7 @@ function listenToWWSDataWithStomp() {
 	}
 
 	client.connect("stream_bridge_user1", "WWS2016", onConnectListener, onError, "/test");
+	sendClient = client;
 }
 
 
