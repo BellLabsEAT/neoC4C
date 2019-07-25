@@ -19,6 +19,7 @@ var BAN_ID = "c4c";
 var neo = true;
 var connectAttempts;
 var sendClient;
+var silencesamp
 
 
 
@@ -169,7 +170,7 @@ function pick_stream(zone_no) {
 
 function changeToNeo(){
 	audio.pause();
-	dummyaudio.play();
+	//dummyaudio.play();
 	neo = true;
 	listenToWWSDataWithStomp();
 }
@@ -178,7 +179,7 @@ function changeToOG(){
 	neo = false;
 	audio.src = audio_streams[zone_no - 1];
 	audio = new Audio(audio_streams[zone_no - 1])
-	dummyaudio.pause();
+	//dummyaudio.pause();
 	audio.play();
 }
 
@@ -303,10 +304,10 @@ function http_GET(url) {
 
 
 function preload(){
-  dummyaudio.src = "samples/silence.wav";
+  //dummyaudio.src = "test.wav";
 		console.log("samp loaded")
-		dummyaudio.loop = true;
-		samples[34] = loadSound('samples/silence.wav', loopSilence)
+		//dummyaudio.loop = true;
+		//silencesamp = loadSound('samples/silence.wav', loopSilence)
 }
 
 
@@ -338,48 +339,50 @@ document.body.addEventListener("touchend", function(){
 		
 		console.log("looped");
 		
-		dummyaudio.play();
+		//dummyaudio.play();
 
 	}
 });
 
 function loadSamples(){
 
-	samples[34] = loadSound('samples/silence.wav', loopSilence)
+	//silencesamp = loadSound('samples/silence.wav', loopSilence)
 	horntimes[0] = 0;
 	horntimes[1] = 250*1000;
 	horntimes[2] = 401*1000;
 	if(tag_no=='1001'){
-		hornsamp[0] = loadSound("mp3s _single files/20190725_EM_2B_4001.mp3", progress)
+		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1001.mp3", progress)
+		/*
 		hornsamp[1] = loadSound('mp3s/4001/20190725_EM_2B_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4001/20190725_EM_2B_2.mp3', progress);
 		hornsamp[3] = loadSound('mp3s/4001/20190725_EM_2B_3.mp3', progress);
+		*/
 	}
 	else if(tag_no=='1002'){
-		hornsamp[0] = loadSound("mp3s _single files/20190725_EM_2D_4002.mp3", progress)
-		hornsamp[1] = loadSound('mp3s/4002/20190725_EM_2D_1.mp3', progress);
+		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1002.mp3", progress)
+		/* hornsamp[1] = loadSound('mp3s/4002/20190725_EM_2D_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4002/20190725_EM_2D_2.mp3', progress);
-		hornsamp[3] = loadSound('mp3s/4002/20190725_EM_2D_3.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4002/20190725_EM_2D_3.mp3', progress); */
 	}
 	else if(tag_no=='1003'){
-		hornsamp[0] = loadSound("mp3s _single files/20190725_EM_3B_4003.mp3", progress)
-		hornsamp[1] = loadSound('mp3s/4003/20190725_EM_3B_1.mp3', progress);
+		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1003.mp3", progress)
+/* 		hornsamp[1] = loadSound('mp3s/4003/20190725_EM_3B_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4003/20190725_EM_3B_2.mp3', progress);
-		hornsamp[3] = loadSound('mp3s/4003/20190725_EM_3B_3.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4003/20190725_EM_3B_3.mp3', progress); */
 	}
 	else if(tag_no=='1004'){
-		hornsamp[0] = loadSound("mp3s _single files/20190725_EM_3D_4004.mp3", progress)
-		hornsamp[1] = loadSound('mp3s/4004/20190725_EM_3D_1.mp3', progress);
+		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1004.mp3", progress)
+/* 		hornsamp[1] = loadSound('mp3s/4004/20190725_EM_3D_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4004/20190725_EM_3D_2.mp3', progress);
-		hornsamp[3] = loadSound('mp3s/4004/20190725_EM_3D_3.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4004/20190725_EM_3D_3.mp3', progress); */
 	}
 	else if(tag_no=='1005'){
-		hornsamp[0] = loadSound("mp3s _single files/20190725_EM_3C_4005.mp3", progress)
-		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3', progress);
+		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1005.mp3", progress)
+/* 		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4005/20190725_EM_3C_2.mp3', progress);
-		hornsamp[3] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3', progress); */
 	}
-	hornsamp[4] = loadSound('test.wav', progress)
+	hornsamp[1] = loadSound('test.wav', progress)
 	
 }
 
@@ -439,8 +442,8 @@ function draw(){
 	*/
 }
 function loopSilence(){
-	samples[34].loop();
-	samples[34].play();
+	//silencesamp.loop();
+	//silencesamp.play();
 }
 
 function progress(){
@@ -448,7 +451,7 @@ function progress(){
 	console.log("sampled " + loaded + "loaded");
 	sendMessage("c4c", "sample loaded");
 
-	if(loaded>=4){
+	if(loaded>=1){
 		console.log("All samples loaded " + tag_no);
 		sendMessage("c4c", tag_no + " fully loaded");
 		//playHorn(hornsamp1, horntimes1);
@@ -475,7 +478,7 @@ function playSamp(){
 	}
 	else{
 		var code = parseInt(curSamp)
-		var index = code - 1;
+		var index = code;
 		console.log("playing sample " + index);
 		try{
 			hornsamp[index].play();
@@ -506,11 +509,12 @@ function mousePressed() {
 	if(!started){
 		clear();
 		//text('Keep your phone open and Listen to the music', 10, 30, 350, 600);
+		curSamp = 1;
 		playSamp();
 		console.log("mousepress");
 		//dummyaudio.play();
 		//noSleep.enable();
-		started = true;
+		//started = true;
 	}
 	
 }
