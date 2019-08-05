@@ -168,7 +168,7 @@ document.body.addEventListener("keypress", function(event){
     clearTimeout(timer2);
   }
   else if(String.fromCharCode(key)=='t'){
-    sendTriggers("4");
+    sendTriggers("1");
   }
   
 });
@@ -288,6 +288,7 @@ function sendTrigger(ban, samp) {
 
         client.send("/exchange/data/" + ban, {}, JSON.stringify(payload));
         console.log("sent " + JSON.stringify(payload));
+        //document.getElementById("lastsent").innerHTML = 5+6;
         //document.write("sent " + JSON.stringify(payload));
 	}
 }

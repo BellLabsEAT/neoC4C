@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>p5.js example</title>
+    <style> body {padding: 0; margin: 0;} </style>
+    
+
+  </head>
+
+  <body>
+      <h2>C4C sending client</h2>
+  <p>Commands: a to send all, x to stop playing, 1,2,3 to send individuals, t to send test sound, d to send timed samples, f to cancel timers</p>
+  <p id="lastmessage"></p>
+  <p id="1001"></p>
+  <p id="1002"></p>
+  <p id="1003"></p>
+  <p id="1004"></p>
+  <p id="1005"></p>
+
+
+
+  <p>Send sample to start at time in textbox</p>
+  <input type="text" id="timeSend" value="0">
+<button onclick="sendTime()">Send Time</button>
+  <script src="https://cdn.jsdelivr.net/npm/webmidi"></script>
+  <script src="stomp.js"></script>
+  <script src="websend.js"></script>
+  </body>
+
+</html>
