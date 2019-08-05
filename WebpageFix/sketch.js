@@ -474,11 +474,17 @@ function playSamp(){
 		changeToOG();
 	}
 	else if(curSamp=="stopall"){
-		stopAll();
+		//stopAll();
+		fadeDown();
 	}
 	else if(String(curSamp).includes("time")){
 		console.log("playing sample at " + parseInt(curSamp));
 		hornsamp[0].play(0, 1, 1, parseInt(curSamp));
+	}
+	else if(String(curSamp).includes("update")){
+		if(!hornsamp[0].isPlaying()){
+			hornsamp[0].play(0, 1, 1, parseInt(curSamp)/1000);
+		}
 	}
 	else{
 		var code = parseInt(curSamp)
@@ -496,7 +502,11 @@ function playSamp(){
 		}
 	}
 }
-
+function fadeDown(){
+	hornsamp[0].setVolume(0, 1);
+	setTimeout(hornsamp[0].stop, 1500);
+	setTimeout(hornsamp[0].setVolume, 1500, 1, 0);
+}
 function stopAll(){
 	for(var i = 0; i < hornsamp.length; i++){
 		hornsamp[i].stop();

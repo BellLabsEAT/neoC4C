@@ -24,7 +24,7 @@ var timer2
 setup();
 //listenToWWSDataWithStomp();
 function setup() {
-  console.log("hello!!!!!")
+  console.log("helloWorld!!!!!")
   //document.getElementById("demo").innerHTML = 5+6;
   //document.write("hello");
   
@@ -142,7 +142,12 @@ document.body.addEventListener("keypress", function(event){
   key = event.which;
   console.log(key);
   if(String.fromCharCode(key)=='a'){
+    console.log("setUpdate");
     sendTriggers('0');
+    var d = new Date();
+    startTime = d.getTime();
+    
+    setTimeout(update, 2000);
   }
   if(String.fromCharCode(key)=='d'){
     clearTimeout(timer1);
@@ -272,7 +277,15 @@ function parseReceived(data){
 
 function sendTime(){
   payload = String(document.getElementById("timeSend").value) + "time";
-  sendTriggers(payload)
+  sendTriggers(payload);
+}
+
+function update(){
+  console.log("update!");
+  var d = new Date();
+  payload = String(d.getTime()-startTime) + "update";
+  sendTriggers(payload);
+  setTimeout(update, 5000);
 }
 
 function sendTriggers(samp){
