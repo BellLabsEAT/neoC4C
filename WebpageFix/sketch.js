@@ -352,7 +352,7 @@ function loadSamples(){
 	horntimes[1] = 250*1000;
 	horntimes[2] = 401*1000;
 	if(tag_no=='1001'){
-		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1001b.mp3", progress)
+		hornsamp[0] = loadSound("VASamples/kittenL.mp3", progress)
 		/*
 		hornsamp[1] = loadSound('mp3s/4001/20190725_EM_2B_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4001/20190725_EM_2B_2.mp3', progress);
@@ -360,40 +360,37 @@ function loadSamples(){
 		*/
 	}
 	else if(tag_no=='1002'){
-		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1002b.mp3", progress)
+		hornsamp[0] = loadSound("VASamples/kittenR.mp3", progress)
 		/* hornsamp[1] = loadSound('mp3s/4002/20190725_EM_2D_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4002/20190725_EM_2D_2.mp3', progress);
 		hornsamp[3] = loadSound('mp3s/4002/20190725_EM_2D_3.mp3', progress); */
 	}
 	else if(tag_no=='1003'){
-		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1003b.mp3", progress)
+		hornsamp[0] = loadSound("VASamples/kalimba.mp3", progress)
 /* 		hornsamp[1] = loadSound('mp3s/4003/20190725_EM_3B_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4003/20190725_EM_3B_2.mp3', progress);
 		hornsamp[3] = loadSound('mp3s/4003/20190725_EM_3B_3.mp3', progress); */
 	}
 	else if(tag_no=='1004'){
-		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1004b.mp3", progress)
+		hornsamp[0] = loadSound("VASamples/wind.mp3", progress)
 /* 		hornsamp[1] = loadSound('mp3s/4004/20190725_EM_3D_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4004/20190725_EM_3D_2.mp3', progress);
 		hornsamp[3] = loadSound('mp3s/4004/20190725_EM_3D_3.mp3', progress); */
 	}
 	else if(tag_no=='1005'){
-		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1005b.mp3", progress)
+		hornsamp[0] = loadSound("VASamples/sandwind.mp3", progress)
+/* 		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3', progress);
+		hornsamp[2] = loadSound('mp3s/4005/20190725_EM_3C_2.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3', progress); */
+	}
+	else if(tag_no=='1006'){
+		hornsamp[0] = loadSound("VASamples/trin.mp3", progress)
 /* 		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4005/20190725_EM_3C_2.mp3', progress);
 		hornsamp[3] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3', progress); */
 	}
 	hornsamp[1] = loadSound('test.wav', progress)
 	
-}
-
-function loadHorns(){
-	hornsamp1[0] = loadSound('mp3s/4001/20190725_EM_2B_1.mp3');
-	hornsamp1[1] = loadSound('mp3s/4001/20190725_EM_2B_2.mp3');
-	hornsamp1[2] = loadSound('mp3s/4001/20190725_EM_2B_3.mp3');
-	horntimes1[0] = 0;
-	horntimes1[1] = 250*1000;
-	horntimes1[2] = 401*1000;
 }
 
 function playHorn(samp, time){
@@ -488,7 +485,11 @@ function playSamp(){
 		var index = code;
 		console.log("playing sample " + index);
 		try{
-			hornsamp[index].play();
+			if(index==0){
+				hornsamp[index].loop();
+			} else{
+				hornsamp[index].play();
+			}
 		}
 		catch(err){
 			console.log("Error! " + err);
