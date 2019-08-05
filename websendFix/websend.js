@@ -20,6 +20,7 @@ var banID4 = '1004'
 var banID5 = '1005'
 var timer1
 var timer2
+var updateTimer;
 
 setup();
 //listenToWWSDataWithStomp();
@@ -146,8 +147,9 @@ document.body.addEventListener("keypress", function(event){
     sendTriggers('0');
     var d = new Date();
     startTime = d.getTime();
+    clearTimeout(updateTimer);
+    updateTimer = setTimeout(update, 2000);
     
-    setTimeout(update, 2000);
   }
   if(String.fromCharCode(key)=='d'){
     clearTimeout(timer1);
@@ -174,6 +176,9 @@ document.body.addEventListener("keypress", function(event){
   }
   else if(String.fromCharCode(key)=='t'){
     sendTriggers("1");
+  }
+  else if(String.fromCharCode(key)=='n'){
+    clearTimeout(updateTimer);
   }
   
 });
@@ -285,7 +290,7 @@ function update(){
   var d = new Date();
   payload = String(d.getTime()-startTime) + "update";
   sendTriggers(payload);
-  setTimeout(update, 5000);
+  updateTimer = setTimeout(update, 5000);
 }
 
 function sendTriggers(samp){
