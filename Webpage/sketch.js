@@ -5,7 +5,7 @@ var samples = [];
 var hornsamp = [];
 var horntimes = [];
 
-var sampleNum = 9;
+var sampleNum = 2;
 var started = true;
 let curSamp;
 var loaded;
@@ -13,8 +13,6 @@ var noSleep = new NoSleep();
 var dummyaudio = new Audio();
 var startTime;
 var loadtime;
-var biglat;
-var big;
 var BAN_ID = "c4c";
 var neo = true;
 var connectAttempts;
@@ -59,32 +57,29 @@ var audio = new Audio();
 
 new p5();
 
+
+//Initializes everything after preload
 function setup() {
 	started = false;
+
+	//Connect attempts for continuing to query the wws server
 	connectAttempts = 0;
-	biglat = 0;
-	big = false;
-	big = getQueryVariable("big")
+	//allows one to set banID by url, mostly unused
 	var newID = getQueryVariable("ban")
 	if(newID!=false){
 		console.log("new ban is " + newID)
 		BAN_ID = newID;
 	}
+	//Get start time
 	var d = new Date();
 	startTime = d.getSeconds();
-	loaded = 0;
-  curSamp = "35"
-	//sample1.playMode('sustain');
 
-	//canvas stuff
-	
-	//load samples
-	
-	//createCanvas(350, 700);
-	//background(255, 0, 0);
-  //text('Loading C4C...', 10, 10);
-  
-	//listenToWWSDataWithStomp();
+	//Sets samples loaded to 0
+	loaded = 0;
+	//Default value of 0
+	curSamp = "0";
+	  
+
 	room = getUrlVars()["room"];
 	//console.log(room)
 	//Check whether a variable has been passed via reload function
@@ -149,28 +144,17 @@ function pick_stream(zone_no) {
 	console.log("network state " + audio.networkState)
 	console.log("ready state " + audio.readyState)
 	BAN_ID = tag_no;
-	if(neo){
-		loadSamples();
-		changeToNeo();
-	}
-	else{
-		changeToOG();
-	}
+	loadSamples();
+	listenToWWSDataWithStomp();
 	
 }
-
-function changeToNeo(){
-	audio.pause();
-	//dummyaudio.play();
-	neo = true;
-	listenToWWSDataWithStomp();
-}
-
+//Allows for reload with room url variable, mostly unused
 function reloadRoom(){
 	window.location.assign('https://www.c4cstream.com/?room='+tag_no); 
 }
 
 //Function borrowed from online
+//For getting url variables, mostly unused
 function getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -252,34 +236,74 @@ function http_GET(url) {
 	
 }
 
-
-
-
-function preload(){
-  //dummyaudio.src = "silent.wav";
-		console.log("samp loaded")
-		//dummyaudio.loop = true;
-		silencesamp = loadSound('silence.wav', loopSilence)
+//For getting the url variables, mostly unused
+function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
 }
 
 
 
+//This loads before the main page loads, used to load the crucial silence sample which
+//keeps phones from falling alseep, then executes loopSilence
+function preload(){
+		console.log("samp loaded")
+		silencesamp = loadSound('silence.wav', loopSilence)
+}
+
+//Loops the silence sample forever to keep the phones awake
+function loopSilence(){
+	silencesamp.loop();
+	silencesamp.play();
+}
+
+//Crucial function which starts audio using p5.js's mouse function
+//Audio of other samples will not play unless the user activiates it with this
+//If browser audio standards change, this will have to be changed as well
+function mousePressed() {
+	console.log("mousepress");
+	if(!started){
+		//Should already be looping from above loopSilence function
+		silencesamp.play();
+		console.log("start user interaction audio");
+		//Enables no sleep, which keeps the phone screen alive as an extra precaution
+		noSleep.enable();
+		//Ensures this does not run again
+		started = true;
+	}
+	
+}
+
+/*
+//Replaced by mousepressed, Be wary of deleting in case of emergency
 document.body.addEventListener("touchend", function(){
 	console.log("clicked")
   if(!started){
 		//dummyaudio.autoplay = true;
+		//dummyaudio.play();
 		console.log("toucheded")
 		
 		console.log("looped");
 		
-		//dummyaudio.play();
+		
 
 	}
 });
+*/
 
+
+
+
+
+//Loads performance samples based on input code and then updates the progress bar
 function loadSamples(){
 
-	//silencesamp = loadSound('samples/silence.wav', loopSilence)
 	if(tag_no=='1001'){
 		samples[0] = loadSound("VASamples/kittenL.mp3", progress)
 	}
@@ -298,15 +322,10 @@ function loadSamples(){
 	else if(tag_no=='1006'){
 		samples[0] = loadSound("VASamples/trin.mp3", progress)
 	}
+	//All ones could use this test tone, however it is non-essential and left 
+	//till the end
 	testTone = loadSound('test.wav', progress)
 	
-}
-
-function playHorn(samp, time){
-	for(i = 0; i < samp.length; i++){
-		setTimeout(playSample, time[i], samp[i]);
-		//print(time[i]);
-	}
 }
 
 //literally timeout will not work with just the sample.play() method so you need this dumb
@@ -315,133 +334,137 @@ function playSample(sample){
 	sample.play();
 }
 
-function getQueryVariable(variable)
-{
-       var query = window.location.search.substring(1);
-       var vars = query.split("&");
-       for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split("=");
-               if(pair[0] == variable){return pair[1];}
-       }
-       return(false);
-}
 
-function loopSilence(){
-	silencesamp.loop();
-	silencesamp.play();
-}
 
+
+//Method which keeps track of how many samples have been loaded, keep global variable
+//updated
 function progress(){
 	loaded++;
 	console.log("sampled " + loaded + "loaded");
 	if(connected){
 		sendMessage("c4c", "sample loaded");
 	}
-
-	if(loaded>=1){
+	//If all samples are loaded, send a message
+	if(loaded>=samplesNum){
 		console.log("All samples loaded " + tag_no);
 		sendMessage("c4c", tag_no + " fully loaded");
-		//playHorn(hornsamp1, horntimes1);
-		/*
-		clear();
-		fill(0, 0, 0)
-		textSize(32);
-		text('Welcome to C4C! Turn up your volume and touch anywhere to begin', 10, 30, 350, 600);
-		*/
 	}
 }
 
-
+//Handles incoming samples
 function playSamp(receivedSamp){
-	console.log("playsamp");
-	curSamp = receivedSamp;
-	if(receivedSamp=="neo"){
-		changeToNeo();
-	}
-	else if(receivedSamp=="og"){
-		changeToOG();
-	}
-	else if(receivedSamp=="stopall"){
+	console.log("playsamp for " + receivedSamp);
+	//Sets curSamp to ensure proper state management
+	
+
+	//Fades down all samples
+	if(receivedSamp=="stopall"){
 		//stopAll();
 		fadeDown();
 	}
+	//Plays test tone with this reserved keyword
 	else if(receivedSamp=="test"){
 		testTone.play();
 	}
+
+	//If time keywored is included, will play at that specific time
 	else if(String(receivedSamp).includes("time")){
+		var code = parseInt(receivedSamp);
+		curSamp = code;
+		var index = code;
+		console.log("playing sample " + index);
+		playTime = parseInt(receivedSamp.substring(receivedSamp.lastIndexOf("e"), receivedSamp.length()));
 		console.log("playing sample at " + parseInt(curSamp));
-		samples[0].play(0, 1, 1, parseInt(curSamp));
+		samples[index].play(0, 1, 1, playTime);
 	}
+
+	//Update function, will handle update signals from the sender to sync all playing
+	//samples
 	else if(String(receivedSamp).includes("update")){
-		if(!samples[0].isPlaying()){
+		//checks whether curSamp is already playing, will not interrupt if so
+		var code = parseInt(receivedSamp);
+		curSamp = code;
+		var index = code;
+		if(!samples[index].isPlaying()){
 			console.log("playing from update");
-			samples[0].setVolume(0, 0);
-			tim = parseInt(receivedSamp)/1000;
+			samples[parseInt(curSamp)].setVolume(0, 0);
+			//Gets the int for the time stamp of the sample
+			tim = parseInt(receivedSamp.substring(receivedSamp.lastIndexOf("e"), receivedSamp.length()));
 			if(tim>samples[0].duration()){
 				tim = tim%samples[0].duration();
 				console.log("Looped, playing from " + tim);
 			}
-			samples[0].stop();
-			samples[0].play(0, 1, 1, tim);
-			samples[0].setVolume(1, 3);
+
+			//Plays the sample at the appropriate time
+			samples[parseInt(curSamp)].stop();
+			samples[parseInt(curSamp)].play(0, 1, 1, tim);
+			samples[parseInt(curSamp)].setVolume(1, 3);
 		}
 	}
-	else{
-		var code = parseInt(receivedSamp)
+
+	//Handles normal case where the message is the index of a sample
+	else if(String(receivedSamp).includes("looping")){
+		var code = parseInt(receivedSamp);
+		curSamp = code;
 		var index = code;
 		console.log("playing sample " + index);
 		try{
-				samples[0].setVolume(1, 0);
-			if(index==0){
+				samples[index].setVolume(1, 0);
 				samples[index].loop();
-			} else{
 				samples[index].play();
 			}
+		catch(err){
+			console.log("Error! " + err);
+		}
+	}
+	else if(String(receivedSamp).includes("unlooping")){
+		var code = parseInt(receivedSamp);
+		curSamp = code;
+		var index = code;
+		console.log("playing sample " + index);
+		try{
+			samples[index].setVolume(1, 0);
+			samples[index].play();
 		}
 		catch(err){
 			console.log("Error! " + err);
 		}
 	}
-}
-function fadeDown(){
-	if(samples[0].isPlaying()){
-		samples[0].setVolume(0, 1);	
-		setTimeout(stop0, 1000);
+	else{
+		console.log("malformed message received: " + receivedSamp);
 	}
 }
-function stop0(){
+
+//Fades current sample gradually down
+function fadeDown(){
+	if(samples[parseInt(curSamp)].isPlaying()){
+		samples[parseInt(curSamp)].setVolume(0, 1);	
+		setTimeout(stopSamp, 1000);
+	}
+}
+//Finally stops the current sample
+function stopSamp(){
 	console.log("Stopping sample");
-	samples[0].stop();
+	samples[curSamp].stop();
 }
 
+//Stops all samples, currently not used in favor of fade down
 function stopAll(){
 	for(var i = 0; i < samples.length; i++){
 		samples[i].stop();
 	}
 }
 
+//Changes all samples to sustain mode
 function sustainMode(){
-	for(var i = 0; i < sampleNum; i++){
+	for(var i = 0; i < samples.length; i++){
 		samples[i].playMode('sustain');
 	}
 }
 
-function mousePressed() {
-	console.log("mousepress");
-	if(!started){
-		//clear();
-		//text('Keep your phone open and Listen to the music', 10, 30, 350, 600);
-		curSamp = 1;
-		//playSamp();
-		silencesamp.play();
-		console.log("mousepress");
-		//dummyaudio.play();
-		noSleep.enable();
-		started = true;
-	}
-	
-}
 
+//Sends messages back to the central process
 function sendMessage(ban, message) {
 	
 
@@ -449,6 +472,7 @@ function sendMessage(ban, message) {
 		let payload = {
 			code: message
 		}
+		//Uses the ban as an identifier, then sends the message
 		if(connected){
         	sendClient.send("/exchange/data/" + ban, {}, JSON.stringify(payload));
 			console.log("sent " + JSON.stringify(payload));
@@ -459,9 +483,14 @@ function sendMessage(ban, message) {
 }
 
 
+//Listens to WWS
 // STOMP-based stream listener (no polling)
 function listenToWWSDataWithStomp() {
 	
+
+	//Different wws instances, Paris is best if EAT is done since Murray Hill has inconsistent
+	//uptime and will often block outside signals
+
 	//MH
 	//const url = "ws://stream_bridge_user1:WWS2016@10.4.82.58/ws"
 	//Paris
@@ -481,25 +510,27 @@ function listenToWWSDataWithStomp() {
 	function onError() {
 		console.log('Stomp error');
 		connectAttempts++;
+		//Wait after repeated attempts to connect
 		if(connectAttempts>4){
-			changeToOG();
-			connectAttempts = 0;
+			setTimeout(listenToWWSDataWithStomp, 5000);
 		} else{
 			listenToWWSDataWithStomp();
 		}
 	}
 
+	//Connected
 	function onConnectListener(x) {
 		console.log("Listening to " + BAN_ID);
 		connected = true;
 		sendMessage('c4c', 'online')
 
-		//client.subscribe(exchange+BAN_ID+".motion.sleeve", function(msg) {
+	//Subscribing to the BANID, receives these messages
     client.subscribe(exchange+BAN_ID, function(msg) {
 			// Update motion information
 			//console.log(msg.body);
+			//curSamp is not set here, but only when a new sample is played
+			//curSamp = data.code;
 			let data = JSON.parse(msg.body);
-			curSamp = data.code;
 			console.log("received" + data.code);
 
 			playSamp(data.code);
@@ -507,16 +538,7 @@ function listenToWWSDataWithStomp() {
 		});
 	}
 
+	//The actual connection function
 	client.connect("stream_bridge_user1", "WWS2016", onConnectListener, onError, "/test");
 	sendClient = client;
 }
-
-
-/*
-<audio loop>
-      <source src="horse.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-		</audio>
-
-
-		*/
