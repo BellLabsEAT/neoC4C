@@ -9,7 +9,7 @@ var sampleNum = 9;
 var started = true;
 let curSamp;
 var loaded;
-//var noSleep = new NoSleep();
+var noSleep = new NoSleep();
 var dummyaudio = new Audio();
 var startTime;
 var loadtime;
@@ -19,7 +19,8 @@ var BAN_ID = "c4c";
 var neo = true;
 var connectAttempts;
 var sendClient;
-var silencesamp
+var silencesamp;
+var connected = false;
 
 
 
@@ -304,10 +305,10 @@ function http_GET(url) {
 
 
 function preload(){
-  //dummyaudio.src = "test.wav";
+  //dummyaudio.src = "silent.wav";
 		console.log("samp loaded")
 		//dummyaudio.loop = true;
-		//silencesamp = loadSound('samples/silence.wav', loopSilence)
+		silencesamp = loadSound('silence.wav', loopSilence)
 }
 
 
@@ -351,7 +352,7 @@ function loadSamples(){
 	horntimes[1] = 250*1000;
 	horntimes[2] = 401*1000;
 	if(tag_no=='1001'){
-		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1001b.mp3", progress)
+		hornsamp[0] = loadSound("VASamples/kittenL.mp3", progress)
 		/*
 		hornsamp[1] = loadSound('mp3s/4001/20190725_EM_2B_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4001/20190725_EM_2B_2.mp3', progress);
@@ -359,40 +360,37 @@ function loadSamples(){
 		*/
 	}
 	else if(tag_no=='1002'){
-		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1002b.mp3", progress)
+		hornsamp[0] = loadSound("VASamples/kittenR.mp3", progress)
 		/* hornsamp[1] = loadSound('mp3s/4002/20190725_EM_2D_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4002/20190725_EM_2D_2.mp3', progress);
 		hornsamp[3] = loadSound('mp3s/4002/20190725_EM_2D_3.mp3', progress); */
 	}
 	else if(tag_no=='1003'){
-		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1003b.mp3", progress)
+		hornsamp[0] = loadSound("VASamples/kalimba.mp3", progress)
 /* 		hornsamp[1] = loadSound('mp3s/4003/20190725_EM_3B_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4003/20190725_EM_3B_2.mp3', progress);
 		hornsamp[3] = loadSound('mp3s/4003/20190725_EM_3B_3.mp3', progress); */
 	}
 	else if(tag_no=='1004'){
-		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1004b.mp3", progress)
+		hornsamp[0] = loadSound("VASamples/wind.mp3", progress)
 /* 		hornsamp[1] = loadSound('mp3s/4004/20190725_EM_3D_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4004/20190725_EM_3D_2.mp3', progress);
 		hornsamp[3] = loadSound('mp3s/4004/20190725_EM_3D_3.mp3', progress); */
 	}
 	else if(tag_no=='1005'){
-		hornsamp[0] = loadSound("mp3s _single filesnew/20190725_EM_2B_1005b.mp3", progress)
+		hornsamp[0] = loadSound("VASamples/sandwind.mp3", progress)
+/* 		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3', progress);
+		hornsamp[2] = loadSound('mp3s/4005/20190725_EM_3C_2.mp3', progress);
+		hornsamp[3] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3', progress); */
+	}
+	else if(tag_no=='1006'){
+		hornsamp[0] = loadSound("VASamples/trin.mp3", progress)
 /* 		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3', progress);
 		hornsamp[2] = loadSound('mp3s/4005/20190725_EM_3C_2.mp3', progress);
 		hornsamp[3] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3', progress); */
 	}
 	hornsamp[1] = loadSound('test.wav', progress)
 	
-}
-
-function loadHorns(){
-	hornsamp1[0] = loadSound('mp3s/4001/20190725_EM_2B_1.mp3');
-	hornsamp1[1] = loadSound('mp3s/4001/20190725_EM_2B_2.mp3');
-	hornsamp1[2] = loadSound('mp3s/4001/20190725_EM_2B_3.mp3');
-	horntimes1[0] = 0;
-	horntimes1[1] = 250*1000;
-	horntimes1[2] = 401*1000;
 }
 
 function playHorn(samp, time){
@@ -442,14 +440,16 @@ function draw(){
 	*/
 }
 function loopSilence(){
-	//silencesamp.loop();
-	//silencesamp.play();
+	silencesamp.loop();
+	silencesamp.play();
 }
 
 function progress(){
 	loaded++;
 	console.log("sampled " + loaded + "loaded");
-	sendMessage("c4c", "sample loaded");
+	if(connected){
+		sendMessage("c4c", "sample loaded");
+	}
 
 	if(loaded>=1){
 		console.log("All samples loaded " + tag_no);
@@ -474,19 +474,53 @@ function playSamp(){
 		changeToOG();
 	}
 	else if(curSamp=="stopall"){
-		stopAll();
+		//stopAll();
+		fadeDown();
+	}
+	else if(String(curSamp).includes("time")){
+		console.log("playing sample at " + parseInt(curSamp));
+		hornsamp[0].play(0, 1, 1, parseInt(curSamp));
+	}
+	else if(String(curSamp).includes("update")){
+		if(!hornsamp[0].isPlaying()){
+			console.log("playing from update");
+			hornsamp[0].setVolume(0, 0);
+			tim = parseInt(curSamp)/1000;
+			if(tim>hornsamp[0].duration()){
+				tim = tim%hornsamp[0].duration();
+				console.log("Looped, playing from " + tim);
+			}
+			hornsamp[0].stop();
+			hornsamp[0].play(0, 1, 1, tim);
+			hornsamp[0].setVolume(1, 3);
+		}
 	}
 	else{
 		var code = parseInt(curSamp)
 		var index = code;
 		console.log("playing sample " + index);
 		try{
-			hornsamp[index].play();
+				hornsamp[0].setVolume(1, 0);
+			if(index==0){
+				hornsamp[index].loop();
+			} else{
+				hornsamp[index].play();
+			}
 		}
 		catch(err){
 			console.log("Error! " + err);
 		}
 	}
+}
+function fadeDown(){
+	if(hornsamp[0].isPlaying()){
+		hornsamp[0].setVolume(0, 1);	
+		setTimeout(stop0, 1000);
+	}
+}
+function stop0(){
+	console.log("Stopping sample");
+	hornsamp[0].stop();
 }
 
 function stopAll(){
@@ -507,14 +541,15 @@ function sustainMode(){
 function mousePressed() {
 	console.log("mousepress");
 	if(!started){
-		clear();
+		//clear();
 		//text('Keep your phone open and Listen to the music', 10, 30, 350, 600);
 		curSamp = 1;
-		playSamp();
+		//playSamp();
+		silencesamp.play();
 		console.log("mousepress");
 		//dummyaudio.play();
-		//noSleep.enable();
-		//started = true;
+		noSleep.enable();
+		started = true;
 	}
 	
 }
@@ -526,9 +561,12 @@ function sendMessage(ban, message) {
 		let payload = {
 			code: message
 		}
-
-        sendClient.send("/exchange/data/" + ban, {}, JSON.stringify(payload));
-        console.log("sent " + JSON.stringify(payload));
+		if(connected){
+        	sendClient.send("/exchange/data/" + ban, {}, JSON.stringify(payload));
+			console.log("sent " + JSON.stringify(payload));
+		} else{
+			console.log("Not connected yet, message not sent");
+		}
 	}
 }
 
@@ -570,6 +608,7 @@ function listenToWWSDataWithStomp() {
 
 	function onConnectListener(x) {
 		console.log("Listening to " + BAN_ID);
+		connected = true;
 		sendMessage('c4c', 'online')
 
 		//client.subscribe(exchange+BAN_ID+".motion.sleeve", function(msg) {
