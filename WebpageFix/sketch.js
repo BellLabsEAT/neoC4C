@@ -483,7 +483,16 @@ function playSamp(){
 	}
 	else if(String(curSamp).includes("update")){
 		if(!hornsamp[0].isPlaying()){
-			hornsamp[0].play(0, 1, 1, parseInt(curSamp)/1000);
+			console.log("playing from update");
+			hornsamp[0].setVolume(0, 0);
+			tim = parseInt(curSamp)/1000;
+			if(tim>hornsamp[0].duration()){
+				tim = tim%hornsamp[0].duration();
+				console.log("Looped, playing from " + tim);
+			}
+			hornsamp[0].stop();
+			hornsamp[0].play(0, 1, 1, tim);
+			hornsamp[0].setVolume(1, 3);
 		}
 	}
 	else{
@@ -491,6 +500,7 @@ function playSamp(){
 		var index = code;
 		console.log("playing sample " + index);
 		try{
+				hornsamp[0].setVolume(1, 0);
 			if(index==0){
 				hornsamp[index].loop();
 			} else{
@@ -503,10 +513,16 @@ function playSamp(){
 	}
 }
 function fadeDown(){
-	hornsamp[0].setVolume(0, 1);
-	setTimeout(hornsamp[0].stop, 1500);
-	setTimeout(hornsamp[0].setVolume, 1500, 1, 0);
+	if(hornsamp[0].isPlaying()){
+		hornsamp[0].setVolume(0, 1);	
+		setTimeout(stop0, 1000);
+	}
 }
+function stop0(){
+	console.log("Stopping sample");
+	hornsamp[0].stop();
+}
+
 function stopAll(){
 	for(var i = 0; i < hornsamp.length; i++){
 		hornsamp[i].stop();

@@ -18,9 +18,19 @@ var banID2 = '1002'
 var banID3 = '1003'
 var banID4 = '1004'
 var banID5 = '1005'
+var banID6 = '1006'
+var c1
+var c2
+var c3
+var c4
+var c5
+var c6
 var timer1
 var timer2
 var updateTimer;
+var allMode;
+var meowMode;
+var fluteMode;
 
 setup();
 //listenToWWSDataWithStomp();
@@ -28,7 +38,16 @@ function setup() {
   console.log("helloWorld!!!!!")
   //document.getElementById("demo").innerHTML = 5+6;
   //document.write("hello");
-  
+  c1 = 0;
+  c2 = 0;
+  c3 = 0;
+  c4 = 0;
+  c5 = 0;
+  c6 = 0;
+  allMode = true;
+  meowMode = false;
+  fluteMode = false;
+  document.getElementById("mode").innerHTML = "allMode";
     listenToWWSDataWithStomp();
 }
 
@@ -42,7 +61,7 @@ function activateSending(){
 
             console.log(WebMidi.inputs);
             console.log(WebMidi.outputs);
-            input = WebMidi.inputs[0];
+            input = WebMidi.inputs[2];
             input.addListener('noteon', "all",
                 function (e) {
                     var note = "" + e.note.name + e.note.octave;
@@ -151,28 +170,30 @@ document.body.addEventListener("keypress", function(event){
     updateTimer = setTimeout(update, 2000);
     
   }
-  if(String.fromCharCode(key)=='d'){
-    clearTimeout(timer1);
-    clearTimeout(timer2);
-    sendTriggers("1");
-    timer1 =  setTimeout(sendTriggers, 250*1000, "2");
-    timer2 =  setTimeout(sendTriggers, 401*1000, "3");
-  }
   else if(String.fromCharCode(key)=='1'){
     sendTriggers("1");
   }
   else if(String.fromCharCode(key)=='2'){
-    sendTriggers("2");
+    allMode = true;
+    meowMode = false;
+    fluteMode = false;
+    document.getElementById("mode").innerHTML = "allMode";
   }
   else if(String.fromCharCode(key)=='3'){
-    sendTriggers("3");
+    allMode = false;
+    meowMode = true;
+    fluteMode = false;
+    document.getElementById("mode").innerHTML = "meowMode";
+  }
+  else if(String.fromCharCode(key)=='4'){
+    allMode = false;
+    meowMode = false;
+    fluteMode = true;
+    document.getElementById("mode").innerHTML = "fluteMode";
   }
   else if(String.fromCharCode(key)=='x'){
     sendTriggers("stopall");
-  }
-  else if(String.fromCharCode(key)=='f'){
-    clearTimeout(timer1);
-    clearTimeout(timer2);
+    clearTimeout(updateTimer);
   }
   else if(String.fromCharCode(key)=='t'){
     sendTriggers("1");
@@ -260,19 +281,28 @@ function parseReceived(data){
     if(k!=NaN){
       switch(k){
         case 1001:
-          document.getElementById("1001").innerHTML = "phone 1 loaded";
+          document.getElementById("1001").innerHTML = "phone 1 loaded " + String(c1);
+          c1++;
           break;
         case 1002:
-          document.getElementById("1002").innerHTML = "phone 2 loaded";
+          document.getElementById("1002").innerHTML = "phone 2 loaded " + String(c2);
+          c2++;
           break;
         case 1003:
-          document.getElementById("1003").innerHTML = "phone 3 loaded";
+          document.getElementById("1003").innerHTML = "phone 3 loaded " + String(c3);
+          c3++;
           break;
         case 1004:
-          document.getElementById("1004").innerHTML = "phone 4 loaded";
+          document.getElementById("1004").innerHTML = "phone 4 loaded " + String(c4);
+          c4++;
           break;
         case 1005:
-          document.getElementById("1005").innerHTML = "phone 5 loaded";
+          document.getElementById("1005").innerHTML = "phone 5 loaded " + String(c5);
+          c5++;
+          break;
+        case 1006:
+          document.getElementById("1006").innerHTML = "phone 6 loaded " + String(c6);
+          c6++;
           break;
 
       }
@@ -290,15 +320,20 @@ function update(){
   var d = new Date();
   payload = String(d.getTime()-startTime) + "update";
   sendTriggers(payload);
-  updateTimer = setTimeout(update, 5000);
+  updateTimer = setTimeout(update, 1000);
 }
 
 function sendTriggers(samp){
-  sendTrigger(banID, samp)
-  sendTrigger(banID2, samp)
-  sendTrigger(banID3, samp)
-  sendTrigger(banID4, samp)
-  sendTrigger(banID5, samp)
+  if(meowMode||allMode){
+    sendTrigger(banID, samp)
+    sendTrigger(banID2, samp)
+  }
+  if(fluteMode||allMode){
+    sendTrigger(banID3, samp)
+    sendTrigger(banID4, samp)
+    sendTrigger(banID5, samp)
+    sendTrigger(banID6, samp)
+  }
 }
 
 function sendTrigger(ban, samp) {
