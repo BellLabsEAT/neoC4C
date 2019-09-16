@@ -20,6 +20,7 @@ var neo = true;
 var connectAttempts;
 var sendClient;
 var silencesamp;
+var testTone;
 var connected = false;
 
 
@@ -44,16 +45,6 @@ var audio_streams = ["http://52.15.74.163:8000/phono", "http://18.191.241.173:80
 	"http://18.218.48.101:8000/phono", "http://3.16.216.43:8000/phono", "http://18.216.106.143:8000/phono",
 	"http://18.222.219.131:8000/phono", "http://3.16.143.147:8000/phono", "http://18.216.55.97:8000/phono"]; //audio streams using AWS EC2
 
-//var audio_streams = ["http://18.224.190.207:8000/phono", "http://18.224.252.102:8000/phono",
-//	"http://3.16.129.93:8000/phono", "http://18.218.85.251:8000/phono", "http://18.191.23.151:8000/phono",
-//	"http://18.222.219.131:8000/phono", "http://3.16.143.147:8000/phono", "http://18.216.55.97:8000/phono"]; //audio streams using AWS EC2
-
-// var audio_streams = ["http://c4cpis.ddns.net:1/phono", "http://c4cpis.ddns.net:2/phono",
-// 	"http://c4cpis.ddns.net:3/phono", "http://c4cpis.ddns.net:4/phono", "http://c4cpis.ddns.net:5/phono",
-// 	"http://c4cpis.ddns.net:6/phono", "http://c4cpis.ddns.net:7/phono", "http://c4cpis.ddns.net:8/phono"]; // DDNS through No-IP.com
-// var audio_streams = ["http://192.168.1.201:8000/phono", "http://192.168.1.202:8000/phono", 
-// 	"http://192.168.1.203:8000/phono", "http://192.168.1.204:8000/phono", "http://192.168.1.205:8000/phono",
-// 	"http://192.168.1.206:8000/phono", "http://192.168.1.207:8000/phono", "http://192.168.1.208:8000/phono"]; // c4c
 
 /*
 User information: should not be changed. Includes variables referencing the user's tag
@@ -146,7 +137,6 @@ function login() {
 		if(!neo){
 			audio.play();
 		}
-		//begin();
 		document.getElementById("information").innerHTML = "Now playing stream " + zone_no + " for performance..."; // used for testing purposes
 	}
 }
@@ -175,45 +165,6 @@ function changeToNeo(){
 	neo = true;
 	listenToWWSDataWithStomp();
 }
-
-function changeToOG(){
-	neo = false;
-	audio.src = audio_streams[zone_no - 1];
-	audio = new Audio(audio_streams[zone_no - 1])
-	//dummyaudio.pause();
-	audio.play();
-}
-
-
-//Added by Ethan to handle various timing events
-function begin(){
-	//console.log(tag_no)
-	var d = new Date();
-	startTime = d.getTime();
-	
-	for(var i = 0; i<500; i++){
-		
-		setTimeout(console.log, i*1000, "network state " + audio.networkState);
-		setTimeout(console.log, i*1000, "ready state " + audio.readyState)
-		//setTimeout(console.log, i*1000, "buffered state " + audio.buffered.end(0))
-		setTimeout(console.log, i*1000, "volume " + audio.volume)
-		setTimeout(console.log, i*1000, "ct " + audio.currentTime)
-		setTimeout(console.log, i*1000, "dur " + audio.duration)
-		setTimeout(console.log, i*1000, "er " + audio.error)
-		setTimeout(console.log, i*1000, "pr " + audio.preload)
-		setTimeout(console.log, i*1000, "sr " + audio.src.length)
-	}
-	//window.location.reload(true)
-	
-}
-
-/*
-function updateCurrentTime(){
-	var d = new Date();
-	ct = d.getTime() - startTime;
-	audio.currentTime = ct/1000;
-}
-*/
 
 function reloadRoom(){
 	window.location.assign('https://www.c4cstream.com/?room='+tag_no); 
@@ -313,25 +264,6 @@ function preload(){
 
 
 
-
-/*
-Initial page setup, solely related to the appearance of the interface.
-Clears the login input box every time the user refreshes.
-
-function setup() {
-	room = getUrlVars()["room"];
-	console.log(room)
-	//Check whether a variable has been passed via reload function
-	if(room>1000){
-		tag_no = room;
-		login();
-	}
-	document.getElementById("attempted_login").value = "";
-}
-*/
-
-
-
 document.body.addEventListener("touchend", function(){
 	console.log("clicked")
   if(!started){
@@ -348,48 +280,25 @@ document.body.addEventListener("touchend", function(){
 function loadSamples(){
 
 	//silencesamp = loadSound('samples/silence.wav', loopSilence)
-	horntimes[0] = 0;
-	horntimes[1] = 250*1000;
-	horntimes[2] = 401*1000;
 	if(tag_no=='1001'){
-		hornsamp[0] = loadSound("VASamples/kittenL.mp3", progress)
-		/*
-		hornsamp[1] = loadSound('mp3s/4001/20190725_EM_2B_1.mp3', progress);
-		hornsamp[2] = loadSound('mp3s/4001/20190725_EM_2B_2.mp3', progress);
-		hornsamp[3] = loadSound('mp3s/4001/20190725_EM_2B_3.mp3', progress);
-		*/
+		samples[0] = loadSound("VASamples/kittenL.mp3", progress)
 	}
 	else if(tag_no=='1002'){
-		hornsamp[0] = loadSound("VASamples/kittenR.mp3", progress)
-		/* hornsamp[1] = loadSound('mp3s/4002/20190725_EM_2D_1.mp3', progress);
-		hornsamp[2] = loadSound('mp3s/4002/20190725_EM_2D_2.mp3', progress);
-		hornsamp[3] = loadSound('mp3s/4002/20190725_EM_2D_3.mp3', progress); */
+		samples[0] = loadSound("VASamples/kittenR.mp3", progress)
 	}
 	else if(tag_no=='1003'){
-		hornsamp[0] = loadSound("VASamples/kalimba.mp3", progress)
-/* 		hornsamp[1] = loadSound('mp3s/4003/20190725_EM_3B_1.mp3', progress);
-		hornsamp[2] = loadSound('mp3s/4003/20190725_EM_3B_2.mp3', progress);
-		hornsamp[3] = loadSound('mp3s/4003/20190725_EM_3B_3.mp3', progress); */
+		samples[0] = loadSound("VASamples/kalimba.mp3", progress)
 	}
 	else if(tag_no=='1004'){
-		hornsamp[0] = loadSound("VASamples/wind.mp3", progress)
-/* 		hornsamp[1] = loadSound('mp3s/4004/20190725_EM_3D_1.mp3', progress);
-		hornsamp[2] = loadSound('mp3s/4004/20190725_EM_3D_2.mp3', progress);
-		hornsamp[3] = loadSound('mp3s/4004/20190725_EM_3D_3.mp3', progress); */
+		samples[0] = loadSound("VASamples/wind.mp3", progress)
 	}
 	else if(tag_no=='1005'){
-		hornsamp[0] = loadSound("VASamples/sandwind.mp3", progress)
-/* 		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3', progress);
-		hornsamp[2] = loadSound('mp3s/4005/20190725_EM_3C_2.mp3', progress);
-		hornsamp[3] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3', progress); */
+		samples[0] = loadSound("VASamples/sandwind.mp3", progress)
 	}
 	else if(tag_no=='1006'){
-		hornsamp[0] = loadSound("VASamples/trin.mp3", progress)
-/* 		hornsamp[1] = loadSound('mp3s/4005/20190725_EM_3C_1.mp3', progress);
-		hornsamp[2] = loadSound('mp3s/4005/20190725_EM_3C_2.mp3', progress);
-		hornsamp[3] = loadSound('mp3s/4005/20190725_EM_3C_3.mp3', progress); */
+		samples[0] = loadSound("VASamples/trin.mp3", progress)
 	}
-	hornsamp[1] = loadSound('test.wav', progress)
+	testTone = loadSound('test.wav', progress)
 	
 }
 
@@ -417,28 +326,6 @@ function getQueryVariable(variable)
        return(false);
 }
 
-function draw(){
-/*
-	if(loaded<sampleNum){
-		//console.log("drawing");
-		clear();
-		stroke(0, 0, 0);
-		noFill();
-		rect(30, 30, 500, 80);
-		
-
-		noStroke();
-		fill(0, 0, 255);
-		rect(30, 30, 500*loaded/sampleNum, 80);
-		var d = new Date();
-		var s = d.getSeconds()-startTime;
-		textSize(32);
-		loadtime = s;
-		text('Loading time: ' + s, 100, 170);
-		console.log(s);
-	}
-	*/
-}
 function loopSilence(){
 	silencesamp.loop();
 	silencesamp.play();
@@ -465,46 +352,50 @@ function progress(){
 }
 
 
-function playSamp(){
+function playSamp(receivedSamp){
 	console.log("playsamp");
-	if(curSamp=="neo"){
+	curSamp = receivedSamp;
+	if(receivedSamp=="neo"){
 		changeToNeo();
 	}
-	else if(curSamp=="og"){
+	else if(receivedSamp=="og"){
 		changeToOG();
 	}
-	else if(curSamp=="stopall"){
+	else if(receivedSamp=="stopall"){
 		//stopAll();
 		fadeDown();
 	}
-	else if(String(curSamp).includes("time")){
-		console.log("playing sample at " + parseInt(curSamp));
-		hornsamp[0].play(0, 1, 1, parseInt(curSamp));
+	else if(receivedSamp=="test"){
+		testTone.play();
 	}
-	else if(String(curSamp).includes("update")){
-		if(!hornsamp[0].isPlaying()){
+	else if(String(receivedSamp).includes("time")){
+		console.log("playing sample at " + parseInt(curSamp));
+		samples[0].play(0, 1, 1, parseInt(curSamp));
+	}
+	else if(String(receivedSamp).includes("update")){
+		if(!samples[0].isPlaying()){
 			console.log("playing from update");
-			hornsamp[0].setVolume(0, 0);
-			tim = parseInt(curSamp)/1000;
-			if(tim>hornsamp[0].duration()){
-				tim = tim%hornsamp[0].duration();
+			samples[0].setVolume(0, 0);
+			tim = parseInt(receivedSamp)/1000;
+			if(tim>samples[0].duration()){
+				tim = tim%samples[0].duration();
 				console.log("Looped, playing from " + tim);
 			}
-			hornsamp[0].stop();
-			hornsamp[0].play(0, 1, 1, tim);
-			hornsamp[0].setVolume(1, 3);
+			samples[0].stop();
+			samples[0].play(0, 1, 1, tim);
+			samples[0].setVolume(1, 3);
 		}
 	}
 	else{
-		var code = parseInt(curSamp)
+		var code = parseInt(receivedSamp)
 		var index = code;
 		console.log("playing sample " + index);
 		try{
-				hornsamp[0].setVolume(1, 0);
+				samples[0].setVolume(1, 0);
 			if(index==0){
-				hornsamp[index].loop();
+				samples[index].loop();
 			} else{
-				hornsamp[index].play();
+				samples[index].play();
 			}
 		}
 		catch(err){
@@ -513,20 +404,17 @@ function playSamp(){
 	}
 }
 function fadeDown(){
-	if(hornsamp[0].isPlaying()){
-		hornsamp[0].setVolume(0, 1);	
+	if(samples[0].isPlaying()){
+		samples[0].setVolume(0, 1);	
 		setTimeout(stop0, 1000);
 	}
 }
 function stop0(){
 	console.log("Stopping sample");
-	hornsamp[0].stop();
+	samples[0].stop();
 }
 
 function stopAll(){
-	for(var i = 0; i < hornsamp.length; i++){
-		hornsamp[i].stop();
-	}
 	for(var i = 0; i < samples.length; i++){
 		samples[i].stop();
 	}
@@ -573,11 +461,6 @@ function sendMessage(ban, message) {
 
 // STOMP-based stream listener (no polling)
 function listenToWWSDataWithStomp() {
-
-//	const url = "ws://stream_bridge_user1:WWS2016@194.137.84.174:15674/ws";
-	//const url = "ws://stream_bridge_user1:WWS2016@34.241.186.209:15674/ws";
-  //const url = "ws://stream_bridge_user1:WWS2016@135.112.86.21:15674/ws";
-	//const url = "ws://stream_bridge_user1:WWS2016@10.12.82.58:5672/ws"
 	
 	//MH
 	//const url = "ws://stream_bridge_user1:WWS2016@10.4.82.58/ws"
@@ -617,23 +500,9 @@ function listenToWWSDataWithStomp() {
 			//console.log(msg.body);
 			let data = JSON.parse(msg.body);
 			curSamp = data.code;
-			console.log(data.code);
+			console.log("received" + data.code);
 
-			//Latency display
-			/*
-			clear();
-			var d = new Date();
-			console.log(d.getTime() - data.time);
-			var lat = d.getTime() - data.time;
-			if(lat>biglat){
-				biglat = lat;
-			}
-			*/
-			//text('Latency:  ' + lat, 100, 170);
-			//text('Loaded Time:  ' + loadtime, 100, 270);
-			//text('Top Lat:  ' + biglat, 100, 370);
-
-			playSamp();
+			playSamp(data.code);
 
 		});
 	}
