@@ -1,7 +1,6 @@
 //import { rejects } from "assert";
 
 var samples = [];
-var sampleNum = 5;
 var started = false;
 let curSamp;
 var loaded;
@@ -17,8 +16,6 @@ var banID = '1001'
 var banID2 = '1002'
 var banID3 = '1003'
 var banID4 = '1004'
-var banID5 = '1005'
-var banID6 = '1006'
 var c1
 var c2
 var c3
@@ -31,6 +28,8 @@ var updateTimer;
 var allMode;
 var meowMode;
 var fluteMode;
+var stream1_idNum, stream2_idNum, stream3_idNum, stream4_idNum;
+var stream1_IDs, stream2_IDs, stream3_IDs, stream4_IDs;
 
 setup();
 //listenToWWSDataWithStomp();
@@ -51,6 +50,10 @@ function setup() {
     listenToWWSDataWithStomp();
 }
 
+/*
+Enables WebMIDI protocol to send triggers via MIDI ports.
+Currently looking for MIDI port 2, but should be variable in the future.
+*/
 function activateSending(){
     WebMidi.enable(function (err) {
 
@@ -78,6 +81,14 @@ function activateSending(){
       });
 }
 
+
+/*
+MIDI Input: Currently using MIDI notes C2-D3 (48-62) 
+to send triggers to all clients to play their respective samples. 
+
+This was last used for Times Square ICE performance.
+But can be adapted for future MIDI use.
+*/
 function sendMIDI(note){
     switch (note){
         case 48:
@@ -158,6 +169,17 @@ function sendMIDI(note){
       }
 }
 
+/*
+Parses through keypress events to send triggers to the clients.
+	a = Play sample 0 on all clients
+	1 = Play sample 1 on all clients
+	2 = Switches to allMode (sends sample triggers to all clients)
+	3 = Switches to meowMode, 2 individual streams (used in Vault Allure #3 performance)
+	4 = Switches to fluteMode, 4 individual streams (used in Vault Allure #3 performance)
+	x = Stop all samples from playing
+	t = Play test tone (in this case test tone is sample [1])
+	n = Update timer variable
+*/
 document.body.addEventListener("keypress", function(event){
   key = event.which;
   console.log(key);
@@ -205,12 +227,16 @@ document.body.addEventListener("keypress", function(event){
 });
 
 
-// STOMP-based stream listener (no polling)
+/*
+ STOMP-based stream listener (no polling)
+ Listens to WWS stream for exchange data if connected to an existing stream_no
+ Activates sending from webpage to connected clients.
+*/
 function listenToWWSDataWithStomp() {
 
-//	const url = "ws://stream_bridge_user1:WWS2016@194.137.84.174:15674/ws";
+	//	const url = "ws://stream_bridge_user1:WWS2016@194.137.84.174:15674/ws";
 	//const url = "ws://stream_bridge_user1:WWS2016@34.241.186.209:15674/ws";
-  //const url = "ws://stream_bridge_user1:WWS2016@135.112.86.21:15674/ws";
+  	//const url = "ws://stream_bridge_user1:WWS2016@135.112.86.21:15674/ws";
 	//const url = "ws://stream_bridge_user1:WWS2016@10.12.82.58:5672/ws"
 	
 	//MH
@@ -241,9 +267,27 @@ function listenToWWSDataWithStomp() {
 
 	function onConnectListener(x) {
         console.log("Listening to " + BAN_ID)
+        // if (BAN_ID == "1001"){
+        // 	stream1_idNum++;
+        // 	stream1_IDs.push(stream1_idNum);
+        // 	console.log("Listening to " + BAN_ID + "on Phone ID" + stream1_idNum);
+        // }
+        // if (BAN_ID == "1002"){
+        // 	stream2_idNum++;
+        // 	stream2_IDs.push(stream2_idNum);
+        // }
+        // if (BAN_ID == "1003"){
+        // 	stream3_idNum++;
+        // 	stream3_IDs.push(stream3_idNum);
+        // }
+        // if (BAN_ID == "1004"){
+        // 	stream4_idNum++;
+        // 	stream4_IDs.push(stream4_idNum);
+        // }
         activateSending();
 
 		//client.subscribe(exchange+BAN_ID+".motion.sleeve", function(msg) {
+        }
     client.subscribe(exchange+BAN_ID, function(msg) {
 			// Update motion information
 			//console.log(msg.body);
@@ -272,6 +316,11 @@ function listenToWWSDataWithStomp() {
 	client.connect("stream_bridge_user1", "WWS2016", onConnectListener, onError, "/test");
 }
 
+
+/*
+When a client has fully buffered the sample bank onto their device,
+server webpage displays debug message to inform the user for each tag. 
+*/
 function parseReceived(data){
   console.log(data);
   console.log(data.code)
@@ -312,17 +361,23 @@ function parseReceived(data){
 
 function sendTime(){
   payload = String(document.getElementById("timeSend").value) + "time";
-  sendTriggers(payload);
+  // sendTriggers(payload);
 }
 
 function update(){
   console.log("update!");
   var d = new Date();
   payload = String(d.getTime()-startTime) + "update";
-  sendTriggers(payload);
+  // sendTriggers(payload);
   updateTimer = setTimeout(update, 1000);
 }
 
+/*
+Multi-sending function that can send triggers to multiple ban IDs at once.
+	allMode = send triggers simultaneously to all clients to play sample_no N
+	meowMode = send triggers simultaneously to clients on streams 1001 and 1002
+	fluteMode = send triggers simultaneously to clients on streams 1003 - 1006
+*/
 function sendTriggers(samp){
   if(meowMode||allMode){
     sendTrigger(banID, samp)
@@ -336,9 +391,10 @@ function sendTriggers(samp){
   }
 }
 
+/*
+Sends data to WWS to play sample based on ban ID & sample_no.
+*/
 function sendTrigger(ban, samp) {
-	
-
 	if (client) {		
 		let payload = {
 			code: samp
