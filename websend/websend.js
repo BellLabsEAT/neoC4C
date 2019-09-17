@@ -363,9 +363,30 @@ function sendTime(){
   // sendTriggers(payload);
 }
 
+/*
+Actives debug console on the sender/server webpage
+Shows current mode and status of sample loading on clients with tags 1001-1006.
+*/
 function debugMode(){
-	debugMode = document.getElementById("debugtoggle").value;
-	console.log(debugMode);
+	var debugMode = document.getElementById("debug").checked;
+  if (debugMode){
+    document.getElementById("mode").style.display = "block";
+    document.getElementById("1001").style.display = "block";
+    document.getElementById("1002").style.display = "block";
+    document.getElementById("1003").style.display = "block";
+    document.getElementById("1004").style.display = "block";
+    document.getElementById("1005").style.display = "block";
+    document.getElementById("1006").style.display = "block";
+  } else {
+    document.getElementById("mode").style.display = "none";
+    document.getElementById("1001").style.display = "none";
+    document.getElementById("1002").style.display = "none";
+    document.getElementById("1003").style.display = "none";
+    document.getElementById("1004").style.display = "none";
+    document.getElementById("1005").style.display = "none";
+    document.getElementById("1006").style.display = "none";
+  }
+	// console.log(debugMode);
 }
 
 function update(){
