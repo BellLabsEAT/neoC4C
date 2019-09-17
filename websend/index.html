@@ -3,15 +3,26 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>p5.js example</title>
+    <title>C4C Sending Client Console</title>
     <style> body {padding: 0; margin: 0;} </style>
     
 
   </head>
 
   <body>
-      <h2>C4C sending client</h2>
-  <p>Commands: a to send all, x to stop playing, 1 or t to send test sound, 2,3,4 to change send modes, n to cancel update timer</p>
+      <h2>C4C Sending Client Console</h2>
+  <p>COMMANDS: <br> 
+  a to send play samples on all active clients, <br>
+  x to stop playing samples on all active clients, <br>
+  1 or t to send test sound to all active clients, <br>
+  2,3,4 to change send modes (allMode, meowMode, fluteMode), <br>
+  n to cancel update timer</p>
+
+  <p>Send trigger to all clients to start current sample at time in textbox</p>
+  <input type="text" id="timeSend" value="0">
+  <button onclick="sendTime()">Send Time</button><br>
+
+  <p> <input type="checkbox" name="debugtoggle" value="debug"> DEBUG CONSOLE<br>
   <p id="lastmessage"></p>
   <p id="mode"></p>
   <p id="1001"></p>
@@ -20,12 +31,6 @@
   <p id="1004"></p>
   <p id="1005"></p>
   <p id="1006"></p>
-
-
-
-  <p>Send sample to start at time in textbox</p>
-  <input type="text" id="timeSend" value="0">
-  <button onclick="sendTime()">Send Time</button><br>
 
 <!--   <input type = "checkbox" id="isLooping" value="0"> Autoloop <br>
   <input type = "checkbox" id="catchUp" value="0"> Catch Up<br> -->
