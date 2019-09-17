@@ -234,85 +234,68 @@ document.body.addEventListener("keypress", function(event){
 */
 function listenToWWSDataWithStomp() {
 
-	//	const url = "ws://stream_bridge_user1:WWS2016@194.137.84.174:15674/ws";
-	//const url = "ws://stream_bridge_user1:WWS2016@34.241.186.209:15674/ws";
-  	//const url = "ws://stream_bridge_user1:WWS2016@135.112.86.21:15674/ws";
-	//const url = "ws://stream_bridge_user1:WWS2016@10.12.82.58:5672/ws"
-	
-	//MH
-	//const url = "ws://stream_bridge_user1:WWS2016@10.4.82.58/ws"
-	//Paris
-	//const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
-	//EAT
-	const url = "ws://stream_bridge_user1:WWS2016@3.83.188.186:15674/ws"
+//  const url = "ws://stream_bridge_user1:WWS2016@194.137.84.174:15674/ws";
+  //const url = "ws://stream_bridge_user1:WWS2016@34.241.186.209:15674/ws";
+  //const url = "ws://stream_bridge_user1:WWS2016@135.112.86.21:15674/ws";
+  //const url = "ws://stream_bridge_user1:WWS2016@10.12.82.58:5672/ws"
+  
+  //MH
+  //const url = "ws://stream_bridge_user1:WWS2016@10.4.82.58/ws"
+  //Paris
+  //const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
+  //EAT
+  const url = "ws://stream_bridge_user1:WWS2016@3.83.188.186:15674/ws"
 
-	const exchange = "/exchange/data/";
+  const exchange = "/exchange/data/";
 
-	// Check if we have a BAN_ID provided as an URL parameter
-
-
+  // Check if we have a BAN_ID provided as an URL parameter
 
 
-	client = Stomp.client(url);
 
-	function onError() {
-		console.log('Stomp error');
-		connectAttempts++;
-		if(connectAttempts>4){
 
-		} else{
-			listenToWWSDataWithStomp();
-		}
-	}
+  client = Stomp.client(url);
 
-	function onConnectListener(x) {
+  function onError() {
+    console.log('Stomp error');
+    connectAttempts++;
+    if(connectAttempts>4){
+
+    } else{
+      listenToWWSDataWithStomp();
+    }
+  }
+
+  function onConnectListener(x) {
         console.log("Listening to " + BAN_ID)
-        // if (BAN_ID == "1001"){
-        // 	stream1_idNum++;
-        // 	stream1_IDs.push(stream1_idNum);
-        // 	console.log("Listening to " + BAN_ID + "on Phone ID" + stream1_idNum);
-        // }
-        // if (BAN_ID == "1002"){
-        // 	stream2_idNum++;
-        // 	stream2_IDs.push(stream2_idNum);
-        // }
-        // if (BAN_ID == "1003"){
-        // 	stream3_idNum++;
-        // 	stream3_IDs.push(stream3_idNum);
-        // }
-        // if (BAN_ID == "1004"){
-        // 	stream4_idNum++;
-        // 	stream4_IDs.push(stream4_idNum);
-        // }
         activateSending();
 
-		//client.subscribe(exchange+BAN_ID+".motion.sleeve", function(msg) {
-        }
+    //client.subscribe(exchange+BAN_ID+".motion.sleeve", function(msg) {
     client.subscribe(exchange+BAN_ID, function(msg) {
-			// Update motion information
-			//console.log(msg.body);
+      // Update motion information
+      //console.log(msg.body);
       let data = JSON.parse(msg.body);
       parseReceived(data);
-			curSamp = data.code;
-			//console.log(data.code);
+      curSamp = data.code;
+      //console.log(data.code);
 
-			//Latency display
-			/*
-			clear();
-			var d = new Date();
-			console.log(d.getTime() - data.time);
-			var lat = d.getTime() - data.time;
-			if(lat>biglat){
-				biglat = lat;
-			}
-			*/
-			//text('Latency:  ' + lat, 100, 170);
-			//text('Loaded Time:  ' + loadtime, 100, 270);
-			//text('Top Lat:  ' + biglat, 100, 370);
+      //Latency display
+      /*
+      clear();
+      var d = new Date();
+      console.log(d.getTime() - data.time);
+      var lat = d.getTime() - data.time;
+      if(lat>biglat){
+        biglat = lat;
+      }
+      */
+      //text('Latency:  ' + lat, 100, 170);
+      //text('Loaded Time:  ' + loadtime, 100, 270);
+      //text('Top Lat:  ' + biglat, 100, 370);
 
-		});
+    });
+  }
 
-	client.connect("stream_bridge_user1", "WWS2016", onConnectListener, onError, "/test");
+  client.connect("stream_bridge_user1", "WWS2016", onConnectListener, onError, "/test");
 }
 
 
