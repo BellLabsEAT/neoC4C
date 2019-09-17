@@ -311,7 +311,6 @@ function listenToWWSDataWithStomp() {
 			//text('Top Lat:  ' + biglat, 100, 370);
 
 		});
-	}
 
 	client.connect("stream_bridge_user1", "WWS2016", onConnectListener, onError, "/test");
 }
@@ -362,6 +361,11 @@ function parseReceived(data){
 function sendTime(){
   payload = String(document.getElementById("timeSend").value) + "time";
   // sendTriggers(payload);
+}
+
+function debugMode(){
+	debugMode = document.getElementById("debugtoggle").value;
+	console.log(debugMode);
 }
 
 function update(){
