@@ -20,6 +20,7 @@ var sendClient;
 var silencesamp;
 var testTone;
 var connected = false;
+var uniqueName
 
 
 
@@ -134,6 +135,13 @@ function login() {
 		}
 		document.getElementById("information").innerHTML = "Now playing stream " + zone_no + " for performance..."; // used for testing purposes
 	}
+}
+
+function genName(tag){
+	var name = String(tag);
+	let r = Math.random().toString(36).substring(7);
+	name = name + " " + String(r);
+	return name;
 }
 
 /*
@@ -343,12 +351,12 @@ function progress(){
 	loaded++;
 	console.log("sampled " + loaded + "loaded");
 	if(connected){
-		sendMessage("c4c", "sample loaded");
+		sendMessage(BAN_ID, uniqueName + " sample loaded");
 	}
 	//If all samples are loaded, send a message
-	if(loaded>=samplesNum){
+	if(loaded>=sampleNum){
 		console.log("All samples loaded " + tag_no);
-		sendMessage("c4c", tag_no + " fully loaded");
+		sendMessage(BAN_ID, uniqueName + " fully loaded");
 	}
 }
 
@@ -374,8 +382,10 @@ function playSamp(receivedSamp){
 		curSamp = code;
 		var index = code;
 		console.log("playing sample " + index);
-		playTime = parseInt(receivedSamp.substring(receivedSamp.lastIndexOf("e"), receivedSamp.length()));
-		console.log("playing sample at " + parseInt(curSamp));
+		stringSamp = String(receivedSamp);
+		var len = stringSamp.length;
+		playTime = parseInt(stringSamp.substring(stringSamp.lastIndexOf("e")+1, len));
+		console.log("playing sample " + parseInt(curSamp) + " at " + playTime);
 		samples[index].play(0, 1, 1, playTime);
 	}
 
@@ -387,15 +397,25 @@ function playSamp(receivedSamp){
 		curSamp = code;
 		var index = code;
 		if(!samples[index].isPlaying()){
-			console.log("playing from update");
+			
 			samples[parseInt(curSamp)].setVolume(0, 0);
 			//Gets the int for the time stamp of the sample
-			tim = parseInt(receivedSamp.substring(receivedSamp.lastIndexOf("e"), receivedSamp.length()));
-			if(tim>samples[0].duration()){
-				tim = tim%samples[0].duration();
+			stringSamp = String(receivedSamp);
+			var len = stringSamp.length;
+			partial = stringSamp.substring(stringSamp.lastIndexOf("e")+1, len);
+			console.log(partial);
+			tim = parseInt(stringSamp.substring(stringSamp.lastIndexOf("e")+1, len));
+
+			//I don't think this works, disabled for now
+
+			/*
+			if(tim>samples[index].duration()){
+				tim = tim%samples[index].duration();
 				console.log("Looped, playing from " + tim);
 			}
+			*/
 
+			console.log("playing from update at " + tim);
 			//Plays the sample at the appropriate time
 			samples[parseInt(curSamp)].stop();
 			samples[parseInt(curSamp)].play(0, 1, 1, tim);
@@ -522,7 +542,9 @@ function listenToWWSDataWithStomp() {
 	function onConnectListener(x) {
 		console.log("Listening to " + BAN_ID);
 		connected = true;
-		sendMessage('c4c', 'online')
+		uniqueName = genName(tag_no);
+		console.log("Generated new name which is " + uniqueName)
+		sendMessage(BAN_ID, uniqueName + ' online')
 
 	//Subscribing to the BANID, receives these messages
     client.subscribe(exchange+BAN_ID, function(msg) {

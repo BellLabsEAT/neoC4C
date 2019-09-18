@@ -16,6 +16,8 @@ var banID = '1001'
 var banID2 = '1002'
 var banID3 = '1003'
 var banID4 = '1004'
+var banID5 = '1005'
+var banID6 = '1006'
 var c1
 var c2
 var c3
@@ -189,7 +191,7 @@ document.body.addEventListener("keypress", function(event){
     var d = new Date();
     startTime = d.getTime();
     clearTimeout(updateTimer);
-    updateTimer = setTimeout(update, 2000);
+    updateTimer = setTimeout(update, 2000, 0);
     
   }
   else if(String.fromCharCode(key)=='1'){
@@ -341,9 +343,9 @@ function parseReceived(data){
   }
 }
 
-function sendTime(){
-  payload = String(document.getElementById("timeSend").value) + "time";
-  // sendTriggers(payload);
+function sendTime(samp){
+  payload = samp + " time" + String(document.getElementById("timeSend").value);
+  sendTriggers(payload);
 }
 
 /*
@@ -372,12 +374,12 @@ function debugMode(){
 	// console.log(debugMode);
 }
 
-function update(){
+function update(samp){
   console.log("update!");
   var d = new Date();
-  payload = String(d.getTime()-startTime) + "update";
-  // sendTriggers(payload);
-  updateTimer = setTimeout(update, 1000);
+  payload = samp + " update " + String(d.getTime()-startTime);
+  sendTriggers(payload);
+  updateTimer = setTimeout(update, 1000, 0);
 }
 
 /*
@@ -387,16 +389,12 @@ Multi-sending function that can send triggers to multiple ban IDs at once.
 	fluteMode = send triggers simultaneously to clients on streams 1003 - 1006
 */
 function sendTriggers(samp){
-  if(meowMode||allMode){
     sendTrigger(banID, samp)
     sendTrigger(banID2, samp)
-  }
-  if(fluteMode||allMode){
     sendTrigger(banID3, samp)
     sendTrigger(banID4, samp)
     sendTrigger(banID5, samp)
     sendTrigger(banID6, samp)
-  }
 }
 
 /*
