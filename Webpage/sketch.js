@@ -13,7 +13,7 @@ var noSleep = new NoSleep();
 var dummyaudio = new Audio();
 var startTime;
 var loadtime;
-var BAN_ID = "c4c";
+var sendban = "c4c";
 var neo = true;
 var connectAttempts;
 var sendClient;
@@ -351,12 +351,12 @@ function progress(){
 	loaded++;
 	console.log("sampled " + loaded + "loaded");
 	if(connected){
-		sendMessage(BAN_ID, uniqueName + " sample loaded");
+		sendMessage(sendban, uniqueName + " sample loaded");
 	}
 	//If all samples are loaded, send a message
 	if(loaded>=sampleNum){
 		console.log("All samples loaded " + tag_no);
-		sendMessage(BAN_ID, uniqueName + " fully loaded");
+		sendMessage(sendban, uniqueName + " fully loaded");
 	}
 }
 
@@ -547,7 +547,7 @@ function listenToWWSDataWithStomp() {
 		connected = true;
 		uniqueName = genName(tag_no);
 		console.log("Generated new name which is " + uniqueName)
-		sendMessage(BAN_ID, uniqueName + ' online')
+		sendMessage(sendban, uniqueName + ' online')
 
 	//Subscribing to the BANID, receives these messages
     client.subscribe(exchange+BAN_ID, function(msg) {
