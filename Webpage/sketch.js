@@ -396,8 +396,9 @@ function playSamp(receivedSamp){
 		var code = parseInt(receivedSamp);
 		curSamp = code;
 		var index = code;
+		console.log("update received at index " + String(index));
 		if(!samples[index].isPlaying()){
-			
+			console.log("is not playing " + samples[index].isPlaying);
 			samples[parseInt(curSamp)].setVolume(0, 0);
 			//Gets the int for the time stamp of the sample
 			stringSamp = String(receivedSamp);
@@ -405,21 +406,23 @@ function playSamp(receivedSamp){
 			partial = stringSamp.substring(stringSamp.lastIndexOf("e")+1, len);
 			console.log(partial);
 			tim = parseInt(stringSamp.substring(stringSamp.lastIndexOf("e")+1, len));
-
+			tim = tim/1000;
 			//I don't think this works, disabled for now
 
-			/*
+			
 			if(tim>samples[index].duration()){
 				tim = tim%samples[index].duration();
 				console.log("Looped, playing from " + tim);
 			}
-			*/
+			
 
 			console.log("playing from update at " + tim);
 			//Plays the sample at the appropriate time
-			samples[parseInt(curSamp)].stop();
-			samples[parseInt(curSamp)].play(0, 1, 1, tim);
-			samples[parseInt(curSamp)].setVolume(1, 3);
+			
+			samples[index].stop();
+			console.log("stopped");
+			samples[index].play(0, 1, 1, tim);
+			samples[index].setVolume(1, 3);
 		}
 	}
 

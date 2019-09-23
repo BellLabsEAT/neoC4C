@@ -187,7 +187,7 @@ document.body.addEventListener("keypress", function(event){
   console.log(key);
   if(String.fromCharCode(key)=='a'){
     console.log("setUpdate");
-    sendTriggers('0');
+    sendTriggers('0 unlooping');
     var d = new Date();
     startTime = d.getTime();
     clearTimeout(updateTimer);
@@ -195,7 +195,7 @@ document.body.addEventListener("keypress", function(event){
     
   }
   else if(String.fromCharCode(key)=='1'){
-    sendTriggers("1");
+    sendTriggers("1 unlooping");
   }
   else if(String.fromCharCode(key)=='2'){
     allMode = true;
@@ -220,7 +220,7 @@ document.body.addEventListener("keypress", function(event){
     clearTimeout(updateTimer);
   }
   else if(String.fromCharCode(key)=='t'){
-    sendTriggers("1");
+    sendTriggers("1 unlooping");
   }
   else if(String.fromCharCode(key)=='n'){
     clearTimeout(updateTimer);
