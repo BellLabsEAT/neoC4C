@@ -596,7 +596,7 @@ function sendUpdate(){
 	if(localDebug){
 		console.log("sending update");
 	}
-	sendMessage(sendban, uniqueName + " still online " + d.getTime());
+	sendMessage(sendban, uniqueName + " still " + d.getTime());
 	updateTimeout = setTimeout(sendUpdate, updateTime);
 }
 

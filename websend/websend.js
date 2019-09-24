@@ -32,12 +32,18 @@ var updateTimer;
 var allMode;
 var meowMode;
 var fluteMode;
+var phones;
+var updateCheckTimeout;
+var updateTime = 7000;
+var offlineTime = 12000;
 // var stream1_idNum, stream2_idNum, stream3_idNum, stream4_idNum;
 // var stream1_IDs, stream2_IDs, stream3_IDs, stream4_IDs;
 
 setup();
 //listenToWWSDataWithStomp();
 function setup() {
+  updateCheck();
+  phones = {};
   console.log("helloWorld!!!!!")
   //document.getElementById("demo").innerHTML = 5+6;
   //document.write("hello");
@@ -230,6 +236,18 @@ document.body.addEventListener("keypress", function(event){
   
 });
 
+function updateCheck(){
+  for(var phone in phones){
+    var d = new Date();
+    var value = phones[phone];
+    if(d.getTime()>value+offlineTime){
+      console.log("Phone " + phone + " is not sending");
+    }
+  }
+
+  updateCheckTimeout = setTimeout(updateCheck, updateTime);
+}
+
 
 /*
  STOMP-based stream listener (no polling)
@@ -346,6 +364,11 @@ function parseReceived(data){
   }
   if(String(data.code).includes("online")){
     var userID = data.code.split(" ");
+    //Populates dictionary
+    var d = new Date();
+    phones[userID[1]] = d.getTime();
+
+    //Populates array
     var i;
     for (i = 0; i < users.length; i++){
       if (userID[1] == users[i]){
@@ -354,6 +377,13 @@ function parseReceived(data){
     } 
     users.push(userID[1]);
     console.log(users);
+  }
+  else if(String(data.code).includes("still")){
+    var userID = data.code.split(" ");
+    console.log(userID);
+    var d = new Date();
+    phones[userID[1]] = d.getTime();
+    console.log("Updated phone " + userID[1] + " to " + d.getTime());
   }
 }
 
