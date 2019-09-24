@@ -1,5 +1,7 @@
 //import { rejects } from "assert";
 
+var users = [];
+var userBan_IDs = [];
 var samples = [];
 var started = false;
 let curSamp;
@@ -30,8 +32,8 @@ var updateTimer;
 var allMode;
 var meowMode;
 var fluteMode;
-var stream1_idNum, stream2_idNum, stream3_idNum, stream4_idNum;
-var stream1_IDs, stream2_IDs, stream3_IDs, stream4_IDs;
+// var stream1_idNum, stream2_idNum, stream3_idNum, stream4_idNum;
+// var stream1_IDs, stream2_IDs, stream3_IDs, stream4_IDs;
 
 setup();
 //listenToWWSDataWithStomp();
@@ -309,37 +311,49 @@ function parseReceived(data){
   console.log(data);
   console.log(data.code)
   if(String(data.code).includes("fully loaded")){
+    var userID = data.code.split(" ");
     var k = parseInt(String(data.code));
     console.log("parsed is " + k);
     if(k!=NaN){
       switch(k){
         case 1001:
-          document.getElementById("1001").innerHTML = "phone 1 loaded " + String(c1);
+          document.getElementById("1001").innerHTML = "phone 1 loaded ID: " + userID[1] + ", total on stream: " + String(c1);
           c1++;
           break;
         case 1002:
-          document.getElementById("1002").innerHTML = "phone 2 loaded " + String(c2);
+          document.getElementById("1002").innerHTML = "phone 2 loaded ID: " + userID[1] + ", total on stream: " + String(c2);
           c2++;
           break;
         case 1003:
-          document.getElementById("1003").innerHTML = "phone 3 loaded " + String(c3);
+          document.getElementById("1003").innerHTML = "phone 3 loaded ID:" + userID[1] + ", total on stream: " + String(c3);
           c3++;
           break;
         case 1004:
-          document.getElementById("1004").innerHTML = "phone 4 loaded " + String(c4);
+          document.getElementById("1004").innerHTML = "phone 4 loaded ID: " + userID[1] + ", total on stream: " + String(c4);
           c4++;
           break;
         case 1005:
-          document.getElementById("1005").innerHTML = "phone 5 loaded " + String(c5);
+          document.getElementById("1005").innerHTML = "phone 5 loaded ID: " + userID[1] + ", total on stream: " + String(c5);
           c5++;
           break;
         case 1006:
-          document.getElementById("1006").innerHTML = "phone 6 loaded " + String(c6);
+          document.getElementById("1006").innerHTML = "phone 6 loaded ID: " + userID[1] + ", total on stream: " + String(c6);
           c6++;
           break;
 
       }
+    }
   }
+  if(String(data.code).includes("online")){
+    var userID = data.code.split(" ");
+    var i;
+    for (i = 0; i < users.length; i++){
+      if (userID[1] == users[i]){
+        console.log("Generating new name...");
+      }
+    } 
+    users.push(userID[1]);
+    console.log(users);
   }
 }
 
@@ -372,6 +386,13 @@ function debugMode(){
     document.getElementById("1006").style.display = "none";
   }
 	// console.log(debugMode);
+}
+
+function genName(tag){
+  var name = String(tag);
+  let r = Math.random().toString(36).substring(7);
+  name = name + " " + String(r);
+  return name;
 }
 
 function update(samp){
