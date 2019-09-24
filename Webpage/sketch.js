@@ -23,6 +23,8 @@ var uniqueName;
 var debugSending = false;
 var localDebug = true;
 var loadTimeout = 10000;
+var updateTimeout;
+var updateTime = 5000;
 
 
 
@@ -589,6 +591,15 @@ function sendMessage(ban, message) {
 	}
 }
 
+function sendUpdate(){
+	var d = new Date();
+	if(localDebug){
+		console.log("sending update");
+	}
+	sendMessage(sendban, uniqueName + " still online " + d.getTime());
+	updateTimeout = setTimeout(sendUpdate, updateTime);
+}
+
 
 //Listens to WWS
 // STOMP-based stream listener (no polling)
@@ -632,6 +643,7 @@ function listenToWWSDataWithStomp() {
 		uniqueName = genName(tag_no);
 		console.log("Generated new name which is " + uniqueName)
 		sendMessage(sendban, uniqueName + ' online')
+		sendUpdate();
 
 	//Subscribing to the BANID, receives these messages
     client.subscribe(exchange+BAN_ID, function(msg) {
