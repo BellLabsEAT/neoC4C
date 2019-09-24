@@ -12,7 +12,6 @@ var loaded;
 var noSleep = new NoSleep();
 var dummyaudio = new Audio();
 var startTime;
-var loadtime;
 var sendban = "c4c";
 var neo = true;
 var connectAttempts;
@@ -20,7 +19,10 @@ var sendClient;
 var silencesamp;
 var testTone;
 var connected = false;
-var uniqueName
+var uniqueName;
+var debugSending = false;
+var localDebug = true;
+var loadTimeout = 10000;
 
 
 
@@ -28,7 +30,6 @@ var uniqueName
 HAIP-related information: change values according to HAIP server address,
 calibration / room size, and tags available.
 */
-console.log("hello worldo")
 
 var HAIP_SERVER_IP = "135.222.247.168";
 var HAIP_SERVER_PORT = "18080";
@@ -68,7 +69,12 @@ function setup() {
 	//allows one to set banID by url, mostly unused
 	var newID = getQueryVariable("ban")
 	if(newID!=false){
-		console.log("new ban is " + newID)
+		if(localDebug){
+			console.log("new ban is " + newID)
+		}
+		if(debugMode){
+			sendMessage(sendban, uniqueName + " new ban is " + newID);
+		}
 		BAN_ID = newID;
 	}
 	//Get start time
@@ -82,7 +88,6 @@ function setup() {
 	  
 
 	room = getUrlVars()["room"];
-	//console.log(room)
 	//Check whether a variable has been passed via reload function
 	if(room>1000){
 		tag_no = room;
@@ -103,7 +108,9 @@ numbered 1001-100n where n is the number of zones being used.
 */
 function attempt_activate_button() {
 	//enteringFirstTime = true
-	console.log("entering")
+	if(localDebug){
+		console.log("entering")
+	}
 	tag_no = document.getElementById("attempted_login").value;
 	if (tags[tag_no]) {
 		document.getElementById("button").disabled = false; // enables ENTER button
@@ -125,10 +132,14 @@ function login() {
 	// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
 	zone_no = tag_no - 1000; // used for non-localization zone definitions
 	if(enteringFirstTime){
-		console.log("reload")
+		if(localDebug){
+			console.log("reload");
+		}
 		reloadRoom();
 	} else{
-		console.log("picking stream")
+		if(localDebug){
+			console.log("picking stream");
+		}
 		pick_stream(zone_no); // picks initial stream based on zone
 		if(!neo){
 			audio.play();
@@ -149,8 +160,10 @@ Picks appropriate audio source given zone number based on the logic that audio_s
 with zone m-1.
 */
 function pick_stream(zone_no) {
-	console.log("network state " + audio.networkState)
-	console.log("ready state " + audio.readyState)
+	if(localDebug){
+		console.log("network state " + audio.networkState);
+		console.log("ready state " + audio.readyState);
+	}
 	BAN_ID = tag_no;
 	loadSamples();
 	listenToWWSDataWithStomp();
@@ -178,7 +191,9 @@ has not changed. Since non-localization zone definitions are static, this means 
 inactive when HAIP is not in use.
 */
 function refresh() {
-	console.log("refresh?")
+	if(localDebug){
+		console.log("refresh?");
+	}
 	setInterval(function() {
 		// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
 		var old_zone_no = zone_no; // used for non-localization zone definitions
@@ -261,8 +276,10 @@ function getQueryVariable(variable)
 //This loads before the main page loads, used to load the crucial silence sample which
 //keeps phones from falling alseep, then executes loopSilence
 function preload(){
-		console.log("samp loaded")
-		silencesamp = loadSound('silence.wav', loopSilence)
+	if(localDebug){
+		console.log("samp loaded");
+	}
+		silencesamp = loadSound('silence.wav', loopSilence);
 }
 
 //Loops the silence sample forever to keep the phones awake
@@ -275,11 +292,15 @@ function loopSilence(){
 //Audio of other samples will not play unless the user activiates it with this
 //If browser audio standards change, this will have to be changed as well
 function mousePressed() {
-	console.log("mousepress");
+	if(localDebug){
+		console.log("mousepress");
+	}
 	if(!started){
 		//Should already be looping from above loopSilence function
 		silencesamp.play();
-		console.log("start user interaction audio");
+		if(localDebug){
+			console.log("start user interaction audio");
+		}
 		//Enables no sleep, which keeps the phone screen alive as an extra precaution
 		noSleep.enable();
 		//Ensures this does not run again
@@ -311,7 +332,7 @@ document.body.addEventListener("touchend", function(){
 
 //Loads performance samples based on input code and then updates the progress bar
 function loadSamples(){
-
+	setTimeout(loadTimer, loadTimeout)
 	if(tag_no=='1001'){
 		samples[0] = loadSound("VASamples/kittenL.mp3", progress)
 	}
@@ -342,6 +363,12 @@ function playSample(sample){
 	sample.play();
 }
 
+function loadTimer(){
+	if(loaded<sampleNum){
+		sendMessage(sendban, uniqueName + " had failed to load in " + loadTimeout/1000.0 + "seconds");
+	}
+}
+
 
 
 
@@ -349,20 +376,29 @@ function playSample(sample){
 //updated
 function progress(){
 	loaded++;
-	console.log("sampled " + loaded + "loaded");
+	if(localDebug){
+		console.log("sampled " + loaded + "loaded");
+	}
 	if(connected){
 		sendMessage(sendban, uniqueName + " sample loaded");
 	}
 	//If all samples are loaded, send a message
 	if(loaded>=sampleNum){
-		console.log("All samples loaded " + tag_no);
+		if(localDebug){
+			console.log("All samples loaded " + tag_no);
+		}
 		sendMessage(sendban, uniqueName + " fully loaded");
 	}
 }
 
 //Handles incoming samples
 function playSamp(receivedSamp){
-	console.log("playsamp for " + receivedSamp);
+	if(localDebug){
+		console.log("playsamp for " + receivedSamp);
+	}
+	if(debugMode){
+		sendMessage(sendban, uniqueName + " playsamp for " + receivedSamp);
+	}
 	//Sets curSamp to ensure proper state management
 	
 
@@ -370,10 +406,22 @@ function playSamp(receivedSamp){
 	if(receivedSamp=="stopall"){
 		//stopAll();
 		fadeDown();
+		if(localDebug){
+			console.log("stopping all")
+		}
+		if(debugMode){
+			sendMessage(sendban, uniqueName + " stopping all");
+		}
 	}
 	//Plays test tone with this reserved keyword
 	else if(receivedSamp=="test"){
 		testTone.play();
+		if(localDebug){
+			console.log("playing test tone")
+		}
+		if(debugMode){
+			sendMessage(sendban, uniqueName + " playing test tone");
+		}
 	}
 
 	//If time keywored is included, will play at that specific time
@@ -381,11 +429,16 @@ function playSamp(receivedSamp){
 		var code = parseInt(receivedSamp);
 		curSamp = code;
 		var index = code;
-		console.log("playing sample " + index);
+		//console.log("playing sample " + index);
 		stringSamp = String(receivedSamp);
 		var len = stringSamp.length;
 		playTime = parseInt(stringSamp.substring(stringSamp.lastIndexOf("e")+1, len));
-		console.log("playing sample " + parseInt(curSamp) + " at " + playTime);
+		if(debugMode){
+			console.log("playing sample " + index + " at " + playTime);
+		}	
+		if(debugMode){
+			sendMessage(sendban, uniqueName + " playing sample " + index + " at " + playTime);
+		}
 		samples[index].play(0, 1, 1, playTime);
 	}
 
@@ -396,15 +449,16 @@ function playSamp(receivedSamp){
 		var code = parseInt(receivedSamp);
 		curSamp = code;
 		var index = code;
-		console.log("update received at index " + String(index));
+		if(debugMode){
+			console.log("update received at index " + String(index));
+		}
+		
 		if(!samples[index].isPlaying()){
-			console.log("is not playing " + samples[index].isPlaying);
 			samples[parseInt(curSamp)].setVolume(0, 0);
 			//Gets the int for the time stamp of the sample
 			stringSamp = String(receivedSamp);
 			var len = stringSamp.length;
 			partial = stringSamp.substring(stringSamp.lastIndexOf("e")+1, len);
-			console.log(partial);
 			tim = parseInt(stringSamp.substring(stringSamp.lastIndexOf("e")+1, len));
 			tim = tim/1000;
 			//I don't think this works, disabled for now
@@ -412,15 +466,23 @@ function playSamp(receivedSamp){
 			
 			if(tim>samples[index].duration()){
 				tim = tim%samples[index].duration();
-				console.log("Looped, playing from " + tim);
+				if(debugMode){
+					console.log("Looped, playing from " + tim);
+				}				
+				if(debugMode){
+					sendMessage(sendban, uniqueName + " Looped, playing from " + tim);
+				}
 			}
 			
-
-			console.log("playing from update at " + tim);
+			if(debugMode){
+				console.log("playing from update at " + tim);
+			}
+			if(debugMode){
+				sendMessage(sendban, uniqueName + " playing from update at " + tim);
+			}
 			//Plays the sample at the appropriate time
 			
 			samples[index].stop();
-			console.log("stopped");
 			samples[index].play(0, 1, 1, tim);
 			samples[index].setVolume(1, 3);
 		}
@@ -431,7 +493,12 @@ function playSamp(receivedSamp){
 		var code = parseInt(receivedSamp);
 		curSamp = code;
 		var index = code;
-		console.log("playing sample " + index);
+		if(debugMode){
+			console.log("playing looping sample " + index);
+		}
+		if(debugMode){
+			sendMessage(sendban, uniqueName + " playing looping sample " + index);
+		}
 		try{
 				samples[index].setVolume(1, 0);
 				samples[index].loop();
@@ -445,13 +512,28 @@ function playSamp(receivedSamp){
 		var code = parseInt(receivedSamp);
 		curSamp = code;
 		var index = code;
-		console.log("playing sample " + index);
+		if(debugMode){
+			console.log("playing unlooping sample " + index);
+		}
+		if(debugMode){
+			sendMessage(sendban, uniqueName + " playing unlooping sample " + index);
+		}
 		try{
 			samples[index].setVolume(1, 0);
 			samples[index].play();
 		}
 		catch(err){
 			console.log("Error! " + err);
+		}
+	}
+	else if(String(receivedSamp).includes("debug")){
+		var debugState = parseInt(receivedSamp);
+		debugMode = debugState;
+		if(debugMode){
+			console.log("Debug mode changed to " + debugState);
+		}
+		if(debugMode){
+			sendMessage(sendban, uniqueName + " Debug mode changed to " + debugState);
 		}
 	}
 	else{
@@ -468,7 +550,9 @@ function fadeDown(){
 }
 //Finally stops the current sample
 function stopSamp(){
-	console.log("Stopping sample");
+	if(localDebug){
+		console.log("Stopping sample");
+	}
 	samples[curSamp].stop();
 }
 
@@ -556,7 +640,10 @@ function listenToWWSDataWithStomp() {
 			//curSamp is not set here, but only when a new sample is played
 			//curSamp = data.code;
 			let data = JSON.parse(msg.body);
-			console.log("received" + data.code);
+			if(debugMode){
+				console.log("received" + data.code);
+			}
+			
 
 			playSamp(data.code);
 
