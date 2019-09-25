@@ -15,11 +15,15 @@
 
 		<h1>C4C</h1>
 		<div id="login">
-			<p id="instructions">Welcome to Compositions for the Collective. Please enter your tag number to join the audio streams...</p>
+			<!-- <p id="instructions">Welcome to Compositions for the Collective. Please enter your tag number to join the audio streams...</p> -->
+			<p id="instructions">Welcome to Compositions for the Collective. <br> Please follow these instructions to login to C4C: <br>
+			<br> 1. Turn on the sound on your device and turn the volume all the way up. <br> 2. Turn off WiFi and activate Do Not Disturb. <br> 3. Press ENTER and enjoy. <br>
+			</p>
 			<br>
-			<input type="text" maxlength="4" id="attempted_login" placeholder="0000" onfocus="this.placeholder=''" onblur="this.placeholder='0000'" oninput="attempt_activate_button()">
-			<br>
-			<button id="button" onclick="login(); refresh()" disabled="true">E N T E R</button>
+
+			<!-- <input type="text" maxlength="4" id="attempted_login" placeholder="0000" onfocus="this.placeholder=''" onblur="this.placeholder='0000'" oninput="attempt_activate_button()">
+			<br> -->
+			<button id="button" onclick="login(); refresh()" >E N T E R</button>
 		</div>
 
 		<div id="player_info" hidden="true">
