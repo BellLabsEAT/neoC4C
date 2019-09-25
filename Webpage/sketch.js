@@ -5,7 +5,7 @@ var samples = [];
 var hornsamp = [];
 var horntimes = [];
 
-var sampleNum = 2;
+var sampleNum = 3;
 var started = true;
 let curSamp;
 var loaded;
@@ -26,6 +26,7 @@ var loadTimeout = 10000;
 var updateTimeout;
 var updateTime = 5000;
 var sampleLoadNumber = 0;
+var loadReceived = false;
 
 
 
@@ -138,7 +139,11 @@ function login() {
 	document.getElementById("player_info").style.display = "block"; // shows player page divs
 	// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
 	if(!(tag_no>1001&&tag_no<1009)){
-		tag_no = 1005;
+		tag_no = Math.floor(Math.random() * 8) + 1;
+		if(localDebug){
+			console.log("Tag no is " + tag_no);
+		}
+		//tag_no = 1001;
 	}
 	zone_no = tag_no - 1000; // used for non-localization zone definitions
 	if(enteringFirstTime){
@@ -176,6 +181,7 @@ function pick_stream(zone_no) {
 	}
 	BAN_ID = tag_no;
 	//loadSamples();
+	setTimeout(lateLoad, 1000);
 	listenToWWSDataWithStomp();
 	
 }
@@ -342,31 +348,78 @@ document.body.addEventListener("touchend", function(){
 
 //Loads performance samples based on input code and then updates the progress bar
 function loadSamples(){
-	setTimeout(loadTimer, loadTimeout)
-	if(tag_no=='1001'){
-		switch(sampleLoadNumber){
-			case 0:
-				samples[0] = loadSound("VASamples/kittenL.mp3", progress);
-				console.log("I did 0");
-			case 1:
-				samples[1] = loadSound("VASamples/kittenL.mp3", progress);
-				console.log("I did 1");
-		}
-	}
-	else if(tag_no=='1002'){
-		samples[0] = loadSound("VASamples/kittenR.mp3", progress)
-	}
-	else if(tag_no=='1003'){
-		samples[0] = loadSound("VASamples/kalimba.mp3", progress)
-	}
-	else if(tag_no=='1004'){
-		samples[0] = loadSound("VASamples/wind.mp3", progress)
-	}
-	else if(tag_no=='1005'){
-		samples[0] = loadSound("VASamples/sandwind.mp3", progress)
-	}
-	else if(tag_no=='1006'){
-		samples[0] = loadSound("VASamples/trin.mp3", progress)
+	setTimeout(loadTimer, loadTimeout);
+	switch(tag_no){
+		case 1001:
+			switch(sampleLoadNumber){
+				//Note that this switch statement intentionally does not include breaks
+				//All code should execute from the starting point
+				case 0:
+					samples[0] = loadSound("samples/test_zone1.mp3", progress);
+					console.log("1 loaded here");
+				case 1:
+					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+					console.log("2 loaded here");
+			}
+			break;
+		case 1002:
+			switch(sampleLoadNumber){
+				case 0:
+					samples[0] = loadSound("samples/test_zone1.mp3", progress);
+				case 1:
+					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+			}
+			break;
+			
+		case 1003:
+			switch(sampleLoadNumber){
+				case 0:
+					samples[0] = loadSound("samples/test_zone2.mp3", progress);
+				case 1:
+					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+			}
+			break;
+		case 1004:
+				switch(sampleLoadNumber){
+					case 0:
+						samples[0] = loadSound("samples/test_zone2.mp3", progress);
+					case 1:
+						samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+				}
+				break;
+		case 1005:
+			switch(sampleLoadNumber){
+				case 0:
+					samples[0] = loadSound("samples/test_zone3.mp3", progress);
+				case 1:
+					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
+			}
+			break;
+		case 1006:
+			switch(sampleLoadNumber){
+				case 0:
+					samples[0] = loadSound("samples/test_zone3.mp3", progress);
+				case 1:
+					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
+			}
+			break;
+		case 1007:
+			switch(sampleLoadNumber){
+				case 0:
+					samples[0] = loadSound("samples/test_zone4.mp3", progress);
+				case 1:
+					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
+			}
+			break;
+		case 1008:
+			switch(sampleLoadNumber){
+				case 0:
+					samples[0] = loadSound("samples/test_zone4.mp3", progress);
+				case 1:
+					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
+			}
+			break;
+
 	}
 	//All ones could use this test tone, however it is non-essential and left 
 	//till the end
@@ -394,7 +447,7 @@ function loadTimer(){
 function progress(){
 	loaded++;
 	if(localDebug){
-		console.log("sampled " + loaded + "loaded");
+		console.log("sampled " + loaded + " loaded");
 	}
 	if(connected){
 		sendMessage(sendban, uniqueName + " sample loaded");
@@ -554,12 +607,26 @@ function playSamp(receivedSamp){
 		}
 	}
 	else if(String(receivedSamp).includes("load")){
-		var loadNum = parseInt(receivedSamp);
-		sampleLoadNumber = loadNum;
-		loadSamples();
+		if(!loadReceived){
+			if(localDebug){
+				var loadNum = parseInt(receivedSamp);
+			}
+			console.log("load number received " + loadNum)
+			sampleLoadNumber = loadNum;
+			loadReceived = true;
+			loadSamples();
+		}
 	}
 	else{
 		console.log("malformed message received: " + receivedSamp);
+	}
+}
+
+function lateLoad(){
+	if(!loadReceived){
+		sampleLoadNumber = 0;
+		loadSamples();
+		console.log("loaded late!");
 	}
 }
 
