@@ -153,7 +153,7 @@ function login() {
 		if(!neo){
 			audio.play();
 		}
-		document.getElementById("information").innerHTML = "Now playing stream " + zone_no + " for performance... <br><br> Can't hear any audio? Try turning the sound on for your device and turning the volume all the way up! <br> Remember to turn off WiFi and put your device on Do Not Disturb."; // used for testing purposes
+		document.getElementById("information").innerHTML = "Now playing stream " + zone_no + " for performance... <br><br> Can't hear any audio? <br> Try turning the sound on for your device and turning the volume all the way up! <br> Remember to turn off WiFi and put your device on Do Not Disturb."; // used for testing purposes
 	}
 }
 
