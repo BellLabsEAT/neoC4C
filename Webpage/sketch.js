@@ -25,6 +25,7 @@ var localDebug = true;
 var loadTimeout = 10000;
 var updateTimeout;
 var updateTime = 5000;
+var sampleLoadNumber = 0;
 
 
 
@@ -174,7 +175,7 @@ function pick_stream(zone_no) {
 		console.log("ready state " + audio.readyState);
 	}
 	BAN_ID = tag_no;
-	loadSamples();
+	//loadSamples();
 	listenToWWSDataWithStomp();
 	
 }
@@ -343,7 +344,14 @@ document.body.addEventListener("touchend", function(){
 function loadSamples(){
 	setTimeout(loadTimer, loadTimeout)
 	if(tag_no=='1001'){
-		samples[0] = loadSound("VASamples/kittenL.mp3", progress)
+		switch(sampleLoadNumber){
+			case 0:
+				samples[0] = loadSound("VASamples/kittenL.mp3", progress);
+				console.log("I did 0");
+			case 1:
+				samples[1] = loadSound("VASamples/kittenL.mp3", progress);
+				console.log("I did 1");
+		}
 	}
 	else if(tag_no=='1002'){
 		samples[0] = loadSound("VASamples/kittenR.mp3", progress)
@@ -544,6 +552,11 @@ function playSamp(receivedSamp){
 		if(debugMode){
 			sendMessage(sendban, uniqueName + " Debug mode changed to " + debugState);
 		}
+	}
+	else if(String(receivedSamp).includes("load")){
+		var loadNum = parseInt(receivedSamp);
+		sampleLoadNumber = loadNum;
+		loadSamples();
 	}
 	else{
 		console.log("malformed message received: " + receivedSamp);

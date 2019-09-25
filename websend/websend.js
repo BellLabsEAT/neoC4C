@@ -36,6 +36,7 @@ var phones;
 var updateCheckTimeout;
 var updateTime = 7000;
 var offlineTime = 12000;
+var sampleLoadNum = 0;
 // var stream1_idNum, stream2_idNum, stream3_idNum, stream4_idNum;
 // var stream1_IDs, stream2_IDs, stream3_IDs, stream4_IDs;
 
@@ -372,6 +373,7 @@ function parseReceived(data){
     //Populates dictionary
     var d = new Date();
     phones[userID[1]] = d.getTime();
+    sendTriggers(String(sampleLoadNum)+ " load");
 
     //Populates array
     var i;
