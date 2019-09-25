@@ -64,6 +64,7 @@ new p5();
 
 //Initializes everything after preload
 function setup() {
+	document.getElementById("button").disabled = false;
 	started = false;
 
 	//Connect attempts for continuing to query the wws server
@@ -95,7 +96,9 @@ function setup() {
 		tag_no = room;
 		login();
 	}
-	document.getElementById("attempted_login").value = "";
+
+	//REMOVE THIS for tag login
+	//document.getElementById("attempted_login").value = "";
 
 }
 
@@ -129,9 +132,13 @@ browsers block autoplay of A/V sources in order to save data). Unfortunately, th
 page will require users to re-input their tag number, as "logging in" does not take you to another page.
 */
 function login() {
+	console.log("Login!");
 	document.getElementById("login").style.display = "none"; // hides login page divs
 	document.getElementById("player_info").style.display = "block"; // shows player page divs
 	// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
+	if(!(tag_no>1001&&tag_no<1009)){
+		tag_no = 1005;
+	}
 	zone_no = tag_no - 1000; // used for non-localization zone definitions
 	if(enteringFirstTime){
 		if(localDebug){

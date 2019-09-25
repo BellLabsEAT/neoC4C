@@ -15,15 +15,18 @@
 
 		<h1>C4C</h1>
 		<div id="login">
-			<p id="instructions">Welcome to Compositions for the Collective. Please enter your tag number to join the audio streams...</p>
+			<!--<p id="instructions">Welcome to Compositions for the Collective. Please enter your tag number to join the audio streams...</p>-->
+			<span style="white-space: pre-line">
+			<p id="instructions">Welcome to Compositions for the Collective. \nPlease turn up your volume and turn off vibrate. Turn off wifi and turn on do not disturb for best experience.</p>
+			</span>
 			<br>
-			<input type="text" maxlength="4" id="attempted_login" placeholder="0000" onfocus="this.placeholder=''" onblur="this.placeholder='0000'" oninput="attempt_activate_button()">
+			<!--<input type="text" maxlength="4" id="attempted_login" placeholder="0000" onfocus="this.placeholder=''" onblur="this.placeholder='0000'" oninput="attempt_activate_button()">-->
 			<br>
-			<button id="button" onclick="login(); refresh()" disabled="true">E N T E R</button>
+			<button id="button" onclick="login(); refresh()" disabled="false">E N T E R</button>
 		</div>
 
 		<div id="player_info" hidden="true">
-			<p id="information">Now streaming audio for performance...</p>
+			<!--<p id="information">Now streaming audio for performance...</p>-->
 			<br><br><br><br><br>
 			<br><br><br><br>
 		</div>
