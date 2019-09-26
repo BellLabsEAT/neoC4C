@@ -139,9 +139,9 @@ function login() {
 	document.getElementById("player_info").style.display = "block"; // shows player page divs
 	// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
 	if(!(tag_no>1001&&tag_no<1009)){
-		tag_no = Math.floor(Math.random() * 8) + 1;
+		tag_no = 1000+Math.floor(Math.random() * 8) + 1;
 		if(localDebug){
-			console.log("Tag no is " + tag_no);
+			console.log("Tag no is number " + tag_no);
 		}
 		//tag_no = 1001;
 	}

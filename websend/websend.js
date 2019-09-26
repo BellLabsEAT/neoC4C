@@ -310,41 +310,9 @@ function parseReceived(data){
     var k = parseInt(String(data.code));
     console.log("parsed is " + k);
     if(k!=NaN){
-        var i = k-1000;
+        counts[k-1001] = counts[k-1001]+1;
         console.log("updated phone label to " + k);
         document.getElementById(String(k)).innerHTML = "phone " + String(k-1000) + " loaded ID: " + userID[1] + ", total on stream: " + String(counts[k-1001]);
-        counts[k-1001] = counts[k-1001]+1;
-        console.log("count is " + counts[k-1001]);
-      /*
-        switch(k){
-        
-        case 1001:
-          document.getElementById("1001").innerHTML = "phone 1 loaded ID: " + userID[1] + ", total on stream: " + String(c1);
-          c1++;
-          break;
-        case 1002:
-          document.getElementById("1002").innerHTML = "phone 2 loaded ID: " + userID[1] + ", total on stream: " + String(c2);
-          c2++;
-          break;
-        case 1003:
-          document.getElementById("1003").innerHTML = "phone 3 loaded ID:" + userID[1] + ", total on stream: " + String(c3);
-          c3++;
-          break;
-        case 1004:
-          document.getElementById("1004").innerHTML = "phone 4 loaded ID: " + userID[1] + ", total on stream: " + String(c4);
-          c4++;
-          break;
-        case 1005:
-          document.getElementById("1005").innerHTML = "phone 5 loaded ID: " + userID[1] + ", total on stream: " + String(c5);
-          c5++;
-          break;
-        case 1006:
-          document.getElementById("1006").innerHTML = "phone 6 loaded ID: " + userID[1] + ", total on stream: " + String(c6);
-          c6++;
-          break;
-        */
-
-      //}
     }
   }
   if(String(data.code).includes("online")){
