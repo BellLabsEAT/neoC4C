@@ -167,11 +167,17 @@ document.body.addEventListener("keypress", function(event){
   console.log(key);
   if(String.fromCharCode(key)=='a'){
     console.log("setUpdate");
-    sendTriggers('0 unlooping');
+    sendTriggers('1 unlooping');
     var d = new Date();
     startTime = d.getTime();
     clearTimeout(updateTimer);
-    updateTimer = setTimeout(update, 2000, 0);
+    updateTimer = setTimeout(update, 2000, 1);
+    
+  }
+  if(String.fromCharCode(key)=='q'){
+    console.log("firsttone");
+    clearTimeout(updateTimer);
+    startTone(0);
     
   }
   else if(String.fromCharCode(key)=='1'){
@@ -387,7 +393,14 @@ function update(samp){
   var d = new Date();
   payload = samp + " update " + String(d.getTime()-startTime);
   sendTriggers(payload);
-  updateTimer = setTimeout(update, 1000, 0);
+  updateTimer = setTimeout(update, 1000, samp);
+}
+
+function startTone(samp){
+  console.log("playing start tone")
+  payload = samp + " unlooping";
+  sendTriggers(payload);
+  updateTimer = setTimeout(startTone, 5000, samp);
 }
 
 /*

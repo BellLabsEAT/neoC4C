@@ -559,15 +559,15 @@ function playSamp(receivedSamp){
 	}
 
 	//Handles normal case where the message is the index of a sample
-	else if(String(receivedSamp).includes("looping")){
+	else if(String(receivedSamp).includes("ylooping")){
 		var code = parseInt(receivedSamp);
 		curSamp = code;
 		var index = code;
 		if(debugMode){
-			console.log("playing looping sample " + index);
+			console.log("playing ylooping sample " + index);
 		}
 		if(debugMode){
-			sendMessage(sendban, uniqueName + " playing looping sample " + index);
+			sendMessage(sendban, uniqueName + " playing ylooping sample " + index);
 		}
 		try{
 				samples[index].setVolume(1, 0);
