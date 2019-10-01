@@ -9,7 +9,7 @@ var sampleNum = 6;
 var started = true;
 let curSamp;
 var loaded;
-var noSleep = new NoSleep();
+//var noSleep = new NoSleep();
 var dummyaudio = new Audio();
 var startTime;
 var sendban = "c4c";
@@ -27,7 +27,7 @@ var updateTimeout;
 var updateTime = 5000;
 var sampleLoadNumber = 0;
 var loadReceived = false;
-var toneMode = false;
+var toneMode = true;
 
 
 
@@ -326,13 +326,14 @@ function preload(){
 	if(localDebug){
 		console.log("samp loaded");
 	}
-		silencesamp = loadSound('silence.wav', loopSilence);
+		//silencesamp = p5.loadSound('silence.wav', loopSilence);
 }
 
 //Loops the silence sample forever to keep the phones awake
 function loopSilence(){
-	silencesamp.loop();
-	silencesamp.play();
+	//silencesamp.p5.loop();
+	// silencesamp.p5.play();
+	
 }
 
 //Crucial function which starts audio using p5.js's mouse function
@@ -344,12 +345,15 @@ function mousePressed() {
 	}
 	if(!started){
 		//Should already be looping from above loopSilence function
-		silencesamp.play();
+		//silencesamp.play();
 		if(localDebug){
 			console.log("start user interaction audio");
 		}
 		//Enables no sleep, which keeps the phone screen alive as an extra precaution
-		noSleep.enable();
+
+		//tone commented out
+		//noSleep.enable();
+
 		//Ensures this does not run again
 		started = true;
 	}
@@ -379,25 +383,27 @@ document.body.addEventListener("touchend", function(){
 
 //Loads performance samples based on input code and then updates the progress bar
 function loadSamples(){
-	var player = new Tone.Player("samples/test_zone1.mp3").toMaster();
+	//var player = new Tone.Player("samples/test_zone1.mp3").toMaster();
 //play as soon as the buffer is loaded
-	player.autostart = true;
+	//player.autostart = true;
 	switch(tag_no){
 		case 1001:
 			if(toneMode){
+				
 				samples[0] = new Tone.Player("samples/test_zone1.mp3").toMaster();
-				samples[1] = new Tone.Player("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3").toMaster();
+				samples[1] = new Tone.Player("samples/pilgrims_mass_part_1.wav").toMaster();
 				samples[2] = new Tone.Player("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3").toMaster();
 				samples[3] = new Tone.Player("samples/Sine-Tones_Raw-prop Cluett_c4c_1.mp3").toMaster();
 				samples[4] = new Tone.Player("samples/Sine-Tones_Raw-prop Snare.mp3").toMaster();
 				samples[5] = new Tone.Player("samples/01 Labrys Bell Labs 100319.mp3").toMaster();
+				
 				break;
 			}
 			else{
 
 				switch(sampleLoadNumber){
 				case 0:
-					samples[0] = loadSound("samples/test_zone1.mp3", progress);
+					samples[0] = p5.loadSound("samples/test_zone1.mp3", progress);
 					sampleLoadNumber++;
 					console.log("1 loaded here");
 					break;
@@ -564,7 +570,7 @@ function loadSamples(){
 	//till the end
 	if(sampleLoadNumber==0){
 		setTimeout(loadTimer, loadTimeout);
-		testTone = loadSound('test.wav', progress)
+		//testTone = loadSound('test.wav', progress)
 	}
 	
 }
@@ -654,7 +660,7 @@ function playSamp(receivedSamp){
 			sendMessage(sendban, uniqueName + " playing sample " + index + " at " + playTime);
 		}
 		if(toneMode){
-			samples[index].start(Tone.Time(playTime));
+			//samples[index].start(Tone.Time(playTime));
 		}else{
 			samples[index].play(0, 1, 1, playTime);
 		}
