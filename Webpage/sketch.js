@@ -5,7 +5,7 @@ var samples = [];
 var hornsamp = [];
 var horntimes = [];
 
-var sampleNum = 3;
+var sampleNum = 6;
 var started = true;
 let curSamp;
 var loaded;

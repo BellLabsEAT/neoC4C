@@ -175,7 +175,7 @@ document.body.addEventListener("keypress", function(event){
       var d = new Date();
       startTime = d.getTime();
       clearTimeout(updateTimer);
-      updateTimer = setTimeout(update, 2000, 1);
+      updateTimer = setTimeout(update, 2000, sampleMode);
     }
     else{
       console.log("firsttone");
