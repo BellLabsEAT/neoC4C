@@ -205,9 +205,6 @@ document.body.addEventListener("keypress", function(event){
   else if(String.fromCharCode(key)=='5'){
     changeMode(4);
   }
-  else if(String.fromCharCode(key)=='6'){
-    changeMode(5);
-  }
   else if(String.fromCharCode(key)=='x'){
     sendTriggers("stopall");
     clearTimeout(updateTimer);

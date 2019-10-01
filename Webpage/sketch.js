@@ -408,7 +408,7 @@ function loadSamples(){
 					console.log("1 loaded here");
 					break;
 				case 1:
-					samples[1] = loadSound("samples/pilgrims_mass_part_1.wav", progress);
+					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
 					sampleLoadNumber++;
 					console.log("2 loaded here");
 					break;
@@ -423,16 +423,10 @@ function loadSamples(){
 					console.log("4 loaded here");
 					break;
 				case 4:
-					samples[4] = loadSound("samples/01_Labrys_Bell_Labs_100319.mp3", progress);
+					samples[4] = loadSound("samples/01 Labrys Bell Labs 100319.mp3", progress);
 					sampleLoadNumber++;
 					console.log("5 loaded here");
 					break;
-				case 5:
-					samples[5] = loadSound("samples/pilgrims_mass_part_1.wav", progress);
-					sampleLoadNumber++;
-					console.log("6 loaded here");
-					break;
-				}
 			}
 			break;			
 		case 1002:
@@ -459,11 +453,6 @@ function loadSamples(){
 					samples[4] = loadSound("samples/02 Labrys Bell Labs 100319.mp3", progress);
 					console.log("5 loaded here");
 					sampleLoadNumber++;
-					break;
-				case 5:
-					samples[5] = loadSound("samples/pilgrims mass part 1.wav", progress);
-					sampleLoadNumber++;
-					console.log("5 loaded here");
 					break;
 			}
 			break;
@@ -493,11 +482,6 @@ function loadSamples(){
 					sampleLoadNumber++;
 					break;
 					console.log("5 loaded here");
-				case 5:
-					samples[5] = loadSound("samples/pilgrims mass part 1.wav", progress);
-					sampleLoadNumber++;
-					console.log("5 loaded here");
-					break;
 			}
 			break;
 		case 1004:
@@ -524,11 +508,6 @@ function loadSamples(){
 						samples[4] = loadSound("samples/04 Labrys Bell Labs 100319.mp3", progress);
 						console.log("5 loaded here");
 						sampleLoadNumber++;
-						break;
-					case 5:
-						samples[5] = loadSound("samples/pilgrims mass part 1.wav", progress);
-						sampleLoadNumber++;
-						console.log("5 loaded here");
 						break;
 				}
 				break;
