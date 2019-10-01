@@ -378,13 +378,13 @@ function loadSamples(){
 				case 1:
 					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
 				case 2:
-					samples[1] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_2.mp3", progress);
+					samples[2] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_2.mp3", progress);
 					console.log("3 loaded here");
 				case 3:
-					samples[1] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+					samples[3] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
 					console.log("4 loaded here");
 				case 4:
-					samples[1] = loadSound("samples/02 Labrys Bell Labs 100319.mp3", progress);
+					samples[4] = loadSound("samples/02 Labrys Bell Labs 100319.mp3", progress);
 					console.log("5 loaded here");
 			}
 			break;
@@ -396,13 +396,13 @@ function loadSamples(){
 				case 1:
 					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
 				case 2:
-					samples[1] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_3.mp3", progress);
+					samples[2] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_3.mp3", progress);
 					console.log("3 loaded here");
 				case 3:
-					samples[1] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+					samples[3] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
 					console.log("4 loaded here");
 				case 4:
-					samples[1] = loadSound("samples/03 Labrys Bell Labs 100319.mp3", progress);
+					samples[4] = loadSound("samples/03 Labrys Bell Labs 100319.mp3", progress);
 					console.log("5 loaded here");
 			}
 			break;
@@ -413,13 +413,13 @@ function loadSamples(){
 					case 1:
 						samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress)
 					case 2:
-						samples[1] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_4.mp3", progress);
+						samples[2] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_4.mp3", progress);
 					console.log("3 loaded here");
 					case 3:
-						samples[1] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+						samples[3] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
 						console.log("4 loaded here");
 					case 4:
-						samples[1] = loadSound("samples/04 Labrys Bell Labs 100319.mp3", progress);
+						samples[4] = loadSound("samples/04 Labrys Bell Labs 100319.mp3", progress);
 						console.log("5 loaded here");
 				}
 				break;

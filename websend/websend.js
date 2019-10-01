@@ -36,6 +36,7 @@ var updateTimer;
 var allMode;
 var meowMode;
 var fluteMode;
+var sampleMode;
 var phones;
 var updateCheckTimeout;
 var updateTime = 7000;
@@ -47,6 +48,7 @@ var sampleLoadNum = 0;
 setup();
 //listenToWWSDataWithStomp();
 function setup() {
+  sampleMode = 0;
   updateCheck();
   phones = {};
   console.log("helloWorld!!!!!")
@@ -167,11 +169,19 @@ document.body.addEventListener("keypress", function(event){
   console.log(key);
   if(String.fromCharCode(key)=='a'){
     console.log("setUpdate");
-    sendTriggers('1 unlooping');
-    var d = new Date();
-    startTime = d.getTime();
-    clearTimeout(updateTimer);
-    updateTimer = setTimeout(update, 2000, 1);
+
+    if(sampleMode!=0){
+      sendTriggers(String(sampleMode) + ' unlooping');
+      var d = new Date();
+      startTime = d.getTime();
+      clearTimeout(updateTimer);
+      updateTimer = setTimeout(update, 2000, 1);
+    }
+    else{
+      console.log("firsttone");
+      clearTimeout(updateTimer);
+      startTone(0);
+    }
     
   }
   if(String.fromCharCode(key)=='q'){
@@ -181,38 +191,35 @@ document.body.addEventListener("keypress", function(event){
     
   }
   else if(String.fromCharCode(key)=='1'){
-    sendTriggers("1 unlooping");
+    changeMode(0);
   }
   else if(String.fromCharCode(key)=='2'){
-    allMode = true;
-    meowMode = false;
-    fluteMode = false;
-    document.getElementById("mode").innerHTML = "allMode";
+    changeMode(1);
   }
   else if(String.fromCharCode(key)=='3'){
-    allMode = false;
-    meowMode = true;
-    fluteMode = false;
-    document.getElementById("mode").innerHTML = "meowMode";
+    changeMode(2);
   }
   else if(String.fromCharCode(key)=='4'){
-    allMode = false;
-    meowMode = false;
-    fluteMode = true;
-    document.getElementById("mode").innerHTML = "fluteMode";
+    changeMode(3);
+  }
+  else if(String.fromCharCode(key)=='5'){
+    changeMode(4);
   }
   else if(String.fromCharCode(key)=='x'){
     sendTriggers("stopall");
     clearTimeout(updateTimer);
-  }
-  else if(String.fromCharCode(key)=='t'){
-    sendTriggers("1 unlooping");
   }
   else if(String.fromCharCode(key)=='n'){
     clearTimeout(updateTimer);
   }
   
 });
+
+function changeMode(mode){
+  sampleMode = mode;
+  document.getElementById("mode").innerHTML = "Sample Mode is " + mode;
+  sampleLoadNum = mode;
+}
 
 function updateCheck(){
   var i = 0;
