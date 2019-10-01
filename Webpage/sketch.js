@@ -27,6 +27,7 @@ var updateTimeout;
 var updateTime = 5000;
 var sampleLoadNumber = 0;
 var loadReceived = false;
+var toneMode = true;
 
 
 
@@ -378,12 +379,21 @@ document.body.addEventListener("touchend", function(){
 
 //Loads performance samples based on input code and then updates the progress bar
 function loadSamples(){
-	
+	var player = new Tone.Player("samples/test_zone1.mp3").toMaster();
+//play as soon as the buffer is loaded
+	player.autostart = true;
 	switch(tag_no){
 		case 1001:
-			switch(sampleLoadNumber){
-				//Note that this switch statement intentionally does not include breaks
-				//All code should execute from the starting point
+			samples[0] = new Tone.Player("samples/test_zone1.mp3").toMaster();
+			samples[1] = new Tone.Player("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3").toMaster();
+			samples[2] = new Tone.Player("samples/Sine-Tones_Raw-prop Cluett_c4c_1.mp3").toMaster();
+			samples[3] = new Tone.Player("samples/Sine-Tones_Raw-prop Snare.mp3").toMaster();
+			samples[4] = new Tone.Player("samples/01 Labrys Bell Labs 100319.mp3").toMaster();
+			break;
+/*
+
+
+
 				case 0:
 					samples[0] = loadSound("samples/test_zone1.mp3", progress);
 					sampleLoadNumber++;
@@ -411,6 +421,7 @@ function loadSamples(){
 					break;
 			}
 			break;
+			*/
 		case 1002:
 			switch(sampleLoadNumber){
 				case 0:
@@ -620,7 +631,11 @@ function playSamp(receivedSamp){
 		if(debugMode){
 			sendMessage(sendban, uniqueName + " playing sample " + index + " at " + playTime);
 		}
-		samples[index].play(0, 1, 1, playTime);
+		if(toneMode){
+			samples[index].start(Tone.Time(playTime));
+		}else{
+			samples[index].play(0, 1, 1, playTime);
+		}
 	}
 
 	//Update function, will handle update signals from the sender to sync all playing
