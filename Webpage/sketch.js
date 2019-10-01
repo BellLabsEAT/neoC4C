@@ -139,7 +139,7 @@ function login() {
 	document.getElementById("player_info").style.display = "block"; // shows player page divs
 	// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
 	if(!(tag_no>1001&&tag_no<1009)){
-		tag_no = 1000+Math.floor(Math.random() * 8) + 1;
+		tag_no = 1000+Math.floor(Math.random() * 4) + 1;
 		if(localDebug){
 			console.log("Tag no is number " + tag_no);
 		}
@@ -360,31 +360,67 @@ function loadSamples(){
 				case 1:
 					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
 					console.log("2 loaded here");
+				case 2:
+					samples[1] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_1.mp3", progress);
+					console.log("3 loaded here");
+				case 3:
+					samples[1] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+					console.log("4 loaded here");
+				case 4:
+					samples[1] = loadSound("samples/01 Labrys Bell Labs 100319.mp3", progress);
+					console.log("5 loaded here");
 			}
 			break;
 		case 1002:
 			switch(sampleLoadNumber){
 				case 0:
-					samples[0] = loadSound("samples/test_zone1.mp3", progress);
+					samples[0] = loadSound("samples/test_zone2.mp3", progress);
 				case 1:
-					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
+				case 2:
+					samples[1] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_2.mp3", progress);
+					console.log("3 loaded here");
+				case 3:
+					samples[1] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+					console.log("4 loaded here");
+				case 4:
+					samples[1] = loadSound("samples/02 Labrys Bell Labs 100319.mp3", progress);
+					console.log("5 loaded here");
 			}
 			break;
 			
 		case 1003:
 			switch(sampleLoadNumber){
 				case 0:
-					samples[0] = loadSound("samples/test_zone2.mp3", progress);
+					samples[0] = loadSound("samples/test_zone3.mp3", progress);
 				case 1:
 					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+				case 2:
+					samples[1] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_3.mp3", progress);
+					console.log("3 loaded here");
+				case 3:
+					samples[1] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+					console.log("4 loaded here");
+				case 4:
+					samples[1] = loadSound("samples/03 Labrys Bell Labs 100319.mp3", progress);
+					console.log("5 loaded here");
 			}
 			break;
 		case 1004:
 				switch(sampleLoadNumber){
 					case 0:
-						samples[0] = loadSound("samples/test_zone2.mp3", progress);
+						samples[0] = loadSound("samples/test_zone4.mp3", progress);
 					case 1:
-						samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+						samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress)
+					case 2:
+						samples[1] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_4.mp3", progress);
+					console.log("3 loaded here");
+					case 3:
+						samples[1] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+						console.log("4 loaded here");
+					case 4:
+						samples[1] = loadSound("samples/04 Labrys Bell Labs 100319.mp3", progress);
+						console.log("5 loaded here");
 				}
 				break;
 		case 1005:
