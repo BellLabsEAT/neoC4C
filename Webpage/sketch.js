@@ -27,7 +27,7 @@ var updateTimeout;
 var updateTime = 5000;
 var sampleLoadNumber = 0;
 var loadReceived = false;
-var toneMode = true;
+var toneMode = false;
 
 
 
@@ -384,16 +384,18 @@ function loadSamples(){
 	player.autostart = true;
 	switch(tag_no){
 		case 1001:
-			samples[0] = new Tone.Player("samples/test_zone1.mp3").toMaster();
-			samples[1] = new Tone.Player("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3").toMaster();
-			samples[2] = new Tone.Player("samples/Sine-Tones_Raw-prop Cluett_c4c_1.mp3").toMaster();
-			samples[3] = new Tone.Player("samples/Sine-Tones_Raw-prop Snare.mp3").toMaster();
-			samples[4] = new Tone.Player("samples/01 Labrys Bell Labs 100319.mp3").toMaster();
-			break;
-/*
+			if(toneMode){
+				samples[0] = new Tone.Player("samples/test_zone1.mp3").toMaster();
+				samples[1] = new Tone.Player("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3").toMaster();
+				samples[2] = new Tone.Player("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3").toMaster();
+				samples[3] = new Tone.Player("samples/Sine-Tones_Raw-prop Cluett_c4c_1.mp3").toMaster();
+				samples[4] = new Tone.Player("samples/Sine-Tones_Raw-prop Snare.mp3").toMaster();
+				samples[5] = new Tone.Player("samples/01 Labrys Bell Labs 100319.mp3").toMaster();
+				break;
+			}
+			else{
 
-
-
+				switch(sampleLoadNumber){
 				case 0:
 					samples[0] = loadSound("samples/test_zone1.mp3", progress);
 					sampleLoadNumber++;
@@ -424,9 +426,9 @@ function loadSamples(){
 					sampleLoadNumber++;
 					console.log("6 loaded here");
 					break;
+				}
 			}
-			break;
-			*/
+			break;			
 		case 1002:
 			switch(sampleLoadNumber){
 				case 0:
