@@ -48,7 +48,7 @@ var sampleLoadNum = 0;
 setup();
 //listenToWWSDataWithStomp();
 function setup() {
-  sampleMode = 0;
+  changeMode(0);
   updateCheck();
   phones = {};
   console.log("helloWorld!!!!!")
