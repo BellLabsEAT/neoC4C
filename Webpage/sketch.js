@@ -5,7 +5,7 @@ var samples = [];
 var hornsamp = [];
 var horntimes = [];
 
-var sampleNum = 6;
+var sampleNum = 5;
 var started = true;
 let curSamp;
 var loaded;
@@ -169,7 +169,7 @@ function login() {
 	// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
 	if(!(tag_no>1001&&tag_no<1009)){
 		tag_no = 1000+Math.floor(Math.random() * 4) + 1;
-		tag_no = 1001;
+		//tag_no = 1001;
 		if(localDebug){
 			console.log("Tag no is number " + tag_no);
 		}
@@ -400,14 +400,14 @@ function loadSamples(){
 					console.log("3 loaded here");
 					break;
 				case 3:
-					//samples[3] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
-					sampleLoadNumber++;
-					console.log("4 loaded here");
-					break;
-				case 4:
-					samples[4] = loadSound("samples/01_Labrys_Bell_Labs_100319.mp3", progress);
+					samples[3] = loadSound("samples/01_Labrys_Bell_Labs_100319.mp3", progress);
 					sampleLoadNumber++;
 					console.log("5 loaded here");
+					break;
+				case 4:
+					samples[4] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+					sampleLoadNumber++;
+					console.log("4 loaded here");
 					break;
 			}
 			break;
@@ -427,13 +427,13 @@ function loadSamples(){
 					sampleLoadNumber++;
 					break;
 				case 3:
-					//samples[3] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
-					console.log("4 loaded here");
+					samples[3] = loadSound("samples/02 Labrys Bell Labs 100319.mp3", progress);
+					console.log("5 loaded here");
 					sampleLoadNumber++;
 					break;
 				case 4:
-					samples[4] = loadSound("samples/02 Labrys Bell Labs 100319.mp3", progress);
-					console.log("5 loaded here");
+					samples[4] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+					console.log("4 loaded here");
 					sampleLoadNumber++;
 					break;
 			}
@@ -452,18 +452,19 @@ function loadSamples(){
 				case 2:
 					samples[2] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_3.mp3", progress);
 					sampleLoadNumber++;
-					break;
 					console.log("3 loaded here");
+					break;
 				case 3:
-					//samples[3] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+					samples[3] = loadSound("samples/03 Labrys Bell Labs 100319.mp3", progress);
 					sampleLoadNumber++;
-					break;
-					console.log("4 loaded here");
-				case 4:
-					samples[4] = loadSound("samples/03 Labrys Bell Labs 100319.mp3", progress);
-					sampleLoadNumber++;
-					break;
 					console.log("5 loaded here");
+					break;
+				case 4:
+					samples[4] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+					sampleLoadNumber++;
+					console.log("4 loaded here");
+					break;
+					
 			}
 			break;
 		case 1004:
@@ -482,13 +483,13 @@ function loadSamples(){
 						sampleLoadNumber++;
 						break;
 					case 3:
-						//samples[3] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
-						console.log("4 loaded here");
+						samples[3] = loadSound("samples/04 Labrys Bell Labs 100319.mp3", progress);
+						console.log("5 loaded here");
 						sampleLoadNumber++;
 						break;
 					case 4:
-						samples[4] = loadSound("samples/04 Labrys Bell Labs 100319.mp3", progress);
-						console.log("5 loaded here");
+						samples[4] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
+						console.log("4 loaded here");
 						sampleLoadNumber++;
 						break;
 				}

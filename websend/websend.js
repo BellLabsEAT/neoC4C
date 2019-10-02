@@ -33,9 +33,6 @@ var counts = [streamsNum];
 var timer1
 var timer2
 var updateTimer;
-var allMode;
-var meowMode;
-var fluteMode;
 var sampleMode;
 var phones;
 var updateCheckTimeout;
@@ -63,10 +60,6 @@ function setup() {
   c4 = 0;
   c5 = 0;
   c6 = 0;
-  allMode = true;
-  meowMode = false;
-  fluteMode = false;
-  document.getElementById("mode").innerHTML = "allMode";
     listenToWWSDataWithStomp();
 }
 
