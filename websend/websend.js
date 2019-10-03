@@ -163,8 +163,14 @@ document.body.addEventListener("keypress", function(event){
   if(String.fromCharCode(key)=='a'){
     console.log("setUpdate");
 
-    if(sampleMode!=0){
+    if(sampleMode!=0&&sampleMode!=3){
       sendTriggers(String(sampleMode) + ' unlooping');
+      var d = new Date();
+      startTime = d.getTime();
+      clearTimeout(updateTimer);
+      updateTimer = setTimeout(update, 2000, sampleMode);
+    } else if(sampleMode==3){
+      sendTriggers(String(sampleMode) + ' ylooping');
       var d = new Date();
       startTime = d.getTime();
       clearTimeout(updateTimer);
@@ -198,12 +204,12 @@ document.body.addEventListener("keypress", function(event){
   else if(String.fromCharCode(key)=='5'){
     changeMode(4);
   }
-  else if(String.fromCharCode(key)=='6'){
-    changeMode(5);
-  }
   else if(String.fromCharCode(key)=='x'){
     sendTriggers("stopall");
     clearTimeout(updateTimer);
+  }
+  else if(String.fromCharCode(key)=='p'){
+    sendTriggers("loadall");
   }
   else if(String.fromCharCode(key)=='n'){
     clearTimeout(updateTimer);
@@ -351,7 +357,7 @@ function parseReceived(data){
 }
 
 function sendTime(samp){
-  payload = samp + " time" + String(document.getElementById("timeSend").value);
+  payload = sampleLoadNum + " time" + String(document.getElementById("timeSend").value);
   sendTriggers(payload);
 }
 
@@ -401,7 +407,7 @@ function update(samp){
 
 function startTone(samp){
   console.log("playing start tone")
-  payload = samp + " unlooping";
+  payload = samp + " unlooping rand";
   sendTriggers(payload);
   updateTimer = setTimeout(startTone, 5000, samp);
 }
@@ -417,10 +423,10 @@ function sendTriggers(samp){
     sendTrigger(banID2, samp)
     sendTrigger(banID3, samp)
     sendTrigger(banID4, samp)
-    sendTrigger(banID5, samp)
-    sendTrigger(banID6, samp)
-    sendTrigger(banID7, samp)
-    sendTrigger(banID8, samp)
+    //sendTrigger(banID5, samp)
+    //sendTrigger(banID6, samp)
+    //sendTrigger(banID7, samp)
+    //sendTrigger(banID8, samp)
 }
 
 /*

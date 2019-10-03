@@ -4,8 +4,8 @@ var samples = [];
 
 var hornsamp = [];
 var horntimes = [];
-
-var sampleNum = 5;
+var originalSampleNum = 4;
+var sampleNum = originalSampleNum;
 var started = true;
 let curSamp;
 var loaded;
@@ -169,7 +169,6 @@ function login() {
 	// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
 	if(!(tag_no>1001&&tag_no<1009)){
 		tag_no = 1000+Math.floor(Math.random() * 4) + 1;
-		//tag_no = 1001;
 		if(localDebug){
 			console.log("Tag no is number " + tag_no);
 		}
@@ -385,27 +384,22 @@ function loadSamples(){
 				//Note that this switch statement intentionally does not include breaks
 				//All code should execute from the starting point
 				case 0:
-					samples[0] = loadSound("samples/test_zone1.mp3", progress);
+					samples[0] = loadSound("samples/1-GrandPiano.mp3", progress);
 					sampleLoadNumber++;
 					console.log("1 loaded here");
 					break;
 				case 1:
-					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+					samples[1] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_1.mp3", progress);
 					sampleLoadNumber++;
 					console.log("2 loaded here");
 					break;
 				case 2:
-					samples[2] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_1.mp3", progress);
+					samples[2] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
 					sampleLoadNumber++;
 					console.log("3 loaded here");
 					break;
 				case 3:
 					samples[3] = loadSound("samples/01_Labrys_Bell_Labs_100319.mp3", progress);
-					sampleLoadNumber++;
-					console.log("5 loaded here");
-					break;
-				case 4:
-					samples[4] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
 					sampleLoadNumber++;
 					console.log("4 loaded here");
 					break;
@@ -414,26 +408,21 @@ function loadSamples(){
 		case 1002:
 			switch(sampleLoadNumber){
 				case 0:
-					samples[0] = loadSound("samples/test_zone2.mp3", progress);
+					samples[0] = loadSound("samples/2-GrandPiano.mp3", progress);
 					sampleLoadNumber++;
 					break;
 				case 1:
-					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
+					samples[1] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_2.mp3", progress);
 					sampleLoadNumber++;
 					break;
 				case 2:
-					samples[2] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_2.mp3", progress);
+					samples[2] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
 					console.log("3 loaded here");
 					sampleLoadNumber++;
 					break;
 				case 3:
-					samples[3] = loadSound("samples/02 Labrys Bell Labs 100319.mp3", progress);
+					samples[3] = loadSound("samples/02_Labrys_Bell_Labs_100319.mp3", progress);
 					console.log("5 loaded here");
-					sampleLoadNumber++;
-					break;
-				case 4:
-					samples[4] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
-					console.log("4 loaded here");
 					sampleLoadNumber++;
 					break;
 			}
@@ -442,27 +431,22 @@ function loadSamples(){
 		case 1003:
 			switch(sampleLoadNumber){
 				case 0:
-					samples[0] = loadSound("samples/test_zone3.mp3", progress);
+					samples[0] = loadSound("samples/3-GrandPiano.mp3", progress);
 					sampleLoadNumber++;
 					break;
 				case 1:
-					samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+					samples[1] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_3.mp3", progress);
 					sampleLoadNumber++;
 					break;
 				case 2:
-					samples[2] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_3.mp3", progress);
+					samples[2] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
 					sampleLoadNumber++;
 					console.log("3 loaded here");
 					break;
 				case 3:
-					samples[3] = loadSound("samples/03 Labrys Bell Labs 100319.mp3", progress);
+					samples[3] = loadSound("samples/03_Labrys_Bell_Labs_100319.mp3", progress);
 					sampleLoadNumber++;
 					console.log("5 loaded here");
-					break;
-				case 4:
-					samples[4] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
-					sampleLoadNumber++;
-					console.log("4 loaded here");
 					break;
 					
 			}
@@ -470,26 +454,21 @@ function loadSamples(){
 		case 1004:
 				switch(sampleLoadNumber){
 					case 0:
-						samples[0] = loadSound("samples/test_zone4.mp3", progress);
+						samples[0] = loadSound("samples/4-GrandPiano.mp3", progress);
 						sampleLoadNumber++;
 						break;
 					case 1:
-						samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
+						samples[1] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_4.mp3", progress);
 						sampleLoadNumber++;
 						break;
 					case 2:
-						samples[2] = loadSound("samples/Sine-Tones_Raw-prop Cluett_c4c_4.mp3", progress);
+						samples[2] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
 						console.log("3 loaded here");
 						sampleLoadNumber++;
 						break;
 					case 3:
-						samples[3] = loadSound("samples/04 Labrys Bell Labs 100319.mp3", progress);
+						samples[3] = loadSound("samples/04_Labrys_Bell_Labs_100319.mp3", progress);
 						console.log("5 loaded here");
-						sampleLoadNumber++;
-						break;
-					case 4:
-						samples[4] = loadSound("samples/Sine-Tones_Raw-prop Snare.mp3", progress);
-						console.log("4 loaded here");
 						sampleLoadNumber++;
 						break;
 				}
@@ -500,7 +479,7 @@ function loadSamples(){
 	//till the end
 	if(sampleLoadNumber==0){
 		setTimeout(loadTimer, loadTimeout);
-		testTone = loadSound('test.wav', progress)
+		//testTone = loadSound('test.wav', progress)
 	}
 	
 }
@@ -562,6 +541,12 @@ function playSamp(receivedSamp){
 		if(debugMode){
 			sendMessage(sendban, uniqueName + " stopping all");
 		}
+	}
+	else if(receivedSamp=="loadall"){
+		sampleLoadNumber = 0;
+		loaded = 0;
+		sampleNum = originalSampleNum;
+		loadSamples();
 	}
 	//Plays test tone with this reserved keyword
 	else if(receivedSamp=="test"){
@@ -670,7 +655,11 @@ function playSamp(receivedSamp){
 		}
 		try{
 			samples[index].setVolume(1, 0);
-			samples[index].play();
+			if(String(receivedSamp).includes("rand")){
+				samples[index].play(Math.random()*2, 1, 1, 0);
+			} else{
+				samples[index].play();
+			}
 		}
 		catch(err){
 			console.log("Error! " + err);
@@ -693,6 +682,7 @@ function playSamp(receivedSamp){
 			}
 			console.log("load number received " + loadNum)
 			sampleLoadNumber = loadNum;
+			sampleNum=sampleNum-sampleLoadNumber;
 			loadReceived = true;
 			loadSamples();
 		}
