@@ -75,25 +75,59 @@ function activateSending(){
         } else {
             console.log("WebMidi enabled!");
 
+
+
+          //Create and append select list
+          var selectList = document.createElement("select");
+          selectList.id = "mySelect";
+          //myParent.appendChild(selectList);
+
+          document.getElementById("midi").append(selectList);
+          //Create and append the options
+          for (var i = 0; i < WebMidi.inputs.length; i++) {
+              var option = document.createElement("option");
+              option.value = i.toString();
+              option.text = WebMidi.inputs[i].name;
+              selectList.appendChild(option);
+          }
+
+            //console.log(selElmnt);
+            console.log("??");
             console.log(WebMidi.inputs);
             console.log(WebMidi.outputs);
-            input = WebMidi.inputs[2];
-            input.addListener('noteon', "all",
-                function (e) {
-                    var note = "" + e.note.name + e.note.octave;
-                    console.log(e.note.number)
-                    console.log("Received 'noteon' message (" + e.note.name + e.note.octave + ").");
-                    sendMIDI(e.note.number)
-                    if(note=="D5"){
-                        sendWWS();
-                    }
-                }
-            );
+            
         }
         
       });
 }
 
+function refreshPorts(){
+  var selectList = document.getElementById("mySelect");
+  for(var i = 0; i < selectList.children.length; i++){
+    selectList.removeChild(selectList.children[i]);
+  }
+  //Create and append the options
+  for (var i = 0; i < WebMidi.inputs.length; i++) {
+      var option = document.createElement("option");
+      option.value = i.toString();
+      option.text = WebMidi.inputs[i].name;
+      selectList.appendChild(option);
+  }
+
+}
+
+function activatePort(){
+  var option = document.getElementById("mySelect").value;
+  input = WebMidi.inputs[parseInt(option)];
+  input.addListener('noteon', "all",
+      function (e) {
+          var note = "" + e.note.name + e.note.octave;
+          console.log(e.note.number)
+          console.log("Received 'noteon' message (" + e.note.name + e.note.octave + ").");
+          sendMIDI(e.note.number)
+      }
+  );
+}
 
 /*
 MIDI Input: Currently using MIDI notes C2-D3 (48-62) 
@@ -258,7 +292,7 @@ function listenToWWSDataWithStomp() {
   //Paris
   //const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
   //EAT
-  const url = "ws://stream_bridge_user1:WWS2016@3.83.188.186:15674/ws"
+  const url = "ws://stream_bridge_user1:WWS2016@3.231.148.129:15674/ws"
 
   const exchange = "/exchange/data/";
 
