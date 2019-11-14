@@ -4,7 +4,7 @@ var samples = [];
 
 var hornsamp = [];
 var horntimes = [];
-var originalSampleNum = 4;
+var originalSampleNum = 5;
 var sampleNum = originalSampleNum;
 var started = true;
 let curSamp;
@@ -40,8 +40,8 @@ calibration / room size, and tags available.
 var HAIP_SERVER_IP = "135.222.247.168";
 var HAIP_SERVER_PORT = "18080";
 var boundaries = {"x1": 0, "y1": 4, "y2": 8, "y3": 12}; // used to group HAIP x- and y-coordinates into zones
-var tags = {"1001": true, "1002": true, "1003": true, "1004": true,
-	"1005": true, "1006": true, "1007": true, "1008": true}; // **REPLACE** with all valid tag numbers
+var tags = {"1001": true, "1002": true, "1003": true, "1004": true};//,
+	//"1005": true, "1006": true, "1007": true, "1008": true}; // **REPLACE** with all valid tag numbers
 
 /*
 Audio-related information: change values based on IP addresses of audio stream sources.
@@ -127,7 +127,7 @@ function setup() {
 	//Check whether a variable has been passed via reload function
 	if(room>1000){
 		tag_no = room;
-		login();
+		//login();
 	}
 
 	//REMOVE THIS for tag login
@@ -170,7 +170,7 @@ function login() {
 	document.getElementById("player_info").style.display = "block"; // shows player page divs
 	// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
 	if(!(tag_no>1001&&tag_no<1009)){
-		tag_no = 1000+Math.floor(Math.random() * 4) + 1;
+		//tag_no = 1000+Math.floor(Math.random() * 4) + 1;
 		if(localDebug){
 			console.log("Tag no is number " + tag_no);
 		}
@@ -379,13 +379,14 @@ document.body.addEventListener("touchend", function(){
 
 //Loads performance samples based on input code and then updates the progress bar
 function loadSamples(){
-	
-	switch(tag_no){
+	console.log("load samples called " + tag_no + " load number " + sampleLoadNumber);
+	switch(parseInt(tag_no)){
 		case 1001:
 			switch(sampleLoadNumber){
 				//Note that this switch statement intentionally does not include breaks
 				//All code should execute from the starting point
 				case 0:
+					console.log("did this send????")
 					samples[0] = loadSound("samples/1-GrandPiano.mp3", progress);
 					sampleLoadNumber++;
 					console.log("1 loaded here");
@@ -400,6 +401,8 @@ function loadSamples(){
 					sampleLoadNumber++;
 					console.log("3 loaded here");
 					break;
+				default:
+					console.log("bad sample load number " + sampleLoadNumber);
 				// case 3:
 				// 	samples[3] = loadSound("samples/01_Labrys_Bell_Labs_100319.mp3", progress);
 				// 	sampleLoadNumber++;
@@ -480,12 +483,14 @@ function loadSamples(){
 						sampleLoadNumber++;
 						break;
 					case 4:
-						samples[3] = loadSound("samples/Song2_MIDInote5.mp3", progress);
+						samples[4] = loadSound("samples/Song2_MIDInote5.mp3", progress);
 						console.log("5 loaded here");
 						sampleLoadNumber++;
 						break;
 				}
 				break;
+		default:
+			console.log("bad tag number " + tag_no);
 
 	}
 	//All ones could use this test tone, however it is non-essential and left 
@@ -691,9 +696,10 @@ function playSamp(receivedSamp){
 	else if(String(receivedSamp).includes("load")){
 		if(!loadReceived){
 			if(localDebug){
-				var loadNum = parseInt(receivedSamp);
+				console.log("load number received " + loadNum)
 			}
-			console.log("load number received " + loadNum)
+			var loadNum = parseInt(receivedSamp);
+			
 			sampleLoadNumber = loadNum;
 			sampleNum=sampleNum-sampleLoadNumber;
 			loadReceived = true;

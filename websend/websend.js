@@ -121,6 +121,7 @@ function refreshPorts(){
 function activatePort(){
   var option = document.getElementById("mySelect").value;
   input = WebMidi.inputs[parseInt(option)];
+  console.log("port activated");
   input.addListener('noteon', "all",
       function (e) {
           var note = "" + e.note.name + e.note.octave;
@@ -139,6 +140,7 @@ This was last used for Times Square ICE performance.
 But can be adapted for future MIDI use.
 */
 function sendMIDI(note){
+  console.log("sending midi node " + note);
     switch (note){
         case 1:
           sendTrigger(banID, String(sampleMode) + ' unlooping');
@@ -156,11 +158,11 @@ function sendMIDI(note){
           break;
     
         case 4:
-          sendTrigger(banID4, String(sampleMode) + ' unlooping');
+          sendTrigger(banID4, String(sampleMode*2-1) + ' unlooping');
           console.log('F2');
           break;
         case 5:
-          sendTrigger(banID4, String(sampleMode) + ' unlooping');
+          sendTrigger(banID4, String(sampleMode*2) + ' unlooping');
           console.log('F2');
           break;
         case 55: 
@@ -234,11 +236,17 @@ document.body.addEventListener("keypress", function(event){
   }
   else if(String.fromCharCode(key)=='`'){
 
-    if(sampleMode==0){
+    if(sampleMode==1){
+      changeMode(2);
+    } else if(sampleMode==2){
       changeMode(1);
     } else{
-      changeMode(0);
+      changeMode(1);
     }
+  }
+  else if(String.fromCharCode(key)=='t'){
+
+    changeMode(0)
   }
 
 /*
