@@ -391,20 +391,20 @@ function loadSamples(){
 					console.log("1 loaded here");
 					break;
 				case 1:
-					samples[1] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_1.mp3", progress);
+					samples[1] = loadSound("samples/Song1_MIDInote1.mp3", progress);
 					sampleLoadNumber++;
 					console.log("2 loaded here");
 					break;
 				case 2:
-					samples[2] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+					samples[2] = loadSound("samples/Song2_MIDInote1.mp3", progress);
 					sampleLoadNumber++;
 					console.log("3 loaded here");
 					break;
-				case 3:
-					samples[3] = loadSound("samples/01_Labrys_Bell_Labs_100319.mp3", progress);
-					sampleLoadNumber++;
-					console.log("4 loaded here");
-					break;
+				// case 3:
+				// 	samples[3] = loadSound("samples/01_Labrys_Bell_Labs_100319.mp3", progress);
+				// 	sampleLoadNumber++;
+				// 	console.log("4 loaded here");
+				// 	break;
 			}
 			break;
 		case 1002:
@@ -412,21 +412,23 @@ function loadSamples(){
 				case 0:
 					samples[0] = loadSound("samples/2-GrandPiano.mp3", progress);
 					sampleLoadNumber++;
+					console.log("1 loaded here");
 					break;
 				case 1:
-					samples[1] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_2.mp3", progress);
+					samples[1] = loadSound("samples/Song1_MIDInote2.mp3", progress);
 					sampleLoadNumber++;
+					console.log("2 loaded here");
 					break;
 				case 2:
-					samples[2] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
+					samples[2] = loadSound("samples/Song2_MIDInote2.mp3", progress);
 					console.log("3 loaded here");
 					sampleLoadNumber++;
 					break;
-				case 3:
-					samples[3] = loadSound("samples/02_Labrys_Bell_Labs_100319.mp3", progress);
-					console.log("5 loaded here");
-					sampleLoadNumber++;
-					break;
+				// case 3:
+				// 	samples[3] = loadSound("samples/02_Labrys_Bell_Labs_100319.mp3", progress);
+				// 	console.log("5 loaded here");
+				// 	sampleLoadNumber++;
+				// 	break;
 			}
 			break;
 			
@@ -435,21 +437,23 @@ function loadSamples(){
 				case 0:
 					samples[0] = loadSound("samples/3-GrandPiano.mp3", progress);
 					sampleLoadNumber++;
+					console.log("1 loaded here");
 					break;
 				case 1:
-					samples[1] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_3.mp3", progress);
+					samples[1] = loadSound("samples/Song1_MIDInote3.mp3", progress);
 					sampleLoadNumber++;
+					console.log("2 loaded here");
 					break;
 				case 2:
-					samples[2] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
+					samples[2] = loadSound("samples/Song2_MIDInote3.mp3", progress);
 					sampleLoadNumber++;
 					console.log("3 loaded here");
 					break;
-				case 3:
-					samples[3] = loadSound("samples/03_Labrys_Bell_Labs_100319.mp3", progress);
-					sampleLoadNumber++;
-					console.log("5 loaded here");
-					break;
+				// case 3:
+				// 	samples[3] = loadSound("samples/03_Labrys_Bell_Labs_100319.mp3", progress);
+				// 	sampleLoadNumber++;
+				// 	console.log("5 loaded here");
+				// 	break;
 					
 			}
 			break;
@@ -458,18 +462,25 @@ function loadSamples(){
 					case 0:
 						samples[0] = loadSound("samples/4-GrandPiano.mp3", progress);
 						sampleLoadNumber++;
+						console.log("1 loaded here");
 						break;
 					case 1:
-						samples[1] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_4.mp3", progress);
+						samples[1] = loadSound("samples/Song1_MIDInote4.mp3", progress);
 						sampleLoadNumber++;
+						console.log("2 loaded here");
 						break;
 					case 2:
-						samples[2] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
+						samples[2] = loadSound("samples/Song1_MIDInote5.mp3", progress);
 						console.log("3 loaded here");
 						sampleLoadNumber++;
 						break;
 					case 3:
-						samples[3] = loadSound("samples/04_Labrys_Bell_Labs_100319.mp3", progress);
+						samples[3] = loadSound("samples/Song2_MIDInote4.mp3", progress);
+						console.log("4 loaded here");
+						sampleLoadNumber++;
+						break;
+					case 4:
+						samples[3] = loadSound("samples/Song2_MIDInote5.mp3", progress);
 						console.log("5 loaded here");
 						sampleLoadNumber++;
 						break;
