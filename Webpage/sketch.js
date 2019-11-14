@@ -30,6 +30,8 @@ var loadReceived = false;
 
 
 
+
+
 /*
 HAIP-related information: change values according to HAIP server address,
 calibration / room size, and tags available.

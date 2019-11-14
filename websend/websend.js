@@ -39,6 +39,8 @@ var updateCheckTimeout;
 var updateTime = 7000;
 var offlineTime = 12000;
 var sampleLoadNum = 0;
+
+var samplebank = 0;
 // var stream1_idNum, stream2_idNum, stream3_idNum, stream4_idNum;
 // var stream1_IDs, stream2_IDs, stream3_IDs, stream4_IDs;
 
@@ -138,19 +140,23 @@ But can be adapted for future MIDI use.
 */
 function sendMIDI(note){
     switch (note){
-        case 48:
+        case 1:
+          sendTrigger(banID, String(sampleMode) + ' unlooping');
           console.log('C2');
           break;
     
-        case 50:
+        case 2:
+            sendTrigger(banID2, String(sampleMode) + ' unlooping');
           console.log('D2');
           break;
     
-        case 52:
+        case 3:
+          sendTrigger(banID3, String(sampleMode) + ' unlooping');
           console.log('E2');
           break;
     
-        case 53:
+        case 4:
+          sendTrigger(banID4, String(sampleMode) + ' unlooping');
           console.log('F2');
           break;
     
@@ -223,6 +229,16 @@ document.body.addEventListener("keypress", function(event){
     startTone(0);
     
   }
+  else if(String.fromCharCode(key)=='`'){
+
+    if(sampleMode==0){
+      changeMode(1);
+    } else{
+      changeMode(0);
+    }
+  }
+
+/*
   else if(String.fromCharCode(key)=='1'){
     changeMode(0);
   }
@@ -238,6 +254,7 @@ document.body.addEventListener("keypress", function(event){
   else if(String.fromCharCode(key)=='5'){
     changeMode(4);
   }
+  */
   else if(String.fromCharCode(key)=='x'){
     sendTriggers("stopall");
     clearTimeout(updateTimer);
