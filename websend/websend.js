@@ -159,7 +159,10 @@ function sendMIDI(note){
           sendTrigger(banID4, String(sampleMode) + ' unlooping');
           console.log('F2');
           break;
-    
+        case 5:
+          sendTrigger(banID4, String(sampleMode) + ' unlooping');
+          console.log('F2');
+          break;
         case 55: 
           console.log('G2');
           break;
