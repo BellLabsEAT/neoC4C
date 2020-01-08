@@ -158,11 +158,10 @@ function sendMIDI(note){
           break;
     
         case 4:
-          sendTrigger(banID4, String(sampleMode*2-1) + ' unlooping');
+          sendTrigger(banID4, String(sampleMode) + ' unlooping');
           console.log('F2');
           break;
         case 5:
-          sendTrigger(banID4, String(sampleMode*2) + ' unlooping');
           console.log('F2');
           break;
         case 55: 
@@ -180,10 +179,23 @@ function sendMIDI(note){
         case 60:
           console.log('C3');
           break;
-    
+      
         case 62:
           console.log('D3');
           break;
+
+        case 65:
+            sendTrigger(banID, String(sampleMode) + ' unlooping');
+            console.log('G3');
+        case 67:
+            sendTrigger(banID2, String(sampleMode) + ' unlooping');
+            console.log('Bb3');
+        case 69:
+            sendTrigger(banID3, String(sampleMode) + ' unlooping');
+            console.log('D4');
+        case 71:
+            sendTrigger(banID4, String(sampleMode) + ' unlooping');
+            console.log('F4');
     
         default:
           console.log('Pressed key outside of mapped range');
@@ -234,22 +246,29 @@ document.body.addEventListener("keypress", function(event){
     startTone(0);
     
   }
-  else if(String.fromCharCode(key)=='`'){
+  else if(String.fromCharCode(key)=='k'){
+    var dummy = {wrist: [
+      {
+          Ax: 0,
+          Ay: 1,
+          Az: 2,
+          Gx: 3,
+          Gy: 4,
+          Gz: 5,
+          Mx: 6,
+          My: 7,
+          Mz: 8,
+          Qx: 9,
+          Qy: 10,
+          Qz: 11,
+      }
+    ]}
 
-    if(sampleMode==1){
-      changeMode(2);
-    } else if(sampleMode==2){
-      changeMode(1);
-    } else{
-      changeMode(1);
-    }
+
+    sendTrigger('BAN.imu.sleeve', dummy);
   }
-  else if(String.fromCharCode(key)=='t'){
 
-    changeMode(0)
-  }
 
-/*
   else if(String.fromCharCode(key)=='1'){
     changeMode(0);
   }
@@ -265,7 +284,6 @@ document.body.addEventListener("keypress", function(event){
   else if(String.fromCharCode(key)=='5'){
     changeMode(4);
   }
-  */
   else if(String.fromCharCode(key)=='x'){
     sendTriggers("stopall");
     clearTimeout(updateTimer);
