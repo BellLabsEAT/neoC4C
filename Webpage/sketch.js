@@ -401,7 +401,7 @@ function loadSamples(){
 						sampleLoadNumber++;
 						break;
 					case 3:
-						samples[3] = loadSound("samples/01_Labrys_Bell_Labs_100319.mp3", progress);
+						samples[3] = loadSound("samples/n1.mp3", progress);
 						console.log("4 loaded here");
 						sampleLoadNumber++;
 						break;
@@ -425,7 +425,7 @@ function loadSamples(){
 						sampleLoadNumber++;
 						break;
 					case 3:
-						samples[3] = loadSound("samples/02_Labrys_Bell_Labs_100319.mp3", progress);
+						samples[3] = loadSound("samples/n2.mp3", progress);
 						console.log("4 loaded here");
 						sampleLoadNumber++;
 						break;
@@ -450,7 +450,7 @@ function loadSamples(){
 						sampleLoadNumber++;
 						break;
 					case 3:
-						samples[3] = loadSound("samples/03_Labrys_Bell_Labs_100319.mp3", progress);
+						samples[3] = loadSound("samples/n3.mp3", progress);
 						console.log("4 loaded here");
 						sampleLoadNumber++;
 						break;
