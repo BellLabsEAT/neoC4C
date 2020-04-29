@@ -1,6 +1,15 @@
 //import { rejects } from "assert";
 
 var samples = [];
+var frequencies = 
+[[219,332,547,884,985],
+[221,328,553,876,995],
+[215,331,548,883,986],
+[225,329,552,877,994],
+[216,335,549,882,987]];
+var chosenFrequencies = [0];
+var frequency_index = 0;
+var osc;
 
 var hornsamp = [];
 var horntimes = [];
@@ -12,7 +21,7 @@ var loaded;
 var noSleep = new NoSleep();
 var dummyaudio = new Audio();
 var startTime;
-var sendban = "c4c";
+var sendban = "c4c-p5tests";
 var neo = true;
 var connectAttempts;
 var sendClient;
@@ -28,7 +37,9 @@ var updateTime = 5000;
 var sampleLoadNumber = 0;
 var loadReceived = false;
 
-
+var rotX, rotY, rotZ, accelX, accelY, accelZ;
+var permissionGranted = false
+var nonios13device = false
 
 
 
@@ -40,7 +51,7 @@ calibration / room size, and tags available.
 var HAIP_SERVER_IP = "135.222.247.168";
 var HAIP_SERVER_PORT = "18080";
 var boundaries = {"x1": 0, "y1": 4, "y2": 8, "y3": 12}; // used to group HAIP x- and y-coordinates into zones
-var tags = {"1001": true, "1002": true, "1003": true, "1004": true};//,
+var tags = {"1001": true, "1002": true, "1003": true, "1004": true, "1005": true};//,
 	//"1005": true, "1006": true, "1007": true, "1008": true}; // **REPLACE** with all valid tag numbers
 
 /*
@@ -68,6 +79,8 @@ new p5();
 
 //Initializes everything after preload
 function setup() {
+	// createCanvas(windowWidth, windowHeight);
+	// background(0);
 	/*
 	var r1 = 0;
 	var r2 = 0;
@@ -130,12 +143,17 @@ function setup() {
 		//login();
 	}
 
+	osc = new p5.Oscillator('sine');
+
 	//REMOVE THIS for tag login
 	//document.getElementById("attempted_login").value = "";
 
 }
 
-
+function draw(){
+	document.getElementById("permissions").innerHTML = "Permissions: " + permissionGranted + ", Non iOS Device: " + nonios13device;
+  	document.getElementById("sensorData").innerHTML = "Now streaming sensor data...<br> Rotation X: " + rotationX + ", Rotation Y: " + rotationY + ", Rotation Z: " + rotationZ + "<br> Accelerometer X: " + accelerationX + ", Accelerometer Y: " + accelerationY + ", Accelerometer Z: " + accelerationZ;
+}
 
 
 /*
@@ -169,6 +187,27 @@ function login() {
 	document.getElementById("login").style.display = "none"; // hides login page divs
 	document.getElementById("player_info").style.display = "block"; // shows player page divs
 	// zone_no = get_zone_no(tag_no); // used for HAIP localization zone definitions
+	document.getElementById("information").innerHTML = "Now playing stream " + zone_no + " for performance... <br><br> Can't hear any audio? <br> Try turning the sound on for your device and turning the volume all the way up! <br> Remember to turn off WiFi and put your device on Do Not Disturb."; // used for testing purposes
+	osc.start();
+
+	if (typeof(DeviceOrientationEvent) !== 'undefined' && typeof(DeviceOrientationEvent.requestPermission) === 'function') {
+    DeviceOrientationEvent.requestPermission()
+      .catch(() => {
+        // show permission dialog only the first time
+        // it needs to be a user gesture (requirement) in this case, click
+        getSensorData();
+        throw error // keep the promise chain as rejected
+      })
+      .then(() => {
+        // this runs on subsequent visits
+        permissionGranted = true
+      })
+  	} else {
+    // it's up to you how to handle non ios 13 devices
+    nonios13device = true;
+    permissionGranted = true;
+  	}
+
 	if(!(tag_no>1001&&tag_no<1009)){
 		//tag_no = 1000+Math.floor(Math.random() * 4) + 1;
 		if(localDebug){
@@ -190,8 +229,11 @@ function login() {
 		if(!neo){
 			audio.play();
 		}
-		document.getElementById("information").innerHTML = "Now playing stream " + zone_no + " for performance... <br><br> Can't hear any audio? <br> Try turning the sound on for your device and turning the volume all the way up! <br> Remember to turn off WiFi and put your device on Do Not Disturb."; // used for testing purposes
 	}
+
+	//document.getElementById("information").innerHTML = "Now playing stream " + zone_no + " for performance... <br><br> Can't hear any audio? <br> Try turning the sound on for your device and turning the volume all the way up! <br> Remember to turn off WiFi and put your device on Do Not Disturb."; // used for testing purposes
+  	document.getElementById("permissions").innerHTML = "Permissions: " + permissionGranted + ", Non iOS Device: " + nonios13device;
+  	document.getElementById("sensorData").innerHTML = "Now streaming sensor data...<br> Rotation X: " + rotationX + ", Rotation Y: " + rotationY + ", Rotation Z: " + rotationZ + "<br> Accelerometer X: " + accelerationX + ", Accelerometer Y: " + accelerationY + ", Accelerometer Z: " + accelerationZ;
 }
 
 function genName(tag){
@@ -339,6 +381,12 @@ function loopSilence(){
 //Audio of other samples will not play unless the user activiates it with this
 //If browser audio standards change, this will have to be changed as well
 function mousePressed() {
+	// if(frequency_index < chosenFrequencies.length-1){
+	// 	frequency_index++;
+	// } else {
+	// 	frequency_index = 0;
+	// }
+	// osc.freq(chosenFrequencies[frequency_index]);
 	if(localDebug){
 		console.log("mousepress");
 	}
@@ -356,25 +404,6 @@ function mousePressed() {
 	
 }
 
-/*
-//Replaced by mousepressed, Be wary of deleting in case of emergency
-document.body.addEventListener("touchend", function(){
-	console.log("clicked")
-  if(!started){
-		//dummyaudio.autoplay = true;
-		//dummyaudio.play();
-		console.log("toucheded")
-		
-		console.log("looped");
-		
-		
-
-	}
-});
-*/
-
-
-
 
 
 //Loads performance samples based on input code and then updates the progress bar
@@ -382,105 +411,25 @@ function loadSamples(){
 	console.log("load samples called " + tag_no + " load number " + sampleLoadNumber);
 	switch(parseInt(tag_no)){
 		case 1001:
-			switch(sampleLoadNumber){
-				//Note that this switch statement intentionally does not include breaks
-				//All code should execute from the starting point
-				case 0:
-						samples[0] = loadSound("samples/1-GrandPiano.mp3", progress);
-						sampleLoadNumber++;
-						console.log("1 loaded here");
-						break;
-					case 1:
-						samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
-						sampleLoadNumber++;
-						console.log("2 loaded here");
-						break;
-					case 2:
-						samples[2] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_1.mp3", progress);
-						console.log("3 loaded here");
-						sampleLoadNumber++;
-						break;
-					case 3:
-						samples[3] = loadSound("samples/n1.mp3", progress);
-						console.log("4 loaded here");
-						sampleLoadNumber++;
-						break;
-			}
+			chosenFrequencies = frequencies[0];
+			document.getElementById("frequencies").innerHTML = "Frequencies: " + chosenFrequencies;
 			break;
 		case 1002:
-			switch(sampleLoadNumber){
-				case 0:
-						samples[0] = loadSound("samples/2-GrandPiano.mp3", progress);
-						sampleLoadNumber++;
-						console.log("1 loaded here");
-						break;
-					case 1:
-						samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
-						sampleLoadNumber++;
-						console.log("2 loaded here");
-						break;
-					case 2:
-						samples[2] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_2.mp3", progress);
-						console.log("3 loaded here");
-						sampleLoadNumber++;
-						break;
-					case 3:
-						samples[3] = loadSound("samples/n2.mp3", progress);
-						console.log("4 loaded here");
-						sampleLoadNumber++;
-						break;
-			}
-			break;
-			
+			chosenFrequencies = frequencies[1];
+			document.getElementById("frequencies").innerHTML = "Frequencies: " + chosenFrequencies;
+			break;	
 		case 1003:
-			switch(sampleLoadNumber){
-				case 0:
-						samples[0] = loadSound("samples/1-GrandPiano.mp3", progress);
-						sampleLoadNumber++;
-						console.log("1 loaded here");
-						break;
-					case 1:
-						samples[1] = loadSound("samples/Fefferman19MayPiece_Streams1and3-VBR.mp3", progress);
-						sampleLoadNumber++;
-						console.log("2 loaded here");
-						break;
-					case 2:
-						samples[2] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_3.mp3", progress);
-						console.log("3 loaded here");
-						sampleLoadNumber++;
-						break;
-					case 3:
-						samples[3] = loadSound("samples/n3.mp3", progress);
-						console.log("4 loaded here");
-						sampleLoadNumber++;
-						break;
-					
-			}
+			chosenFrequencies = frequencies[2];
+			document.getElementById("frequencies").innerHTML = "Frequencies: " + chosenFrequencies;
 			break;
 		case 1004:
-				switch(sampleLoadNumber){
-					case 0:
-						samples[0] = loadSound("samples/4-GrandPiano.mp3", progress);
-						sampleLoadNumber++;
-						console.log("1 loaded here");
-						break;
-					case 1:
-						samples[1] = loadSound("samples/Fefferman19MayPiece_Streams2and4-VBR.mp3", progress);
-						sampleLoadNumber++;
-						console.log("2 loaded here");
-						break;
-					case 2:
-						samples[2] = loadSound("samples/Sine-Tones_Raw-prop_Cluett_c4c_4.mp3", progress);
-						console.log("3 loaded here");
-						sampleLoadNumber++;
-						break;
-					case 3:
-						samples[3] = loadSound("samples/04_Labrys_Bell_Labs_100319.mp3", progress);
-						console.log("4 loaded here");
-						sampleLoadNumber++;
-						break;
-				}
-				break;
+			chosenFrequencies = frequencies[3];
+			document.getElementById("frequencies").innerHTML = "Frequencies: " + chosenFrequencies;
+			break;
+		case 1005:
+			chosenFrequencies = frequencies[4];
+			document.getElementById("frequencies").innerHTML = "Frequencies: " + chosenFrequencies;
+			break;
 		default:
 			console.log("bad tag number " + tag_no);
 
@@ -539,11 +488,11 @@ function playSamp(receivedSamp){
 		sendMessage(sendban, uniqueName + " playsamp for " + receivedSamp);
 	}
 	//Sets curSamp to ensure proper state management
-	
 
 	//Fades down all samples
 	if(receivedSamp=="stopall"){
 		//stopAll();
+		osc.stop(0);
 		fadeDown();
 		if(localDebug){
 			console.log("stopping all")
@@ -698,6 +647,27 @@ function playSamp(receivedSamp){
 			loadSamples();
 		}
 	}
+	else if(receivedSamp == "frequency0"){
+		frequency_index = 0;
+		osc.start();
+		osc.freq(chosenFrequencies[frequency_index]);
+	}
+	else if(receivedSamp == "frequency1"){
+		frequency_index = 1;
+		osc.freq(chosenFrequencies[frequency_index]);
+	}
+	else if(receivedSamp == "frequency2"){
+		frequency_index = 2;
+		osc.freq(chosenFrequencies[frequency_index]);
+	}
+	else if(receivedSamp == "frequency3"){
+		frequency_index = 3;
+		osc.freq(chosenFrequencies[frequency_index]);
+	}
+	else if(receivedSamp == "frequency4"){
+		frequency_index = 4;
+		osc.freq(chosenFrequencies[frequency_index]);
+	}
 	else{
 		console.log("malformed message received: " + receivedSamp);
 	}
@@ -782,8 +752,11 @@ function listenToWWSDataWithStomp() {
 	//Paris
 	//const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
 	//EAT
-	const url = "ws://stream_bridge_user1:WWS2016@3.231.148.129:15674/ws"
+	//const url = "ws://stream_bridge_user1:WWS2016@3.231.148.129:15674/ws"
 
+	// WSS
+	const url = "wss://stream_bridge_user1:WWS2016@wws_us_east1.msv-project.com/ws";
+	
 	const exchange = "/exchange/data/";
 
 	// Check if we have a BAN_ID provided as an URL parameter

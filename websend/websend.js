@@ -10,7 +10,7 @@ var startTime;
 var loadtime;
 var biglat;
 var big;
-var BAN_ID = "c4c";
+var BAN_ID = "c4c-p5tests";
 var neo = true;
 var connectAttempts;
 var client;
@@ -19,9 +19,6 @@ var banID2 = '1002'
 var banID3 = '1003'
 var banID4 = '1004'
 var banID5 = '1005'
-var banID6 = '1006'
-var banID7 = '1007'
-var banID8 = '1008'
 var c1
 var c2
 var c3
@@ -40,6 +37,8 @@ var updateTime = 7000;
 var offlineTime = 12000;
 var sampleLoadNum = 0;
 
+var frequency;
+
 var samplebank = 0;
 // var stream1_idNum, stream2_idNum, stream3_idNum, stream4_idNum;
 // var stream1_IDs, stream2_IDs, stream3_IDs, stream4_IDs;
@@ -48,6 +47,7 @@ setup();
 //listenToWWSDataWithStomp();
 function setup() {
   changeMode(0);
+  changeFrequency(0);
   updateCheck();
   phones = {};
   console.log("helloWorld!!!!!")
@@ -244,31 +244,8 @@ document.body.addEventListener("keypress", function(event){
     console.log("firsttone");
     clearTimeout(updateTimer);
     startTone(0);
+  }
     
-  }
-  else if(String.fromCharCode(key)=='k'){
-    var dummy = {wrist: [
-      {
-          Ax: 0,
-          Ay: 1,
-          Az: 2,
-          Gx: 3,
-          Gy: 4,
-          Gz: 5,
-          Mx: 6,
-          My: 7,
-          Mz: 8,
-          Qx: 9,
-          Qy: 10,
-          Qz: 11,
-      }
-    ]}
-
-
-    sendTrigger('BAN.imu.sleeve', dummy);
-  }
-
-
   else if(String.fromCharCode(key)=='1'){
     changeMode(0);
   }
@@ -284,6 +261,30 @@ document.body.addEventListener("keypress", function(event){
   else if(String.fromCharCode(key)=='5'){
     changeMode(4);
   }
+
+
+  else if(String.fromCharCode(key)=='6'){
+    changeFrequency(0);
+    sendTriggers("frequency0");
+  }
+  else if(String.fromCharCode(key)=='7'){
+    changeFrequency(1);
+    sendTriggers("frequency1");
+  }
+  else if(String.fromCharCode(key)=='8'){
+    changeFrequency(2);
+    sendTriggers("frequency2");
+  }
+  else if(String.fromCharCode(key)=='9'){
+    changeFrequency(3);
+    sendTriggers("frequency3");
+  }
+  else if(String.fromCharCode(key)=='0'){
+    changeFrequency(4);
+    sendTriggers("frequency4");
+  }
+
+
   else if(String.fromCharCode(key)=='x'){
     sendTriggers("stopall");
     clearTimeout(updateTimer);
@@ -301,6 +302,12 @@ function changeMode(mode){
   sampleMode = mode;
   document.getElementById("mode").innerHTML = "Sample Mode is " + mode;
   sampleLoadNum = mode;
+}
+
+function changeFrequency(freq){
+  frequency = freq;
+  document.getElementById("frequency").innerHTML = "Frequency Mode is " + freq;
+  loadFreqNum = freq;
 }
 
 function updateCheck(){
@@ -338,7 +345,10 @@ function listenToWWSDataWithStomp() {
   //Paris
   //const url = "ws://stream_bridge_user1:WWS2016@54.154.131.1:15674/ws"
   //EAT
-  const url = "ws://stream_bridge_user1:WWS2016@3.231.148.129:15674/ws"
+  //const url = "ws://stream_bridge_user1:WWS2016@3.231.148.129:15674/ws"
+
+  // WSS
+  const url = "wss://stream_bridge_user1:WWS2016@wws_us_east1.msv-project.com/ws";
 
   const exchange = "/exchange/data/";
 
@@ -449,7 +459,8 @@ function debugMode(){
 	var debugMode = document.getElementById("debug").checked;
   if (debugMode){
     document.getElementById("mode").style.display = "block";
-    for(i = 1001; i<1009;i++){
+    document.getElementById("frequency").style.display = "block";
+    for(i = 1001; i<1006;i++){
       document.getElementById(String(i)).style.display = "block";
     }
     for(i = 0; i<500; i++){
@@ -458,7 +469,8 @@ function debugMode(){
     }
   } else {
     document.getElementById("mode").style.display = "none";
-    for(i = 1001; i<1009;i++){
+    document.getElementById("frequency").style.display = "none";
+    for(i = 1001; i<1006;i++){
       console.log("i is " + String(i));
       document.getElementById(String(i)).style.display = "none";
     }
@@ -503,7 +515,7 @@ function sendTriggers(samp){
     sendTrigger(banID2, samp)
     sendTrigger(banID3, samp)
     sendTrigger(banID4, samp)
-    //sendTrigger(banID5, samp)
+    sendTrigger(banID5, samp)
     //sendTrigger(banID6, samp)
     //sendTrigger(banID7, samp)
     //sendTrigger(banID8, samp)
