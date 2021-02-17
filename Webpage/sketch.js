@@ -28,34 +28,6 @@ var updateTime = 5000;
 var sampleLoadNumber = 0;
 var loadReceived = false;
 
-
-
-
-
-/*
-HAIP-related information: change values according to HAIP server address,
-calibration / room size, and tags available.
-*/
-
-var HAIP_SERVER_IP = "135.222.247.168";
-var HAIP_SERVER_PORT = "18080";
-var boundaries = {"x1": 0, "y1": 4, "y2": 8, "y3": 12}; // used to group HAIP x- and y-coordinates into zones
-var tags = {"1001": true, "1002": true, "1003": true, "1004": true};//,
-	//"1005": true, "1006": true, "1007": true, "1008": true}; // **REPLACE** with all valid tag numbers
-
-/*
-Audio-related information: change values based on IP addresses of audio stream sources.
-Streams are ordered such that audio_streams[m] corresponds with zone m-1.
-*/
-var audio_streams = ["http://52.15.74.163:8000/phono", "http://18.191.241.173:8000/phono",
-	"http://18.218.48.101:8000/phono", "http://3.16.216.43:8000/phono", "http://18.216.106.143:8000/phono",
-	"http://18.222.219.131:8000/phono", "http://3.16.143.147:8000/phono", "http://18.216.55.97:8000/phono"]; //audio streams using AWS EC2
-
-
-/*
-User information: should not be changed. Includes variables referencing the user's tag
-and zone numbers and current audio source.
-*/
 var tag_no;
 var zone_no;
 var room;
@@ -68,35 +40,6 @@ new p5();
 
 //Initializes everything after preload
 function setup() {
-	/*
-	var r1 = 0;
-	var r2 = 0;
-	var r3 = 0;
-	var r4 = 0;
-	for(i = 0; i < 200; i++){
-		t = String(1000+Math.floor(Math.random() * 4) + 1);
-		switch(t){
-			case("1001"):
-				r1++;
-				break;
-			case("1002"):
-				r2++;
-				break;
-			case("1003"):
-				r3++;
-				break;
-			case("1004"):
-				r4++;
-				break;
-		}
-
-	}
-	
-	console.log("r is " + r1);
-	console.log("r is " + r2);
-	console.log("r is " + r3);
-	console.log("r is " + r4);
-	*/
 	document.getElementById("button").disabled = false;
 	started = false;
 
@@ -177,6 +120,7 @@ function login() {
 		//tag_no = 1001;
 	}
 	zone_no = tag_no - 1000; // used for non-localization zone definitions
+	//Debug conditions
 	if(enteringFirstTime){
 		if(localDebug){
 			console.log("reload");
@@ -252,74 +196,6 @@ function refresh() {
 	}, 10000);
 }
 
-/*
-Determines the zone of a HAIP tag based on its x- and y-coordinates. This (and the boundaries object)
-is based on an eight-zone setup, where zones are defined as such:
-
-       x1
- ---------------
-|   7   |   8   |
-|---------------| y3
-|   5   |   6   |
-|---------------| y2
-|   3   |   4   |
-|---------------| y1
-|   1   |   2   |
- ---------------
-      FRONT
-
-This setup can quickly be changed to work with fewer zones than eight, and can also be redefined for
-different setups by changing the logic.
-*/
-function get_zone_no(tag_no) {
-	var request = "http://" + HAIP_SERVER_IP + ":" + HAIP_SERVER_PORT + "/locationOf?MAC=" + tag_no;
-	var information = http_GET(request);
-	var x = information["x_location"];
-	var y = information["y_location"];
-	var zone;
-	if (x < boundaries["x1"]) {
-		if (y < boundaries["y1"]) {zone = 1;}
-		else if (y < boundaries["y2"]) {zone = 3;}
-		else if (y < boundaries["y3"]) {zone = 5;}
-		else {zone = 7;}
-	}
-	else {
-		if (y < boundaries["y1"]) {zone = 2;}
-		else if (y < boundaries["y2"]) {zone = 4;}
-		else if (y < boundaries["y3"]) {zone = 6;}
-		else {zone = 8;}
-	}
-	return x + " " + y;
-}
-
-/*
-Places a synchronous request to a server. Used for querying HAIP for the
-x- and y-coordinates of a tag in get_zone_no(tag_no).
-*/
-function http_GET(url) {
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("GET", url, false); // false for synchronous request
-	xmlHttp.send(null);
-	var text = xmlHttp.responseText;
-	return JSON.parse(text);
-
-	
-}
-
-//For getting the url variables, mostly unused
-function getQueryVariable(variable)
-{
-       var query = window.location.search.substring(1);
-       var vars = query.split("&");
-       for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split("=");
-               if(pair[0] == variable){return pair[1];}
-       }
-       return(false);
-}
-
-
-
 //This loads before the main page loads, used to load the crucial silence sample which
 //keeps phones from falling alseep, then executes loopSilence
 function preload(){
@@ -356,22 +232,7 @@ function mousePressed() {
 	
 }
 
-/*
-//Replaced by mousepressed, Be wary of deleting in case of emergency
-document.body.addEventListener("touchend", function(){
-	console.log("clicked")
-  if(!started){
-		//dummyaudio.autoplay = true;
-		//dummyaudio.play();
-		console.log("toucheded")
-		
-		console.log("looped");
-		
-		
 
-	}
-});
-*/
 
 
 
@@ -494,7 +355,7 @@ function loadSamples(){
 	
 }
 
-//literally timeout will not work with just the sample.play() method so you need this dumb
+//timeout will not work with just the sample.play() method so you need this dumb
 //thing
 function playSample(sample){
 	sample.play();
